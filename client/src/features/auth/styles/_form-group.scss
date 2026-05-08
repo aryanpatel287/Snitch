@@ -73,8 +73,6 @@
         cursor: pointer;
         padding: 4px;
         display: none;
-        align-items: center;
-        justify-content: center;
         transition: color 0.2s ease;
 
         &:hover {
@@ -88,7 +86,7 @@
     }
 
     &:focus-within .password-toggle {
-        display: flex;
+        @include displayFlex(center, center);
     }
 
     &.error {

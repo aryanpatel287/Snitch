@@ -1,5 +1,10 @@
 import { setUser, setLoading, setError } from '../state/auth.slice';
-import { registerUser, loginUser } from '../service/auth.api';
+import {
+    registerUser,
+    loginUser,
+    googleAuth,
+    getMe,
+} from '../service/auth.api';
 import { useDispatch } from 'react-redux';
 
 export const useAuth = () => {
@@ -47,5 +52,23 @@ export const useAuth = () => {
         }
     }
 
-    return { handleRegister, handleLogin };
+    async function handleGetMe() {
+        dispatch(setLoading(true));
+        dispatch(setError(null));
+
+        try {
+            const data = await getMe();
+            dispatch(setUser(data.user));
+        } catch (error) {
+            console.log(error);
+            dispatch(setError(error.message));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    }
+
+    function handleGoogleAuth() {
+        googleAuth();
+    }
+    return { handleRegister, handleLogin, handleGetMe, handleGoogleAuth };
 };

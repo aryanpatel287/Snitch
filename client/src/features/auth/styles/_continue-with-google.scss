@@ -1,0 +1,54 @@
+@use '../../shared/styles/mixins' as *;
+
+.continue-with-google {
+    @include displayFlex(center, center);
+    width: 100%;
+    background-color: #ffffff;
+    color: #3c4043;
+    border: 1px solid #dadce0;
+    border-radius: var(--border-radius, 4px);
+    padding: 0;
+    height: 48px; /* Google standard minimum size for full-width buttons */
+    font-family: 'Roboto', 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.25px;
+    cursor: pointer;
+    transition:
+        background-color 0.2s,
+        box-shadow 0.2s;
+    outline: none;
+
+    &:hover {
+        background-color: #f8f9fa;
+        box-shadow:
+            0 1px 2px 0 rgba(60, 64, 67, 0.3),
+            0 1px 3px 1px rgba(60, 64, 67, 0.15);
+    }
+
+    &:focus {
+        background-color: #f8f9fa;
+        outline: 1px solid #4285f4;
+    }
+
+    &:active {
+        background-color: #e8eaed;
+        box-shadow: none;
+    }
+
+    .google-icon-wrapper {
+        @include displayFlex(center, center);
+        width: 48px;
+        height: 48px;
+        border-radius: var(--border-radius, 4px) 0 0 var(--border-radius, 4px);
+    }
+
+    .google-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .google-text {
+        text-align: center;
+    }
+}

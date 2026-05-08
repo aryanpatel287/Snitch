@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const authApiInstance = axios.create({
-    baseURL: `${import.meta.env.VITE_API_SERVER_URL}/api/auth`,
+    baseURL: '/api/auth',
     withCredentials: true,
 });
 
@@ -32,6 +32,19 @@ export async function loginUser({ email, password }) {
             email,
             password,
         });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export function googleAuth() {
+    window.location.assign('/api/auth/google');
+}
+
+export async function getMe() {
+    try {
+        const response = await authApiInstance.get('/get-me');
         return response.data;
     } catch (error) {
         throw error;

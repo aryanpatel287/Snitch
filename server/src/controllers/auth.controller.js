@@ -20,7 +20,7 @@ async function sendTokenResponse({ user, message, isRegister }, res) {
         message,
         success: true,
         user: {
-            id: user._id,
+            _id: user._id,
             email: user.email,
             contact: user.contact,
             fullname: user.fullname,
@@ -119,4 +119,63 @@ async function loginUserController(req, res) {
     );
 }
 
-export { RegsiterUserController, loginUserController };
+/**
+ * @route GET /api/auth/google/callback
+ * @desc Authenticate user with Google OAuth
+ * @access Public
+ */
+async function googleAuthController(req, res) {
+    console.log(req.user);
+    const { emails, displayName, id } = req.user;
+
+    const email = emails[0].value;
+
+    let user = await userModel.findOne({ email });
+
+    if (!user) {
+        user = await userModel.create({
+            email,
+            fullname: displayName,
+            googleId: id,
+        });
+    }
+
+    const token = jwt.sign(
+        {
+            _id: user._id,
+        },
+        config.JWT_SECRET,
+        {
+            expiresIn: '7d',
+        },
+    );
+
+    res.cookie('token', token);
+
+    res.redirect(config.CLIENT_ORIGIN);
+}
+
+async function getMeController(req, res) {
+    const userId = req.user._id;
+
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+        return res.status(404).json({
+            message: 'User not found',
+            success: false,
+        });
+    }
+
+    res.status(200).json({
+        message: 'User found',
+        success: true,
+        user,
+    });
+}
+export {
+    RegsiterUserController,
+    loginUserController,
+    googleAuthController,
+    getMeController,
+};

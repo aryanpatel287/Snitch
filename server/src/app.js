@@ -4,6 +4,8 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import { config } from './config/config.js';
 import authRouter from './routes/auth.routes.js';
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 
 const app = express();
 
@@ -16,6 +18,24 @@ app.use(
         origin: config.CLIENT_ORIGIN,
         credentials: true,
     }),
+);
+
+//Googe OAuth setup
+app.use(passport.initialize());
+
+passport.use(
+    new GoogleStrategy(
+        {
+            clientID: config.GOOGLE_CLIENT_ID,
+            clientSecret: config.GOOGLE_CLIENT_SECRET,
+            callbackURL: `/api/auth/google/callback`,
+        },
+        (accessToken, refreshToken, profile, done) => {
+            //Here we can handle the user profile returned by Google and create or find a user in our database
+            //For simplicity, we'll just return the profile
+            return done(null, profile);
+        },
+    ),
 );
 
 // Routes setup

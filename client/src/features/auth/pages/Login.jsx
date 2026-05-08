@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import FormGroup from '../components/FormGroup';
+import ContinueWithGoogle from '../components/ContinueWIthGoogle';
 import '../styles/_auth.scss';
 import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../hook/useAuth';
@@ -65,6 +66,9 @@ const Login = () => {
                         Log In
                     </button>
                 </form>
+
+                <div className="auth-divider">OR</div>
+                <ContinueWithGoogle />
 
                 <div className="auth-footer">
                     <p>

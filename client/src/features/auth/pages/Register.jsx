@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import FormGroup from '../components/FormGroup';
+import ContinueWithGoogle from '../components/ContinueWIthGoogle';
 import '../styles/_auth.scss';
 import { useAuth } from '../hook/useAuth';
 
@@ -14,20 +15,25 @@ const Register = () => {
         email: '',
         contact: '',
         password: '',
+        isSeller: false,
     });
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        const { name, value, type, checked } = e.target;
+        if (type === 'checkbox') {
+            setFormData((prev) => ({ ...prev, [name]: checked }));
+        } else {
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { fullname, email, contact, password } = formData;
+        const { fullname, email, contact, password, isSeller } = formData;
 
         try {
-            await handleRegister({ fullname, email, contact, password });
-            navigate('/');
+            await handleRegister({ fullname, email, contact, password, isSeller });
+            // navigate('/');
         } catch (error) {
             console.log(error);
         }
@@ -77,6 +83,17 @@ const Register = () => {
                         placeholder="Enter your password"
                     />
 
+                    <div className="checkbox-group">
+                        <input
+                            type="checkbox"
+                            id="isSeller"
+                            name="isSeller"
+                            checked={formData.isSeller}
+                            onChange={handleChange}
+                        />
+                        <label htmlFor="isSeller">Register as a seller</label>
+                    </div>
+
                     <button
                         type="submit"
                         className="button primary-button full-width auth-button"
@@ -84,6 +101,9 @@ const Register = () => {
                         Register
                     </button>
                 </form>
+
+                <div className="auth-divider">OR</div>
+                <ContinueWithGoogle />
 
                 <div className="auth-footer">
                     <p>
