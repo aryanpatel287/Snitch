@@ -1,0 +1,23 @@
+:root {
+    --color-primary: #181818;
+    --color-primary-hover: #333333;
+    --color-primary-transparent: rgba(0, 0, 0, 0.15);
+
+    --color-background: #f9f9f9;
+    --color-surface: #ffffff;
+
+    --color-text: #7c7c7e;
+    --color-text-muted: #b0b0b0;
+
+    --color-border: #cccccc;
+    --color-input-bg: #ffffff;
+
+    --color-error: #ff4d4d;
+    --color-error-transparent: rgba(230, 0, 0, 0.15);
+    
+    --border-radius: 1rem;
+    
+    --font-sans: 'Inter', sans-serif;
+    --transition: 0.2s ease;
+    --color-surface-hover: #f1f1f1;
+}

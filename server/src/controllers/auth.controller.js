@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 /**
  * @desc Send token response after successful registration or login
  */
-async function sendTokenResponse(user, res) {
+async function sendTokenResponse({ user, message, isRegister }, res) {
     const token = jwt.sign(
         {
             _id: user._id,
@@ -16,7 +16,7 @@ async function sendTokenResponse(user, res) {
 
     res.cookie('token', token);
 
-    res.status(200).json({
+    res.status(isRegister ? 201 : 200).json({
         message,
         success: true,
         user: {
@@ -29,6 +29,18 @@ async function sendTokenResponse(user, res) {
     });
 }
 
+async function checkTokenExists(req, res) {
+    const token = req.cookies?.token;
+
+    if (!token) {
+        return;
+    }
+    return res.status(200).json({
+        message: 'User already logged in',
+        success: true,
+    });
+}
+
 /**
  * @route POST /api/auth/register
  * @desc Register a new user
@@ -36,6 +48,8 @@ async function sendTokenResponse(user, res) {
  * @body { email, password, contact, fullname }
  */
 async function RegsiterUserController(req, res) {
+    await checkTokenExists(req, res);
+
     const { email, password, contact, fullname, isSeller } = req.body;
     try {
         const isUserExists = await userModel.findOne({
@@ -49,7 +63,7 @@ async function RegsiterUserController(req, res) {
             });
         }
 
-        const user = userModel.create({
+        const user = await userModel.create({
             email,
             password,
             contact,
@@ -57,7 +71,10 @@ async function RegsiterUserController(req, res) {
             role: isSeller ? 'seller' : 'buyer',
         });
 
-        sendTokenResponse(user, (message = 'User regsitered successfully'));
+        return await sendTokenResponse(
+            { user, message: 'User regsitered successfully', isRegister: true },
+            res,
+        );
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -67,4 +84,39 @@ async function RegsiterUserController(req, res) {
     }
 }
 
-export { RegsiterUserController };
+/**
+ * @route POST /api/auth/login
+ * @desc Login user and return token
+ * @access Public
+ * @body { email, password }
+ */
+async function loginUserController(req, res) {
+    await checkTokenExists(req, res);
+
+    const { email, password } = req.body;
+
+    const user = await userModel.findOne({ email }).select('+password');
+
+    if (!user || !user.password) {
+        return res.status(401).json({
+            message: 'Invalid credentials',
+            success: false,
+        });
+    }
+
+    const isPasswordMatch = await user.comparePassword(password);
+
+    if (!isPasswordMatch) {
+        return res.status(401).json({
+            message: 'Invalid credentials',
+            success: false,
+        });
+    }
+
+    return await sendTokenResponse(
+        { user, message: 'User logged in successfully', isRegister: false },
+        res,
+    );
+}
+
+export { RegsiterUserController, loginUserController };

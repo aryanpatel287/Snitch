@@ -25,3 +25,15 @@ export async function registerUser({
         throw error;
     }
 }
+
+export async function loginUser({ email, password }) {
+    try {
+        const response = await authApiInstance.post('/login', {
+            email,
+            password,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
