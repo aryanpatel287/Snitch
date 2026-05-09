@@ -23,8 +23,8 @@ const upload = multer({
  */
 productRouter.post(
     '/create-product',
-    createProductValidator,
     upload.array('images', 7), // Allow up to 7 images
+    createProductValidator,
     authUser,
     authSeller,
     createProductContoller,
