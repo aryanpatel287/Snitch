@@ -2,48 +2,50 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        required: true,
-        unique: true,
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: function () {
+      return !this.googleId;
     },
-    password: {
-        type: String,
-        required: function () {
-            return !this.googleId;
-        },
-        select: false,
+    select: false,
+  },
+  contact: {
+    type: String,
+    required: function () {
+      return !this.googleId;
     },
-    contact: {
-        type: String,
-        required: function () {
-            return !this.googleId;
-        },
-        unique: true,
-    },
-    fullname: {
-        type: String,
-        required: true,
-    },
-    role: {
-        type: String,
-        enum: ['buyer', 'seller'],
-        default: 'buyer',
-    },
-    googleId: {
-        type: String,
-    },
+    unique: true,
+  },
+  fullname: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    enum: ['buyer', 'seller'],
+    default: 'buyer',
+  },
+  googleId: {
+    type: String,
+  },
 });
 
 userSchema.pre('save', async function () {
-    if (!this.isModified('password')) return;
+  if (!this.isModified('password')) return;
 
-    const hash = await bcrypt.hash(this.password, 10);
-    this.password = hash;
+  if (this.password.startsWith('$2')) return;
+
+  const hash = await bcrypt.hash(this.password, 10);
+  this.password = hash;
 });
 
 userSchema.methods.comparePassword = async function (password) {
-    return await bcrypt.compare(password, this.password);
+  return await bcrypt.compare(password, this.password);
 };
 
 const userModel = mongoose.model('users', userSchema);

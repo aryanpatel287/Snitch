@@ -59,6 +59,10 @@ const Login = () => {
                         placeholder="Enter your password"
                     />
 
+                    <div className="auth-meta">
+                        <Link to="/forgot-password" className="auth-link">Forgot Password?</Link>
+                    </div>
+
                     <button
                         type="submit"
                         className="button primary-button full-width auth-button"
