@@ -3,9 +3,11 @@ import cors from 'cors';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import { config } from './config/config.js';
-import authRouter from './routes/auth.routes.js';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+
+import authRouter from './routes/auth.routes.js';
+import productRouter from './routes/product.routes.js';
 
 const app = express();
 
@@ -40,5 +42,6 @@ passport.use(
 
 // Routes setup
 app.use('/api/auth', authRouter);
+app.use('/api/products', productRouter);
 
 export default app;
