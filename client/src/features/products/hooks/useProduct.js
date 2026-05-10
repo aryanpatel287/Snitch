@@ -1,15 +1,16 @@
+import { useDispatch, useSelector } from 'react-redux';
 import { getProducts, createProduct } from '../service/product.api';
-import { useDispatch } from 'react-redux';
 import {
     setSellerProducts,
     setLoading,
     setError,
 } from '../state/product.slice';
 
-// TODO:destructure the errors in the setError dispatch , see how to set the proper message in the error
-
 export const useProduct = () => {
     const dispatch = useDispatch();
+    const { sellerProducts, loading, error } = useSelector(
+        (state) => state.product,
+    );
 
     async function handleCreateProducts(formData) {
         dispatch(setLoading(true));
@@ -17,13 +18,8 @@ export const useProduct = () => {
 
         try {
             const data = await createProduct(formData);
+            return data;
         } catch (error) {
-            console.error('error : ', error);
-            console.log(
-                'error.response?.data?.message: ',
-                error.response?.data?.message,
-            );
-            console.log('error.message: ', error.message);
             dispatch(setError(error.response?.data?.message ?? error.message));
         } finally {
             dispatch(setLoading(false));
@@ -38,10 +34,11 @@ export const useProduct = () => {
             const data = await getProducts();
             dispatch(setSellerProducts(data.products));
         } catch (error) {
-            console.error(error);
             dispatch(setError(error.message));
         } finally {
             dispatch(setLoading(false));
         }
     }
+
+    return { handleCreateProducts, handleGetProducts, sellerProducts, loading, error };
 };

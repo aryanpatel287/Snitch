@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import FormGroup from '../../shared/components/FormGroup';
+import AuthFormGroup from '../components/AuthFormGroup';
 import '../styles/_auth.scss';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../hook/useAuth';
@@ -34,7 +34,7 @@ const ResetPassword = () => {
                 <p className="auth-subtitle">Enter your new secure password below.</p>
 
                 <form className="auth-form" onSubmit={handleSubmit}>
-                    <FormGroup
+                    <AuthFormGroup
                         label="New Password"
                         id="password"
                         type="password"

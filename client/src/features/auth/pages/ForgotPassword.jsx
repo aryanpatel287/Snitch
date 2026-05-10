@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import FormGroup from '../../shared/components/FormGroup';
+import AuthFormGroup from '../components/AuthFormGroup';
 import '../styles/_auth.scss';
 import { Link } from 'react-router';
 import { useAuth } from '../hook/useAuth';
@@ -26,7 +26,7 @@ const ForgotPassword = () => {
                 <p className="auth-subtitle">Enter your email to receive a reset link.</p>
 
                 <form className="auth-form" onSubmit={handleSubmit}>
-                    <FormGroup
+                    <AuthFormGroup
                         label="Email Address"
                         id="email"
                         type="email"

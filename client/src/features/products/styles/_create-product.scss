@@ -1,0 +1,145 @@
+@use '../../shared/styles/mixins' as *;
+@use './product-form-group';
+
+// ─── Create Product Page ──────────────────────────────────────────────────────
+
+.create-product-page {
+    min-height: 100vh;
+    background-color: var(--color-background);
+    padding: 48px 24px 80px;
+    font-family: var(--font-sans);
+}
+
+.create-product-page__inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    @include displayFlex(stretch, flex-start, column, 40px);
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+.create-product-header {
+    @include displayFlex(center, flex-start, row, 16px);
+}
+
+.back-button {
+    @include displayFlex(center, center);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    color: var(--color-primary);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition:
+        background-color var(--transition),
+        border-color var(--transition),
+        transform var(--transition);
+
+    &:hover {
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+        color: #fff;
+        transform: translateX(-2px);
+    }
+}
+
+.create-product-header__text {
+    @include displayFlex(flex-start, flex-start, column, 4px);
+}
+
+.create-product-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--color-primary);
+    line-height: 1.2;
+}
+
+.create-product-subtitle {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+}
+
+// ── Form Layout ───────────────────────────────────────────────────────────────
+
+.create-product-form {
+    @include displayFlex(stretch, flex-start, column, 32px);
+}
+
+.create-product-form__layout {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 28px;
+    align-items: start;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ── Form Card ─────────────────────────────────────────────────────────────────
+
+.form-card {
+    @include displayFlex(stretch, flex-start, column, 20px);
+}
+
+.form-card__label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.form-card__hint {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    margin-top: -12px;
+    line-height: 1.5;
+}
+
+// ── API Error ─────────────────────────────────────────────────────────────────
+
+.api-error {
+    padding: 14px 18px;
+    background-color: rgba(255, 77, 77, 0.07);
+    border: 1px solid rgba(255, 77, 77, 0.3);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--color-error);
+    font-family: var(--font-sans);
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────────
+
+.create-product-actions {
+    @include displayFlex(center, flex-end, row, 12px);
+    padding-top: 8px;
+
+    @media (max-width: 560px) {
+        flex-direction: column-reverse;
+
+        .button {
+            width: 100%;
+        }
+    }
+}
+
+.create-product-submit {
+    padding: 0.65rem 2rem;
+    font-size: 0.9rem;
+}
+
+// ── Spin animation for loading icon ──────────────────────────────────────────
+
+.spin-icon {
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

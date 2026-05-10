@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import FormGroup from '../../shared/components/FormGroup';
+import AuthFormGroup from '../components/AuthFormGroup';
 import ContinueWithGoogle from '../components/ContinueWIthGoogle';
 import '../styles/_auth.scss';
 import { useAuth } from '../hook/useAuth';
@@ -46,7 +46,7 @@ const Register = () => {
                 <p className="auth-subtitle">Join us and start your journey.</p>
 
                 <form className="auth-form" onSubmit={handleSubmit}>
-                    <FormGroup
+                    <AuthFormGroup
                         label="Full Name"
                         id="fullname"
                         type="text"
@@ -55,7 +55,7 @@ const Register = () => {
                         onChange={handleChange}
                         placeholder="Enter your full name"
                     />
-                    <FormGroup
+                    <AuthFormGroup
                         label="Email Address"
                         id="email"
                         type="email"
@@ -64,7 +64,7 @@ const Register = () => {
                         onChange={handleChange}
                         placeholder="Enter your email address"
                     />
-                    <FormGroup
+                    <AuthFormGroup
                         label="Contact Number"
                         id="contact"
                         type="text"
@@ -73,7 +73,7 @@ const Register = () => {
                         onChange={handleChange}
                         placeholder="Enter your contact number"
                     />
-                    <FormGroup
+                    <AuthFormGroup
                         label="Password"
                         id="password"
                         type="password"
