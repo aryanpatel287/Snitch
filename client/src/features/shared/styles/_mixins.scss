@@ -48,3 +48,37 @@
     background-position-x: -200%;
   }
 }
+
+// ─── Landing Page Mixins ─────────────────────────────────────────────────────
+
+@mixin sectionWrap($py: 120px, $px: 80px) {
+  padding: $py $px;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+@mixin editorialGrid($cols: 12, $gap: 24px) {
+  display: grid;
+  grid-template-columns: repeat($cols, 1fr);
+  gap: $gap;
+}
+
+@mixin labelCaps {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@mixin fadeUp($delay: 0s) {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease $delay, transform 0.6s ease $delay;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

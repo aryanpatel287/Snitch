@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import FormGroup from '../components/FormGroup';
+import FormGroup from '../../shared/components/FormGroup';
 import '../styles/_auth.scss';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../hook/useAuth';

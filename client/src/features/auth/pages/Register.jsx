@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import FormGroup from '../components/FormGroup';
+import FormGroup from '../../shared/components/FormGroup';
 import ContinueWithGoogle from '../components/ContinueWIthGoogle';
 import '../styles/_auth.scss';
 import { useAuth } from '../hook/useAuth';

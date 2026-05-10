@@ -1,0 +1,244 @@
+@use '../../shared/styles/mixins' as *;
+
+// ─── Section Header ───────────────────────────────────────────────────────────
+
+.section-header {
+  margin-bottom: 56px;
+
+  &__overline {
+    @include labelCaps;
+    color: var(--color-smoke);
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    font-family: var(--font-sans);
+    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--color-onyx);
+    line-height: 1.1;
+
+    &--light {
+      color: var(--color-surface);
+    }
+  }
+}
+
+// ─── Collection Section ───────────────────────────────────────────────────────
+
+.collection {
+  background: var(--color-ivory);
+
+  &__inner {
+    @include sectionWrap;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 5fr 4fr 3fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  &__card {
+    @include fadeUp;
+    cursor: pointer;
+
+    &:nth-child(2) {
+      @include fadeUp(0.1s);
+      margin-top: 48px;
+    }
+
+    &:nth-child(3) {
+      @include fadeUp(0.2s);
+      margin-top: 96px;
+    }
+
+    &:hover .collection__card-img img {
+      transform: scale(1.03);
+    }
+  }
+
+  &__card-img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--color-cream);
+    margin-bottom: 14px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+  }
+
+  &__card-tag {
+    @include labelCaps;
+    color: var(--color-smoke);
+    margin-bottom: 5px;
+  }
+
+  &__card-name {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-onyx);
+    margin-bottom: 4px;
+  }
+
+  &__card-price {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    color: var(--color-smoke);
+  }
+}
+
+// ─── New In Section ───────────────────────────────────────────────────────────
+
+.new-in {
+  background: var(--color-cream);
+
+  &__inner {
+    @include sectionWrap;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  &__card {
+    background: var(--color-surface);
+    cursor: pointer;
+
+    @for $i from 1 through 4 {
+      &:nth-child(#{$i}) {
+        @include fadeUp(#{($i - 1) * 0.08}s);
+      }
+    }
+
+    &:hover .new-in__card-img img {
+      transform: scale(1.04);
+    }
+  }
+
+  &__card-img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--color-ivory);
+    position: relative;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+  }
+
+  &__badge {
+    @include labelCaps;
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: var(--color-gold);
+    color: var(--color-surface);
+    padding: 4px 10px;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    z-index: 1;
+  }
+
+  &__card-info {
+    padding: 14px 0 4px;
+  }
+
+  &__card-name {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-onyx);
+    margin-bottom: 4px;
+  }
+
+  &__card-price {
+    @include labelCaps;
+    color: var(--color-smoke);
+    font-size: 0.7rem;
+  }
+}
+
+// ─── Responsive ───────────────────────────────────────────────────────────────
+
+@media (max-width: 1024px) {
+  .collection {
+    &__inner {
+      @include sectionWrap(80px, 40px);
+    }
+
+    &__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    &__card {
+      &:nth-child(2) { margin-top: 24px; }
+      &:nth-child(3) { margin-top: 48px; }
+    }
+  }
+
+  .new-in {
+    &__inner {
+      @include sectionWrap(80px, 40px);
+    }
+
+    &__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .section-header {
+    margin-bottom: 36px;
+  }
+
+  .collection {
+    &__inner {
+      @include sectionWrap(64px, 24px);
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    &__card {
+      &:nth-child(2),
+      &:nth-child(3) {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .new-in {
+    &__inner {
+      @include sectionWrap(64px, 24px);
+    }
+
+    &__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .new-in__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

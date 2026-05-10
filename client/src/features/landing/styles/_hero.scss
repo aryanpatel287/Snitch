@@ -1,0 +1,198 @@
+@use '../../shared/styles/mixins' as *;
+
+// ─── Hero — Desktop Split Layout ─────────────────────────────────────────────
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  width: 100%;
+  background: var(--color-surface);
+  padding-top: 68px; // navbar height offset
+
+  // ── Left — text content ────────────────────────────────────────────────────
+
+  &__content {
+    @include displayFlex(flex-start, center, column, 0);
+    padding: 80px 64px 80px 80px;
+    position: relative;
+  }
+
+  &__overline {
+    @include labelCaps;
+    @include fadeUp(0s);
+    color: var(--color-smoke);
+    margin-bottom: 20px;
+  }
+
+  &__headline {
+    @include fadeUp(0.1s);
+    font-family: var(--font-sans);
+    font-size: clamp(2.5rem, 4.5vw, 4.25rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--color-onyx);
+    margin-bottom: 24px;
+
+    em {
+      font-style: italic;
+      font-weight: 400;
+    }
+  }
+
+  &__sub {
+    @include fadeUp(0.2s);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--color-smoke);
+    margin-bottom: 44px;
+    letter-spacing: 0.02em;
+    font-family: var(--font-sans);
+  }
+
+  &__ctas {
+    @include fadeUp(0.3s);
+    @include displayFlex(center, flex-start, row, 14px);
+    margin-bottom: 64px;
+  }
+
+  &__scroll-hint {
+    @include labelCaps;
+    @include fadeUp(0.5s);
+    color: var(--color-smoke);
+    @include displayFlex(center, flex-start, row, 8px);
+    margin-top: auto;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--color-smoke);
+    }
+  }
+
+  // ── Right — portrait image ──────────────────────────────────────────────────
+
+  &__media {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-cream);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+  }
+}
+
+// ─── Landing Buttons ──────────────────────────────────────────────────────────
+
+.btn-land {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 0;
+  text-decoration: none;
+  transition: background var(--landing-transition),
+              color var(--landing-transition),
+              border-color var(--landing-transition);
+  white-space: nowrap;
+
+  &--primary {
+    background: var(--color-onyx);
+    color: var(--color-surface);
+    border-color: var(--color-onyx);
+
+    &:hover {
+      background: var(--color-charcoal);
+      border-color: var(--color-charcoal);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: var(--color-onyx);
+    border-color: var(--color-onyx);
+
+    &:hover {
+      background: var(--color-onyx);
+      color: var(--color-surface);
+    }
+  }
+
+  &--ghost-light {
+    background: transparent;
+    color: var(--color-surface);
+    border-color: var(--color-surface);
+
+    &:hover {
+      background: var(--color-surface);
+      color: var(--color-onyx);
+    }
+  }
+}
+
+// ─── Responsive ───────────────────────────────────────────────────────────────
+
+@media (max-width: 1024px) {
+  .hero {
+    &__content {
+      padding: 60px 48px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    min-height: 100svh;
+
+    &__content {
+      padding: 48px 24px 40px;
+      order: 2;
+    }
+
+    &__headline {
+      font-size: clamp(2rem, 8vw, 3rem);
+    }
+
+    &__ctas {
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    &__scroll-hint {
+      display: none;
+    }
+
+    &__media {
+      order: 1;
+      height: 55vw;
+      min-height: 280px;
+      max-height: 420px;
+
+      img {
+        object-position: center 20%;
+      }
+    }
+  }
+
+  .btn-land {
+    padding: 12px 24px;
+    font-size: 0.75rem;
+  }
+}

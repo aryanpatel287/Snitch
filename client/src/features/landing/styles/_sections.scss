@@ -1,0 +1,522 @@
+@use '../../shared/styles/mixins' as *;
+
+// ─── Brand Story ──────────────────────────────────────────────────────────────
+
+.brand-story {
+  background: var(--color-surface);
+
+  &__inner {
+    @include sectionWrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  &__media {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--color-cream);
+    @include fadeUp;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(20%);
+      transition: filter 0.4s ease, transform 0.6s ease;
+
+      &:hover {
+        filter: grayscale(0%);
+        transform: scale(1.02);
+      }
+    }
+  }
+
+  &__text {
+    @include displayFlex(flex-start, center, column, 0);
+    @include fadeUp(0.15s);
+  }
+
+  &__overline {
+    @include labelCaps;
+    color: var(--color-smoke);
+    margin-bottom: 20px;
+  }
+
+  &__headline {
+    font-family: var(--font-sans);
+    font-size: clamp(1.875rem, 3vw, 3rem);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    color: var(--color-onyx);
+    margin-bottom: 24px;
+
+    strong {
+      font-weight: 700;
+    }
+  }
+
+  &__body {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: var(--color-smoke);
+    margin-bottom: 36px;
+    max-width: 420px;
+  }
+
+  &__link {
+    @include labelCaps;
+    color: var(--color-onyx);
+    text-decoration: none;
+    @include displayFlex(center, flex-start, row, 8px);
+    transition: gap var(--landing-transition);
+
+    &::after {
+      content: '→';
+      font-size: 1rem;
+      letter-spacing: 0;
+      transition: transform var(--landing-transition);
+    }
+
+    &:hover::after {
+      transform: translateX(4px);
+    }
+  }
+}
+
+// ─── Editorial Banner ─────────────────────────────────────────────────────────
+
+.editorial-banner {
+  position: relative;
+  width: 100%;
+  min-height: 520px;
+  overflow: hidden;
+  @include displayFlex(center, center, row, 0);
+
+  &__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 10, 10, 0.62);
+    }
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 80px 24px;
+    @include displayFlex(center, center, column, 0);
+    @include fadeUp;
+    width: 100%;
+  }
+
+  &__tag {
+    @include labelCaps;
+    color: var(--color-gold);
+    margin-bottom: 20px;
+    letter-spacing: 0.15em;
+  }
+
+  &__headline {
+    font-family: var(--font-sans);
+    font-size: clamp(2rem, 5vw, 4.25rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--color-surface);
+    line-height: 1.05;
+    margin-bottom: 14px;
+  }
+
+  &__sub {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.72);
+    margin-bottom: 36px;
+    letter-spacing: 0.02em;
+  }
+}
+
+// ─── Testimonials ─────────────────────────────────────────────────────────────
+
+.testimonials {
+  background: var(--color-ivory);
+
+  &__inner {
+    @include sectionWrap;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  &__card {
+    border: 1px solid var(--color-silver);
+    padding: 36px 32px;
+    background: var(--color-surface);
+    transition: border-color var(--landing-transition);
+
+    @for $i from 1 through 3 {
+      &:nth-child(#{$i}) {
+        @include fadeUp(#{($i - 1) * 0.1}s);
+      }
+    }
+
+    &:hover {
+      border-color: var(--color-smoke);
+    }
+  }
+
+  &__stars {
+    color: var(--color-gold);
+    font-size: 0.875rem;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+
+  &__quote {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-onyx);
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+
+  &__author {
+    @include displayFlex(center, flex-start, row, 14px);
+  }
+
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--color-cream);
+    border: 1px solid var(--color-silver);
+    @include displayFlex(center, center, row, 0);
+    flex-shrink: 0;
+
+    span {
+      @include labelCaps;
+      font-size: 0.7rem;
+      color: var(--color-smoke);
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__name {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-onyx);
+  }
+
+  &__city {
+    @include labelCaps;
+    font-size: 0.65rem;
+    color: var(--color-smoke);
+  }
+}
+
+// ─── Newsletter ───────────────────────────────────────────────────────────────
+
+.newsletter {
+  background: var(--color-cream);
+
+  &__inner {
+    @include sectionWrap;
+    text-align: center;
+    @include displayFlex(center, center, column, 0);
+  }
+
+  &__overline {
+    @include labelCaps;
+    color: var(--color-smoke);
+    margin-bottom: 14px;
+    @include fadeUp;
+  }
+
+  &__headline {
+    @include fadeUp(0.1s);
+    font-family: var(--font-sans);
+    font-size: clamp(1.75rem, 3vw, 2.75rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--color-onyx);
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  &__sub {
+    @include fadeUp(0.15s);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    color: var(--color-smoke);
+    margin-bottom: 44px;
+  }
+
+  &__form {
+    @include fadeUp(0.2s);
+    @include displayFlex(stretch, center, row, 0);
+    width: 100%;
+    max-width: 520px;
+  }
+
+  &__input {
+    flex: 1;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    padding: 14px 20px;
+    border: 1px solid var(--color-onyx);
+    border-right: none;
+    border-radius: 0;
+    background: var(--color-surface);
+    color: var(--color-onyx);
+    outline: none;
+    min-width: 0;
+
+    &::placeholder {
+      color: var(--color-smoke);
+    }
+  }
+}
+
+// ─── Footer ───────────────────────────────────────────────────────────────────
+
+.footer {
+  background: var(--color-onyx);
+  color: var(--color-surface);
+
+  &__top {
+    @include sectionWrap(64px, 80px);
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 48px;
+    align-items: start;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  &__brand {
+    @include displayFlex(flex-start, flex-start, column, 14px);
+  }
+
+  &__wordmark {
+    font-family: var(--font-sans);
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-surface);
+    text-decoration: none;
+  }
+
+  &__tagline {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.6;
+    max-width: 200px;
+  }
+
+  &__links {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  &__link-group {
+    @include displayFlex(flex-start, flex-start, column, 10px);
+  }
+
+  &__link-heading {
+    @include labelCaps;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 4px;
+  }
+
+  &__link {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    transition: color var(--landing-transition);
+
+    &:hover {
+      color: var(--color-gold);
+    }
+  }
+
+  &__social {
+    @include displayFlex(flex-start, flex-end, column, 14px);
+
+    a {
+      @include labelCaps;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 0.7rem;
+      transition: color var(--landing-transition);
+
+      &:hover {
+        color: var(--color-surface);
+      }
+    }
+  }
+
+  &__bottom {
+    @include sectionWrap(24px, 80px);
+    @include displayFlex(center, space-between, row, 0);
+  }
+
+  &__copy {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.02em;
+  }
+}
+
+// ─── Responsive ───────────────────────────────────────────────────────────────
+
+@media (max-width: 1024px) {
+  .brand-story {
+    &__inner {
+      @include sectionWrap(80px, 40px);
+      gap: 48px;
+    }
+  }
+
+  .testimonials {
+    &__inner {
+      @include sectionWrap(80px, 40px);
+    }
+  }
+
+  .newsletter {
+    &__inner {
+      @include sectionWrap(80px, 40px);
+    }
+  }
+
+  .footer {
+    &__top {
+      @include sectionWrap(48px, 40px);
+      grid-template-columns: 1fr 1fr;
+    }
+
+    &__social {
+      align-items: flex-start;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    &__bottom {
+      @include sectionWrap(20px, 40px);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .brand-story {
+    &__inner {
+      @include sectionWrap(64px, 24px);
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    &__media {
+      aspect-ratio: 3 / 2;
+    }
+
+    &__body {
+      max-width: 100%;
+    }
+  }
+
+  .editorial-banner {
+    min-height: 400px;
+
+    &__content {
+      padding: 64px 24px;
+    }
+  }
+
+  .testimonials {
+    &__inner {
+      @include sectionWrap(64px, 24px);
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+
+  .newsletter {
+    &__inner {
+      @include sectionWrap(64px, 24px);
+    }
+
+    &__form {
+      flex-direction: column;
+      max-width: 100%;
+    }
+
+    &__input {
+      border-right: 1px solid var(--color-onyx);
+      border-bottom: none;
+    }
+
+    .btn-land {
+      width: 100%;
+    }
+  }
+
+  .footer {
+    &__top {
+      @include sectionWrap(48px, 24px);
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    &__links {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    &__social {
+      flex-direction: row;
+      justify-content: flex-start;
+      gap: 20px;
+    }
+
+    &__bottom {
+      @include sectionWrap(20px, 24px);
+      flex-direction: column;
+      gap: 8px;
+      text-align: center;
+    }
+  }
+}
