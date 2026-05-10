@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import '../styles/_form-group.scss'
+import '../styles/_auth-form-group.scss'
 import { Eye, EyeOff } from 'lucide-react'
 
-const FormGroup = ({ label, id, placeholder, type, value, onChange, name, hasError }) => {
+const AuthFormGroup = ({ label, id, placeholder, type, value, onChange, name, hasError }) => {
   const [showPassword, setShowPassword] = useState(false);
   
   const isPassword = type === 'password';
@@ -38,4 +38,4 @@ const FormGroup = ({ label, id, placeholder, type, value, onChange, name, hasErr
   )
 }
 
-export default FormGroup
+export default AuthFormGroup
