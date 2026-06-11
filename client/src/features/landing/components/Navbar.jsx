@@ -1,11 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import { useSelector } from 'react-redux';
+import LogoutButton from '../../auth/components/LogoutButton';
 
 const Navbar = () => {
     const { user } = useSelector((state) => state.auth);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const closeAllMenus = () => {
+        setIsMenuOpen(false);
+        setIsDropdownOpen(false);
+    };
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+        if (isMenuOpen) {
+            setIsDropdownOpen(false);
+        }
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -20,10 +34,24 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.navbar__profile-dropdown')) {
+                setIsDropdownOpen(false);
+            }
+        };
+        if (isDropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isDropdownOpen]);
+
     return (
         <nav className={`navbar ${isScrolled ? 'navbar--scrolled' : ''} ${isMenuOpen ? 'navbar--open' : ''}`}>
             <div className="navbar__container">
-                <Link to="/" className="navbar__wordmark" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/" className="navbar__wordmark" onClick={closeAllMenus}>
                     SNITCH
                 </Link>
                 
@@ -31,14 +59,14 @@ const Navbar = () => {
                     <Link 
                         to={user ? "/profile" : "/login?redirect=/profile"} 
                         className="navbar__profile-mobile"
-                        onClick={() => setIsMenuOpen(false)}
+                        onClick={closeAllMenus}
                         aria-label="User Profile"
                     >
                         <i className="ri-user-line"></i>
                     </Link>
                     <button 
                         className="navbar__toggle" 
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        onClick={toggleMenu}
                         aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
                     >
                         {isMenuOpen ? <i className="ri-close-line"></i> : <i className="ri-menu-line"></i>}
@@ -46,23 +74,45 @@ const Navbar = () => {
                 </div>
 
                 <div className={`navbar__menu ${isMenuOpen ? 'navbar__menu--open' : ''}`}>
-                    <a href="#collections" className="navbar__link" onClick={() => setIsMenuOpen(false)}>Collections</a>
-                    <a href="#story" className="navbar__link" onClick={() => setIsMenuOpen(false)}>Story</a>
-                    <a href="#editorial" className="navbar__link" onClick={() => setIsMenuOpen(false)}>Editorial</a>
+                    <a href="#collections" className="navbar__link" onClick={closeAllMenus}>Collections</a>
+                    <a href="#story" className="navbar__link" onClick={closeAllMenus}>Story</a>
+                    <a href="#editorial" className="navbar__link" onClick={closeAllMenus}>Editorial</a>
 
                     {user ? (
                         <>
                             {user.role === 'seller' && (
-                                <Link to="/seller/create-product" className="navbar__link" onClick={() => setIsMenuOpen(false)}>
+                                <Link to="/seller/create-product" className="navbar__link" onClick={closeAllMenus}>
                                     Create Product
                                 </Link>
                             )}
-                            <Link to="/profile" className="navbar__link navbar__link--profile" onClick={() => setIsMenuOpen(false)}>
-                                {user.fullname || 'Profile'}
-                            </Link>
+                            <div className="navbar__profile-dropdown">
+                                <button 
+                                    className="navbar__link navbar__link--dropdown-trigger"
+                                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                    aria-expanded={isDropdownOpen}
+                                >
+                                    {user.fullname || 'Profile'}
+                                    <i className={`ri-arrow-down-s-line navbar__dropdown-arrow ${isDropdownOpen ? 'navbar__dropdown-arrow--open' : ''}`}></i>
+                                </button>
+                                {isDropdownOpen && (
+                                    <div className="navbar__dropdown-menu">
+                                        <Link 
+                                            to="/profile" 
+                                            className="navbar__dropdown-item" 
+                                            onClick={closeAllMenus}
+                                        >
+                                            Profile
+                                        </Link>
+                                        <LogoutButton 
+                                            className="navbar__dropdown-item navbar__dropdown-item--logout"
+                                            onClick={closeAllMenus}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                         </>
                     ) : (
-                        <Link to="/login?redirect=/profile" className="navbar__login-btn" onClick={() => setIsMenuOpen(false)}>
+                        <Link to="/login?redirect=/profile" className="navbar__login-btn" onClick={closeAllMenus}>
                             Login
                         </Link>
                     )}

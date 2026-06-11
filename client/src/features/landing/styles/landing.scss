@@ -200,6 +200,100 @@
             font-family: var(--font-display);
         }
     }
+
+    &__profile-dropdown {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        @media (max-width: 767px) {
+            width: 100%;
+        }
+    }
+
+    &__link--dropdown-trigger {
+        background: none;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--color-foreground);
+    }
+
+    &__dropdown-arrow {
+        font-size: 0.875rem;
+        transition: transform var(--transition-fast) ease;
+        line-height: 1;
+
+        &--open {
+            transform: rotate(180deg);
+        }
+    }
+
+    &__dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 12px;
+        background-color: var(--color-background);
+        border: var(--border-thin);
+        min-width: 160px;
+        display: flex;
+        flex-direction: column;
+        z-index: 110;
+        padding: 0;
+
+        @media (max-width: 767px) {
+            position: static;
+            margin-top: 8px;
+            width: 100%;
+            border: none;
+            border-top: var(--border-thin);
+            border-bottom: var(--border-thin);
+            background-color: transparent;
+            gap: 4px;
+            padding: 8px 0;
+        }
+    }
+
+    &__dropdown-item {
+        display: block;
+        width: 100%;
+        padding: 12px 20px;
+        text-align: left;
+        background: transparent;
+        border: none;
+        color: var(--color-foreground);
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color var(--transition-fast) ease, color var(--transition-fast) ease;
+
+        &:hover, &:focus {
+            background-color: var(--color-foreground);
+            color: var(--color-background);
+            outline: none;
+        }
+
+        @media (max-width: 767px) {
+            text-align: center;
+            font-size: 1.25rem;
+            font-family: var(--font-display);
+            padding: 10px 20px;
+
+            &:hover, &:focus {
+                background-color: transparent;
+                color: var(--color-foreground);
+                text-decoration: underline;
+            }
+        }
+    }
 }
 
 // ─── Hero Section ────────────────────────────────────────────────────────────

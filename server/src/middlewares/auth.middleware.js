@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import redis from '../config/cache.js';
 import userModel from '../models/user.model.js';
 import { sendResponse } from '../utils/response.utlis.js';
 
@@ -12,6 +13,18 @@ async function authUser(req, res, next) {
             message: 'Invalid token',
             success: false,
             error: 'token not found',
+        });
+    }
+
+    const isBlacklisted = await redis.get(`snitch-blacklist:${token}`);
+
+    if (isBlacklisted) {
+        return await sendResponse({
+            res,
+            statusCode: 401,
+            message: 'Unauthorized',
+            success: false,
+            error: 'Token has been blacklisted',
         });
     }
 

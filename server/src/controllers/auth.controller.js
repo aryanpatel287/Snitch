@@ -345,7 +345,12 @@ async function logoutController(req, res) {
 
     res.clearCookie('token');
 
-    await redis.set(token, Date.now().toString(), 'EX', 3600 * 24);
+    await redis.set(
+        `snitch-blacklist:${token}`,
+        Date.now().toString(),
+        'EX',
+        3600 * 24,
+    );
 
     return await sendResponse({
         res,
