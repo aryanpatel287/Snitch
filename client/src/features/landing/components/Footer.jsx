@@ -1,79 +1,55 @@
 import React from 'react';
+import { Link } from 'react-router';
 
-const LINKS = [
-    {
-        heading: 'Shop',
-        items: ['New Arrivals', 'Blazers', 'Tees', 'Trousers', 'Accessories'],
-    },
-    {
-        heading: 'Company',
-        items: ['Our Story', 'Careers', 'Press', 'Sustainability'],
-    },
-    {
-        heading: 'Support',
-        items: ['Size Guide', 'Track Order', 'Returns', 'Contact Us'],
-    },
-    {
-        heading: 'Legal',
-        items: ['Privacy Policy', 'Terms of Service', 'Cookie Policy'],
-    },
-];
-
-const SOCIALS = [
-    { label: 'Instagram', href: 'https://instagram.com/snitch.co.in' },
-    { label: 'Twitter / X', href: 'https://twitter.com/snitchco' },
-    { label: 'YouTube', href: 'https://youtube.com' },
-];
-
-const Footer = () => (
-    <footer className="footer" role="contentinfo">
-        <div className="footer__top">
-            {/* Brand */}
-            <div className="footer__brand">
-                <a href="/" className="footer__wordmark" aria-label="Snitch home">
-                    Snitch
-                </a>
-                <p className="footer__tagline">
-                    Premium menswear crafted for the bold Indian man.
-                </p>
-            </div>
-
-            {/* Link columns */}
-            <nav className="footer__links" aria-label="Footer navigation">
-                {LINKS.map((col) => (
-                    <div key={col.heading} className="footer__link-group">
-                        <p className="footer__link-heading">{col.heading}</p>
-                        {col.items.map((item) => (
-                            <a key={item} href="#" className="footer__link">
-                                {item}
-                            </a>
-                        ))}
+const Footer = () => {
+    return (
+        <footer className="footer texture-lines--inverted">
+            <div className="footer__container">
+                <div className="footer__grid">
+                    <div className="footer__brand">
+                        <Link to="/" className="footer__wordmark">
+                            SNITCH
+                        </Link>
+                        <p className="footer__tagline">
+                            An architectural storefront for luxury monochrome clothing. Strictly black and white.
+                        </p>
                     </div>
-                ))}
-            </nav>
-
-            {/* Social */}
-            <div className="footer__social" aria-label="Social media links">
-                {SOCIALS.map((s) => (
-                    <a
-                        key={s.label}
-                        href={s.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        {s.label}
-                    </a>
-                ))}
+                    
+                    <div className="footer__nav">
+                        <span className="footer__nav-title">Shop</span>
+                        <a href="#collections" className="footer__link">Collections</a>
+                        <a href="#collections" className="footer__link">New Arrivals</a>
+                        <a href="#collections" className="footer__link">Outerwear</a>
+                    </div>
+                    
+                    <div className="footer__nav">
+                        <span className="footer__nav-title">Company</span>
+                        <a href="#story" className="footer__link">Our Story</a>
+                        <a href="#editorial" className="footer__link">Campaigns</a>
+                        <a href="#editorial" className="footer__link">Sustainability</a>
+                    </div>
+                    
+                    <div className="footer__nav">
+                        <span className="footer__nav-title">Support</span>
+                        <a href="#newsletter" className="footer__link">Dispatch</a>
+                        <Link to="/login" className="footer__link">Client Account</Link>
+                        <Link to="/register" className="footer__link">Register</Link>
+                    </div>
+                </div>
+                
+                <div className="footer__bottom">
+                    <span className="footer__copyright">
+                        &copy; {new Date().getFullYear()} SNITCH CO. ALL RIGHTS RESERVED.
+                    </span>
+                    <div className="footer__socials">
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="footer__social-link">Instagram</a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="footer__social-link">Twitter</a>
+                        <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer" className="footer__social-link">Pinterest</a>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div className="footer__bottom">
-            <p className="footer__copy">
-                © {new Date().getFullYear()} Snitch. All Rights Reserved.
-            </p>
-            <p className="footer__copy">Crafted with intention.</p>
-        </div>
-    </footer>
-);
+        </footer>
+    );
+};
 
 export default Footer;

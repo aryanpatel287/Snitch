@@ -93,7 +93,18 @@ const CreateProduct = () => {
                     noValidate
                 >
                     <div className="create-product-form__layout">
-                        {/* Left: images */}
+                        {/* Left: fields */}
+                        <section className="create-product-form__fields">
+                            <div className="form-card">
+                                <ProductFormFields
+                                    formData={formData}
+                                    errors={errors}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        </section>
+
+                        {/* Right: images */}
                         <section className="create-product-form__images">
                             <div className="form-card">
                                 <p className="form-card__label">
@@ -106,17 +117,6 @@ const CreateProduct = () => {
                                 <ImageUploadZone
                                     images={images}
                                     onImagesChange={setImages}
-                                />
-                            </div>
-                        </section>
-
-                        {/* Right: fields */}
-                        <section className="create-product-form__fields">
-                            <div className="form-card">
-                                <ProductFormFields
-                                    formData={formData}
-                                    errors={errors}
-                                    onChange={handleChange}
                                 />
                             </div>
                         </section>

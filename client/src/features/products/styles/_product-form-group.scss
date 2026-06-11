@@ -12,11 +12,15 @@
         .premium-input,
         .premium-textarea,
         .premium-select {
-            border-color: var(--color-error);
-            box-shadow: 0 0 0 1px var(--color-error-transparent);
+            border-color: var(--color-error-real);
+            box-shadow: none;
+
+            &:focus {
+                border-color: var(--color-error-real);
+            }
         }
         .premium-label {
-            color: var(--color-error);
+            color: var(--color-error-real);
         }
     }
 }
@@ -35,22 +39,22 @@
     width: 100%;
     padding: 12px 16px;
     background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    color: var(--color-primary);
-    font-family: var(--font-sans);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
     font-size: 1rem;
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: border-color var(--transition-fast) ease;
 
     &::placeholder {
+        font-family: var(--font-body);
+        font-style: italic;
         color: var(--color-text-muted);
     }
 
     &:focus {
         outline: none;
-        border-color: var(--color-primary);
+        border-color: var(--color-foreground);
     }
 }
 

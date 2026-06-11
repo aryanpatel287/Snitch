@@ -2,13 +2,20 @@ import React, { useState } from 'react';
 import AuthFormGroup from '../components/AuthFormGroup';
 import ContinueWithGoogle from '../components/ContinueWIthGoogle';
 import '../styles/_auth.scss';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../hook/useAuth';
+import { useSelector } from 'react-redux';
 
 const Login = () => {
+    const { user, loading, error } = useSelector((state) => state.auth);
     const { handleLogin } = useAuth();
-
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const redirectPath = searchParams.get('redirect') || '/';
+
+    if (!loading && user) {
+        navigate(redirectPath);
+    }
 
     const [formData, setFormData] = useState({
         email: '',
@@ -27,7 +34,7 @@ const Login = () => {
 
         try {
             await handleLogin({ email, password });
-            navigate('/');
+            navigate(redirectPath);
         } catch (error) {
             console.log(error);
         }
@@ -60,7 +67,9 @@ const Login = () => {
                     />
 
                     <div className="auth-meta">
-                        <Link to="/forgot-password" className="auth-link">Forgot Password?</Link>
+                        <Link to="/forgot-password" className="auth-link">
+                            Forgot Password?
+                        </Link>
                     </div>
 
                     <button

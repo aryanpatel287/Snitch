@@ -1,0 +1,33 @@
+@use '../../shared/styles/mixins' as *;
+
+.session-user {
+  @include displayFlex(center, flex-start, row, 0.5rem);
+  
+  &__profile {
+    @include displayFlex(center, flex-start, row, 0.5rem);
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
+    transition: background var(--transition);
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--color-surface-hover);
+    }
+  }
+
+  &__icon {
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__name {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    color: var(--color-primary);
+    font-weight: 500;
+    @include truncateText;
+    max-width: 150px;
+  }
+}

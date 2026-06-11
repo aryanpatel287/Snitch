@@ -143,4 +143,9 @@ vite.config.ts.timestamp-*
 .vite/
 
 #others
-CLIENT_COPILOT_RULES.md
+GEMINI.md 
+AGENTS.md
+.ai/
+.agents/
+.github/
+DESIGN.md

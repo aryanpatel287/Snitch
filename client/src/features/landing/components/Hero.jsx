@@ -1,54 +1,69 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 const Hero = () => {
-    const contentRef = useRef(null);
-
-    useEffect(() => {
-        if (!contentRef.current) return;
-        const els = contentRef.current.querySelectorAll('.reveal');
-        requestAnimationFrame(() => {
-            els.forEach((el) => el.classList.add('is-visible'));
-        });
-    }, []);
-
     return (
-        <section className="hero" aria-label="Hero — Spring Summer 2025" ref={contentRef}>
-            {/* Left — text content */}
-            <div className="hero__content">
-                <p className="hero__overline reveal">Spring / Summer 2025</p>
+        <header className="hero-section">
+            <div className="hero">
+                <div className="hero__content">
+                    <h1 className="hero__headline">
+                        THE ART OF <br />
+                        <em>REDUCTION</em>
+                    </h1>
+                    
+                    <div className="hero__indicator">
+                        <hr className="editorial-divider" />
+                        <div className="hero__rule-marker" />
+                    </div>
 
-                <h1 className="hero__headline reveal">
-                    Dressed for the <em>ones who dare</em>
-                </h1>
-
-                <p className="hero__sub reveal">
-                    New season. Unapologetic style.
-                </p>
-
-                <div className="hero__ctas reveal">
-                    <a href="#collection" className="btn-land btn-land--primary">
-                        Shop Now
-                    </a>
-                    <a href="#editorial" className="btn-land btn-land--ghost">
-                        Explore Lookbook
-                    </a>
+                    <p className="hero__lead">
+                        A study in monochrome luxury. Austere silhouettes, structured geometry, and strict monochrome palettes designed for the uncompromising editor.
+                    </p>
+                    <div className="hero__actions">
+                        <a href="#collections" className="button primary-button">
+                            Explore Collection
+                        </a>
+                        <a href="#collections" className="button secondary-button">
+                            New Arrivals
+                        </a>
+                    </div>
                 </div>
-
-                <span className="hero__scroll-hint reveal" aria-hidden="true">
-                    Scroll to Explore
-                </span>
+                <div className="hero__image-wrapper">
+                    <img 
+                        src="/hero_model.png" 
+                        alt="Editorial model in stark monochrome clothing" 
+                        className="hero__image"
+                    />
+                </div>
             </div>
 
-            {/* Right — editorial portrait image */}
-            <div className="hero__media" aria-hidden="true">
-                <img
-                    src="/hero_model.png"
-                    alt="Editorial menswear — Spring Summer 2025"
-                    loading="eager"
-                    fetchpriority="high"
-                />
+            {/* Statistics Banner - Inverted Grid (Black) with vertical borders and + markers */}
+            <div className="hero-stats texture-noise--inverted">
+                <div className="hero-stats__container">
+                    <div className="hero-stats__col">
+                        <span className="hero-stats__num">500k+</span>
+                        <span className="hero-stats__label">Active Users</span>
+                    </div>
+                    <div className="hero-stats__col">
+                        <div className="plus-marker plus-marker--top">+</div>
+                        <div className="plus-marker plus-marker--bottom">+</div>
+                        <span className="hero-stats__num">99.99%</span>
+                        <span className="hero-stats__label">Uptime SLA</span>
+                    </div>
+                    <div className="hero-stats__col">
+                        <div className="plus-marker plus-marker--top">+</div>
+                        <div className="plus-marker plus-marker--bottom">+</div>
+                        <span className="hero-stats__num">24/7</span>
+                        <span className="hero-stats__label">Support Access</span>
+                    </div>
+                    <div className="hero-stats__col">
+                        <div className="plus-marker plus-marker--top">+</div>
+                        <div className="plus-marker plus-marker--bottom">+</div>
+                        <span className="hero-stats__num">$10M+</span>
+                        <span className="hero-stats__label">Customer Savings</span>
+                    </div>
+                </div>
             </div>
-        </section>
+        </header>
     );
 };
 

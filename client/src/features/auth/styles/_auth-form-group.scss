@@ -9,25 +9,27 @@
         width: 100%;
         padding: 12px 16px;
         background-color: transparent;
-        border: 2px solid var(--color-border);
+        border: 2px solid var(--color-border-light);
         border-radius: var(--border-radius);
         color: var(--color-text);
-        font-family: inherit;
+        font-family: var(--font-body);
         font-size: 1rem;
-        transition: border-color 0.2s ease;
+        transition: border-color var(--transition-fast) ease;
 
         &.has-icon {
             padding-right: 44px;
         }
 
         &::placeholder {
+            font-family: var(--font-body);
+            font-style: italic;
             color: transparent;
-            transition: color 0.2s ease;
+            transition: color var(--transition-fast) ease;
         }
 
         &:focus {
             outline: none;
-            border-color: var(--color-primary);
+            border-color: var(--color-foreground);
 
             &::placeholder {
                 color: var(--color-text-muted);
@@ -91,17 +93,17 @@
 
     &.error {
         .form-input {
-            border-color: var(--color-error);
-            box-shadow: 0 0 0 1px var(--color-error-transparent);
+            border-color: var(--color-error-real);
+            box-shadow: none;
 
             &:focus {
-                border-color: var(--color-error);
-                box-shadow: 0 0 0 2px var(--color-error-transparent);
+                border-color: var(--color-error-real);
+                box-shadow: none;
             }
         }
 
         .form-label {
-            color: var(--color-error) !important;
+            color: var(--color-error-real) !important;
         }
     }
 }

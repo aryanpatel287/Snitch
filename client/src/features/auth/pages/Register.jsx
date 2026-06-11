@@ -4,11 +4,18 @@ import AuthFormGroup from '../components/AuthFormGroup';
 import ContinueWithGoogle from '../components/ContinueWIthGoogle';
 import '../styles/_auth.scss';
 import { useAuth } from '../hook/useAuth';
+import { useSelector } from 'react-redux';
 
 const Register = () => {
+    const { user, loading, error } = useSelector((state) => state.auth);
+
     const { handleRegister } = useAuth();
 
     const navigate = useNavigate();
+
+    if (!loading && user) {
+        navigate('/');
+    }
 
     const [formData, setFormData] = useState({
         fullname: '',
@@ -32,7 +39,13 @@ const Register = () => {
         const { fullname, email, contact, password, isSeller } = formData;
 
         try {
-            await handleRegister({ fullname, email, contact, password, isSeller });
+            await handleRegister({
+                fullname,
+                email,
+                contact,
+                password,
+                isSeller,
+            });
             // navigate('/');
         } catch (error) {
             console.log(error);

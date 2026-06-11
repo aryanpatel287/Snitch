@@ -1,0 +1,134 @@
+@use '../../shared/styles/mixins' as *;
+
+.user-profile-page {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: var(--font-body);
+}
+
+.user-profile-main {
+    @include sectionWrap(140px, var(--spacing-gutter-desktop));
+    
+    @media (max-width: 992px) {
+        padding-top: 100px;
+    }
+}
+
+.user-profile-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.user-profile-header {
+    @include displayFlex(flex-start, flex-start, column, 12px);
+    margin-bottom: 32px;
+}
+
+.user-profile-overline {
+    @include labelCaps;
+    color: var(--color-muted-foreground);
+    font-size: 0.75rem;
+}
+
+.user-profile-title {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+}
+
+.user-profile-content {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 48px;
+    margin-top: 48px;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}
+
+.user-details-card {
+    border: var(--border-thin);
+    padding: 32px;
+    background-color: var(--color-surface);
+    @include displayFlex(stretch, flex-start, column, 24px);
+
+    &__item {
+        @include displayFlex(center, space-between, row, 16px);
+        border-bottom: var(--border-hairline);
+        padding-bottom: 12px;
+
+        &:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        @media (max-width: 480px) {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+    }
+
+    &__label {
+        @include labelCaps;
+        font-size: 0.75rem;
+        color: var(--color-muted-foreground);
+    }
+
+    &__value {
+        font-family: var(--font-body);
+        font-size: 1.125rem;
+        font-weight: 400;
+        color: var(--color-foreground);
+
+        &--role {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background-color: var(--color-foreground);
+            color: var(--color-background);
+            padding: 2px 8px;
+        }
+    }
+}
+
+.change-password-section {
+    @include displayFlex(flex-start, flex-start, column, 24px);
+    width: 100%;
+}
+
+.change-password-trigger {
+    width: 100%;
+    padding: 16px;
+    text-align: center;
+}
+
+.change-password-form {
+    border: var(--border-thin);
+    padding: 32px;
+    background-color: var(--color-surface);
+    width: 100%;
+    @include displayFlex(stretch, flex-start, column, 20px);
+
+    &__title {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .change-password-submit {
+        margin-top: 12px;
+        padding: 16px;
+        width: 100%;
+    }
+}

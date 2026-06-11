@@ -1,4 +1,30 @@
-// ─── Mixins ──────────────────────────────────────────────────────────────────
+@use 'sass:map';
+
+// ─── Breakpoints & Responsive Mixin ──────────────────────────────────────────
+
+$breakpoints: (
+  'mobile': 640px,
+  'tablet': 768px,
+  'desktop': 1024px,
+  'wide': 1440px,
+  'sm': 576px,
+  'md': 768px,
+  'lg': 992px,
+  'xl': 1200px,
+  'xxl': 1400px
+);
+
+@mixin respond-to($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (min-width: map.get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$breakpoint}";
+  }
+}
+
+// ─── Layout & Flex Mixins ───────────────────────────────────────────────────
 
 @mixin displayFlex(
   $align: stretch,
@@ -13,49 +39,58 @@
   gap: $gap;
 }
 
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
 @mixin truncateText {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-@mixin cardSurface($radius: 12px) {
-  background: var(--color-bg-surface);
+@mixin cardSurface($radius: 0px) {
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: $radius;
+  border-radius: 0px;
 }
 
 @mixin hoverLift {
   transition: transform var(--transition), background var(--transition);
   &:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
   }
 }
 
-@mixin shimmerAnimation {
-  background: linear-gradient(
-    110deg,
-    #1a2330 8%,
-    #243040 18%,
-    #1a2330 33%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s linear infinite;
-}
+// ─── Landing & Typography Mixins ─────────────────────────────────────────────
 
-@keyframes shimmer {
-  to {
-    background-position-x: -200%;
-  }
-}
-
-// ─── Landing Page Mixins ─────────────────────────────────────────────────────
-
-@mixin sectionWrap($py: 120px, $px: 80px) {
+@mixin sectionWrap($py: var(--spacing-section), $px: var(--spacing-gutter-mobile)) {
   padding: $py $px;
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
+
+  @include respond-to('mobile') {
+    padding-left: var(--spacing-gutter-tablet);
+    padding-right: var(--spacing-gutter-tablet);
+  }
+  @include respond-to('tablet') {
+    padding-left: var(--spacing-gutter-desktop);
+    padding-right: var(--spacing-gutter-desktop);
+  }
 }
 
 @mixin editorialGrid($cols: 12, $gap: 24px) {
@@ -65,20 +100,55 @@
 }
 
 @mixin labelCaps {
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
+@mixin font-size($size, $line-height: null) {
+  font-size: $size;
+  @if $line-height {
+    line-height: $line-height;
+  }
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@mixin focus-visible {
+  &:focus-visible {
+    outline: 3px solid var(--color-foreground);
+    outline-offset: 3px;
+  }
+}
+
 @mixin fadeUp($delay: 0s) {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.6s ease $delay, transform 0.6s ease $delay;
+  transform: translateY(16px);
+  transition: opacity 300ms ease $delay, transform 300ms ease $delay;
 
   &.is-visible {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
+@mixin inlineHeaderLine {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-base);
+  width: 100%;
+}
+
+
