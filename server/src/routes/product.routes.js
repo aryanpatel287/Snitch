@@ -16,13 +16,13 @@ const upload = multer({
 });
 
 /**
- * @route POST /api/products/create-product
+ * @route POST /api/products/seller/create-product
  * @description Create a new product
  * @access Private (sellers only)
  * @body { title, description, price: { amount, currency }, images: [{ url, alt }] }
  */
 productRouter.post(
-    '/create-product',
+    'seller/create-product',
     upload.array('images', 7), // Allow up to 7 images
     createProductValidator,
     authUser,
@@ -31,11 +31,16 @@ productRouter.post(
 );
 
 /**
- * @route GET /api/products/get-products
+ * @route GET /api/products/seller/get-products
  * @description Get all products of a authenticated seller
  * @access Private (sellers only)
  * @body No body required
  */
-productRouter.get('/get-products', authUser, authSeller, getProductsController);
+productRouter.get(
+    'seller/get-products',
+    authUser,
+    authSeller,
+    getProductsController,
+);
 
 export default productRouter;

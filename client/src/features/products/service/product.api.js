@@ -8,7 +8,7 @@ const productApiInstance = axios.create({
 export async function createProduct(formData) {
     try {
         const response = await productApiInstance.post(
-            '/create-product',
+            '/seller/create-product',
             formData,
         );
         return response.data;
@@ -20,7 +20,7 @@ export async function createProduct(formData) {
 
 export async function getProducts() {
     try {
-        const response = await productApiInstance.get('/get-products');
+        const response = await productApiInstance.get('/seller/get-products');
         return response.data;
     } catch (error) {
         console.error('Error fetching products', error);

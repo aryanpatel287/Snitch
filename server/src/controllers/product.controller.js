@@ -3,7 +3,7 @@ import { sendResponse } from '../utils/response.utlis.js';
 import { uploadFileToImageKit } from '../services/storage.service.js';
 
 /**
- * @route POST /api/products/create-product
+ * @route POST /api/products/seller/create-product
  * @description Create a new product
  * @access Private (sellers only)
  * @body { title, description, price: { amount, currency }, images: [{ url, alt }] }
@@ -62,8 +62,8 @@ async function createProductContoller(req, res) {
 }
 
 /**
- * @route GET /api/products/get-products
- * @description Get all products
+ * @route GET /api/products/seller/get-products
+ * @description Get all products of a authenticated seller
  * @access Private (sellers only)
  * @body No body required
  */
