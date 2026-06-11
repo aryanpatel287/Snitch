@@ -5,6 +5,7 @@ import ContinueWithGoogle from '../components/ContinueWIthGoogle';
 import '../styles/_auth.scss';
 import { useAuth } from '../hook/useAuth';
 import { useSelector } from 'react-redux';
+import { redirectUserAfterAuth } from '../utils/auth.utils';
 
 const Register = () => {
     const { user, loading, error } = useSelector((state) => state.auth);
@@ -39,14 +40,15 @@ const Register = () => {
         const { fullname, email, contact, password, isSeller } = formData;
 
         try {
-            await handleRegister({
+            const user = await handleRegister({
                 fullname,
                 email,
                 contact,
                 password,
                 isSeller,
             });
-            // navigate('/');
+
+            redirectUserAfterAuth({ role: user.role, navigate });
         } catch (error) {
             console.log(error);
         }

@@ -5,6 +5,7 @@ import '../styles/_auth.scss';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../hook/useAuth';
 import { useSelector } from 'react-redux';
+import { redirectUserAfterAuth } from '../utils/auth.utils';
 
 const Login = () => {
     const { user, loading, error } = useSelector((state) => state.auth);
@@ -33,8 +34,8 @@ const Login = () => {
         const { email, password } = formData;
 
         try {
-            await handleLogin({ email, password });
-            navigate(redirectPath);
+            const user = await handleLogin({ email, password });
+            redirectUserAfterAuth({ role: user.role, navigate });
         } catch (error) {
             console.log(error);
         }
