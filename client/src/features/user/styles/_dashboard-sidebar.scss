@@ -1,0 +1,187 @@
+@use '../../shared/styles/mixins' as *;
+
+.dashboard-sidebar {
+    width: 240px;
+    background-color: var(--color-surface);
+    border-right: var(--border-thin);
+    @include displayFlex(stretch, flex-start, column);
+    transition: width var(--transition-fast) ease;
+    flex-shrink: 0;
+
+    &--collapsed {
+        width: 70px;
+
+        .dashboard-sidebar__item {
+            justify-content: center;
+            padding: 16px 0;
+
+            span {
+                display: none;
+            }
+            
+            i {
+                font-size: 1.25rem;
+                margin-right: 0;
+            }
+        }
+
+        .sidebar-toggle-btn {
+            span {
+                display: none;
+            }
+            i {
+                margin: 0;
+            }
+        }
+    }
+
+    @media (max-width: 900px) {
+        width: 100% !important;
+        border-right: none;
+        border-bottom: var(--border-thin);
+        flex-direction: row;
+        align-items: center;
+        overflow-x: auto;
+        padding: 0 16px;
+        height: 60px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        &.dashboard-sidebar--collapsed {
+            width: 100% !important;
+
+            .dashboard-sidebar__item {
+                padding: 8px 16px;
+
+                span {
+                    display: inline !important;
+                }
+                
+                i {
+                    font-size: 1.1rem;
+                    margin-right: 0 !important;
+                }
+            }
+        }
+    }
+}
+
+.dashboard-sidebar__toggle-wrapper {
+    padding: 16px 24px;
+    border-bottom: var(--border-hairline);
+    @include displayFlex(center, center);
+
+    @media (max-width: 900px) {
+        display: none;
+    }
+}
+
+.dashboard-sidebar__header {
+    padding: 32px 24px;
+    border-bottom: var(--border-hairline);
+    @include displayFlex(flex-start, flex-start, column, 4px);
+
+    @media (max-width: 900px) {
+        display: none;
+    }
+}
+
+.dashboard-sidebar__overline {
+    @include labelCaps;
+    font-size: 0.65rem;
+    color: var(--color-muted-foreground);
+}
+
+.dashboard-sidebar__title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+}
+
+.dashboard-sidebar__nav {
+    @include displayFlex(stretch, flex-start, column);
+    padding: 16px 0;
+    width: 100%;
+
+    @media (max-width: 900px) {
+        flex-direction: row;
+        padding: 0;
+        align-items: center;
+        height: 100%;
+        gap: 16px;
+    }
+}
+
+.dashboard-sidebar__item {
+    background: transparent;
+    border: none;
+    padding: 14px 24px;
+    text-align: left;
+    color: var(--color-foreground);
+    @include displayFlex(center, flex-start, row, 12px);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    width: 100%;
+    transition: background-color var(--transition-fast) ease, color var(--transition-fast) ease;
+
+    i {
+        font-size: 1.1rem;
+        flex-shrink: 0;
+    }
+
+    &:hover {
+        background-color: var(--color-foreground);
+        color: var(--color-background);
+    }
+
+    &--active {
+        background-color: var(--color-foreground);
+        color: var(--color-background);
+        font-weight: 600;
+    }
+
+    @media (max-width: 900px) {
+        width: auto;
+        padding: 8px 16px;
+        border: var(--border-thin);
+        height: 38px;
+        white-space: nowrap;
+        @include displayFlex(center, center, row, 8px);
+
+        span {
+            display: inline !important;
+        }
+
+        i {
+            margin: 0;
+        }
+    }
+}
+
+.sidebar-toggle-btn {
+    background: transparent;
+    border: var(--border-thin);
+    color: var(--color-foreground);
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    @include displayFlex(center, center, row, 6px);
+    transition: background-color var(--transition-fast) ease, color var(--transition-fast) ease;
+
+    &:hover {
+        background-color: var(--color-foreground);
+        color: var(--color-background);
+    }
+}

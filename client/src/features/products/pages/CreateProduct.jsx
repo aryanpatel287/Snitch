@@ -25,7 +25,7 @@ function validate(formData) {
     return errors;
 }
 
-const CreateProduct = () => {
+const CreateProduct = ({ isEmbedded = false, onCancel, onSuccess }) => {
     const navigate = useNavigate();
     const { handleCreateProducts } = useProduct();
     const { loading, error } = useSelector((state) => state.product);
@@ -62,29 +62,34 @@ const CreateProduct = () => {
         data.append('priceCurrency', formData.priceCurrency);
         images.forEach((img) => data.append('images', img.file));
 
-        await handleCreateProducts(data);
+        const result = await handleCreateProducts(data);
+        if (result && onSuccess) {
+            onSuccess();
+        }
     };
 
     return (
-        <div className="create-product-page">
+        <div className={`create-product-page ${isEmbedded ? 'create-product-page--embedded' : ''}`}>
             <div className="create-product-page__inner">
                 {/* ── Header ──────────────────────────────────────────────────── */}
-                <header className="create-product-header">
-                    <button
-                        type="button"
-                        className="back-button"
-                        onClick={() => navigate(-1)}
-                        aria-label="Go back"
-                    >
-                        <ArrowLeft size={18} />
-                    </button>
-                    <div className="create-product-header__text">
-                        <h1 className="create-product-title">New Product</h1>
-                        <p className="create-product-subtitle">
-                            Fill in the details to list your product on Snitch.
-                        </p>
-                    </div>
-                </header>
+                {!isEmbedded ? (
+                    <header className="create-product-header">
+                        <button
+                            type="button"
+                            className="back-button"
+                            onClick={() => navigate(-1)}
+                            aria-label="Go back"
+                        >
+                            <ArrowLeft size={18} />
+                        </button>
+                        <div className="create-product-header__text">
+                            <h1 className="create-product-title">New Product</h1>
+                            <p className="create-product-subtitle">
+                                Fill in the details to list your product on Snitch.
+                            </p>
+                        </div>
+                    </header>
+                ) : null}
 
                 {/* ── Form ────────────────────────────────────────────────────── */}
                 <form
@@ -134,14 +139,14 @@ const CreateProduct = () => {
                         <button
                             type="button"
                             className="button secondary-button"
-                            onClick={() => navigate(-1)}
+                            onClick={isEmbedded ? onCancel : () => navigate(-1)}
                             disabled={loading}
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="button primary-button create-product-submit"
+                            className="button primary-button"
                             disabled={loading}
                         >
                             {loading ? (

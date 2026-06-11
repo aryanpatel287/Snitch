@@ -1,0 +1,102 @@
+@use '../../shared/styles/mixins' as *;
+
+.dashboard-child-sidebar {
+    width: 200px;
+    background-color: var(--color-background);
+    border-right: var(--border-thin);
+    @include displayFlex(stretch, flex-start, column);
+    padding: 24px 0;
+    transition: all var(--transition-fast) ease;
+    flex-shrink: 0;
+
+    @media (max-width: 900px) {
+        width: 100%;
+        border-right: none;
+        border-bottom: var(--border-thin);
+        flex-direction: row;
+        align-items: center;
+        overflow-x: auto;
+        padding: 0 16px;
+        height: 50px;
+        background-color: var(--color-surface);
+    }
+}
+
+.dashboard-child-sidebar__header {
+    padding: 32px 24px 16px;
+    @include displayFlex(flex-start, flex-start, column, 4px);
+
+    @media (max-width: 900px) {
+        display: none;
+    }
+}
+
+.dashboard-child-sidebar__overline {
+    @include labelCaps;
+    font-size: 0.6rem;
+    color: var(--color-muted-foreground);
+}
+
+.dashboard-child-sidebar__title {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.dashboard-child-sidebar__nav {
+    @include displayFlex(stretch, flex-start, column);
+    width: 100%;
+
+    @media (max-width: 900px) {
+        flex-direction: row;
+        align-items: center;
+        height: 100%;
+        gap: 12px;
+    }
+}
+
+.dashboard-child-sidebar__item {
+    background: transparent;
+    border: none;
+    padding: 12px 24px;
+    text-align: left;
+    color: var(--color-muted-foreground);
+    @include displayFlex(center, flex-start, row, 10px);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    width: 100%;
+    transition: color var(--transition-fast) ease, background-color var(--transition-fast) ease;
+
+    i {
+        font-size: 1rem;
+    }
+
+    &:hover {
+        color: var(--color-foreground);
+        background-color: var(--color-muted);
+    }
+
+    &--active {
+        color: var(--color-foreground);
+        background-color: var(--color-muted);
+        font-weight: 600;
+        border-left: 2px solid var(--color-foreground);
+
+        @media (max-width: 900px) {
+            border-left: none;
+            border-bottom: 2px solid var(--color-foreground);
+        }
+    }
+
+    @media (max-width: 900px) {
+        width: auto;
+        padding: 4px 12px;
+        height: 32px;
+        font-size: 0.72rem;
+    }
+}

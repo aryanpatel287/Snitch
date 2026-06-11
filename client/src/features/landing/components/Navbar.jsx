@@ -81,7 +81,7 @@ const Navbar = () => {
                     {user ? (
                         <>
                             {user.role === 'seller' && (
-                                <Link to="/seller/create-product" className="navbar__link" onClick={closeAllMenus}>
+                                <Link to="/profile?tab=add-product" className="navbar__link" onClick={closeAllMenus}>
                                     Create Product
                                 </Link>
                             )}

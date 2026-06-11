@@ -1,0 +1,97 @@
+@use '../../shared/styles/mixins' as *;
+
+.dashboard-home {
+    @include displayFlex(flex-start, flex-start, column, 24px);
+    width: 100%;
+}
+
+.dashboard-overline {
+    @include labelCaps;
+    font-size: 0.75rem;
+    color: var(--color-muted-foreground);
+}
+
+.dashboard-title {
+    font-family: var(--font-display);
+    font-size: 2.75rem;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+
+    em {
+        font-style: italic;
+        font-weight: 400;
+    }
+}
+
+.dashboard-home__subtitle {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: var(--color-muted-foreground);
+    max-width: 600px;
+    margin-top: -8px;
+}
+
+.dashboard-home__status-card {
+    border: var(--border-thin);
+    padding: 32px;
+    background-color: var(--color-surface);
+    width: 100%;
+    margin-top: 16px;
+    @include displayFlex(stretch, flex-start, column, 20px);
+
+    .status-title {
+        @include labelCaps;
+        font-size: 0.8rem;
+        border-bottom: var(--border-hairline);
+        padding-bottom: 12px;
+        color: var(--color-foreground);
+        font-weight: 700;
+    }
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+.status-item {
+    @include displayFlex(flex-start, flex-start, column, 4px);
+    border-left: var(--border-thin);
+    padding-left: 16px;
+
+    .status-label {
+        @include labelCaps;
+        font-size: 0.65rem;
+        color: var(--color-muted-foreground);
+    }
+
+    .status-value {
+        font-family: var(--font-mono);
+        font-size: 1.1rem;
+        font-weight: 600;
+
+        &--active {
+            color: #000;
+            position: relative;
+            @include displayFlex(center, flex-start, row, 8px);
+
+            &::before {
+                content: '';
+                display: block;
+                width: 8px;
+                height: 8px;
+                background-color: #000;
+                border-radius: 0;
+            }
+        }
+    }
+}

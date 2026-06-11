@@ -1,0 +1,81 @@
+@use '../../shared/styles/mixins' as *;
+
+.editorial-product-card {
+    border: var(--border-thin);
+    background-color: var(--color-surface);
+    @include displayFlex(stretch, flex-start, column);
+    transition: transform var(--transition-fast) ease, border-color var(--transition-fast) ease;
+    
+    &:hover {
+        transform: translateY(-2px);
+        border-color: var(--color-foreground);
+
+        .product-card__image {
+            filter: grayscale(0);
+            transform: scale(1.02);
+        }
+    }
+}
+
+.product-card__image-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-bottom: var(--border-thin);
+    position: relative;
+    background-color: var(--color-muted);
+}
+
+.product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+    transition: transform var(--transition-image) ease, filter var(--transition-image) ease;
+}
+
+.product-card__details {
+    padding: 16px 20px;
+    @include displayFlex(stretch, flex-start, column, 12px);
+}
+
+.product-card__header {
+    @include displayFlex(flex-start, space-between, row, 12px);
+}
+
+.product-card__title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.product-card__price {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 500;
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+    padding: 2px 8px;
+    white-space: nowrap;
+}
+
+.product-card__desc {
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--color-muted-foreground);
+    margin: 4px 0;
+}
+
+.product-card__metadata {
+    border-top: var(--border-hairline);
+    padding-top: 12px;
+    @include displayFlex(center, space-between, row, 12px);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-muted-foreground);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}

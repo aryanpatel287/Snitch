@@ -1,12 +1,56 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router';
 import Navbar from '../../landing/components/Navbar';
-import Footer from '../../landing/components/Footer';
-import ChangePasswordButton from '../components/ChangePasswordButton';
+import DashboardHome from '../components/DashboardHome';
+import DashboardAccount from '../components/DashboardAccount';
+import DashboardMyProducts from '../../products/components/DashboardMyProducts';
+import CreateProduct from '../../products/pages/CreateProduct';
 import '../styles/_user.scss';
+
+const mockProducts = [
+    {
+        price: {
+            amount: 399,
+            currency: 'INR',
+        },
+        _id: '69ff67aeaee39489f36b8f79',
+        title: 'Printed Tshirt',
+        description: 'Best Printed Tshirts you can buy',
+        seller: {
+            _id: '69ff08a5b23b53a45c4f6510',
+            email: 'skyh53624@gmail.com',
+            contact: '1231231231',
+            fullname: 'Test User',
+            role: 'seller',
+            __v: 0,
+        },
+        images: [
+            {
+                url: 'https://ik.imagekit.io/ji8wynr3i/snitch/products/69ff08a5b23b53a45c4f6510/printed-tshirts_dG7ew32xq.png',
+                thumbnailUrl: 'https://ik.imagekit.io/ji8wynr3i/tr:n-ik_ml_thumbnail/snitch/products/69ff08a5b23b53a45c4f6510/printed-tshirts_dG7ew32xq.png',
+                alt: 'Printed Tshirt',
+                _id: '69ff67aeaee39489f36b8f7a',
+            },
+            {
+                url: 'https://ik.imagekit.io/ji8wynr3i/snitch/products/69ff08a5b23b53a45c4f6510/printed-tshirts1_zZ4QSMtVa.png',
+                thumbnailUrl: 'https://ik.imagekit.io/ji8wynr3i/tr:n-ik_ml_thumbnail/snitch/products/69ff08a5b23b53a45c4f6510/printed-tshirts1_zZ4QSMtVa.png',
+                alt: 'Printed Tshirt',
+                _id: '69ff67aeaee39489f36b8f7b',
+            },
+        ],
+        createdAt: '2026-05-09T16:58:22.170Z',
+        updatedAt: '2026-05-09T16:58:22.170Z',
+        __v: 0,
+    },
+];
+
+//FIXME: When change the tab form the my products to add a product , the add products is activating a scrollbar , Which cause a layout shift in whole page including the navbar.
 
 const UserProfile = () => {
     const { user } = useSelector((state) => state.auth);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [isParentCollapsed, setIsParentCollapsed] = useState(false);
 
     // Provide default fallback values for development/testing if user is empty
     const displayUser = user || {
@@ -16,52 +60,136 @@ const UserProfile = () => {
         role: 'seller',
     };
 
+    // Derive active tab from search parameter (Vercel best practice: no useEffect)
+    const activeTab = searchParams.get('tab') || 'home';
+    const isProductTab = activeTab === 'my-products' || activeTab === 'add-product';
+    const parentCollapsed = isProductTab || isParentCollapsed;
+
+    const handleTabChange = (newTab) => {
+        setSearchParams({ tab: newTab });
+    };
+
     return (
         <div className="user-profile-page texture-lines texture-grid">
             <Navbar />
 
             <main className="user-profile-main" id="main-content">
                 <div className="user-profile-container">
-                    {/* Section Header */}
-                    <div className="user-profile-header">
-                        <span className="user-profile-overline">01 / Account</span>
-                        <h1 className="user-profile-title">User Profile</h1>
-                    </div>
+                    <div className="profile-dashboard">
+                        {/* ── Level 1: Parent Sidebar ── */}
+                        <aside className={`dashboard-sidebar ${parentCollapsed ? 'dashboard-sidebar--collapsed' : ''}`}>
+                            <div>
+                                {!isProductTab ? (
+                                    <div className="dashboard-sidebar__toggle-wrapper">
+                                        <button
+                                            type="button"
+                                            className="sidebar-toggle-btn"
+                                            onClick={() => setIsParentCollapsed(!isParentCollapsed)}
+                                            aria-label="Toggle Sidebar"
+                                        >
+                                            {isParentCollapsed ? (
+                                                <i className="ri-arrow-right-s-line"></i>
+                                            ) : (
+                                                <>
+                                                    <i className="ri-arrow-left-s-line"></i>
+                                                    <span>Collapse</span>
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
+                                ) : null}
 
-                    <hr className="editorial-divider editorial-divider--thin" />
+                                <nav className="dashboard-sidebar__nav">
+                                    <button
+                                        type="button"
+                                        className={`dashboard-sidebar__item ${activeTab === 'home' ? 'dashboard-sidebar__item--active' : ''}`}
+                                        onClick={() => handleTabChange('home')}
+                                        title="Home"
+                                    >
+                                        <i className="ri-home-3-line"></i>
+                                        <span>Home</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={`dashboard-sidebar__item ${activeTab === 'account' ? 'dashboard-sidebar__item--active' : ''}`}
+                                        onClick={() => handleTabChange('account')}
+                                        title="Account"
+                                    >
+                                        <i className="ri-user-line"></i>
+                                        <span>Account</span>
+                                    </button>
 
-                    {/* Profile details grid */}
-                    <div className="user-profile-content">
-                        <div className="user-details-card">
-                            <div className="user-details-card__item">
-                                <span className="user-details-card__label">Full Name</span>
-                                <span className="user-details-card__value">{displayUser.fullname || 'N/A'}</span>
+                                    {displayUser.role === 'seller' ? (
+                                        <button
+                                            type="button"
+                                            className={`dashboard-sidebar__item ${isProductTab ? 'dashboard-sidebar__item--active' : ''}`}
+                                            onClick={() => handleTabChange('my-products')}
+                                            title="Products"
+                                        >
+                                            <i className="ri-shopping-bag-line"></i>
+                                            <span>Products</span>
+                                        </button>
+                                    ) : null}
+                                </nav>
                             </div>
-                            <div className="user-details-card__item">
-                                <span className="user-details-card__label">Email Address</span>
-                                <span className="user-details-card__value">{displayUser.email || 'N/A'}</span>
-                            </div>
-                            <div className="user-details-card__item">
-                                <span className="user-details-card__label">Contact Number</span>
-                                <span className="user-details-card__value">{displayUser.contact || 'N/A'}</span>
-                            </div>
-                            <div className="user-details-card__item">
-                                <span className="user-details-card__label">Account Role</span>
-                                <span className="user-details-card__value user-details-card__value--role">
-                                    {displayUser.role || 'user'}
-                                </span>
-                            </div>
-                        </div>
+                        </aside>
 
-                        {/* Action Panel */}
-                        <div className="user-profile-actions">
-                            <ChangePasswordButton />
-                        </div>
+                        {/* ── Level 2: Child Sidebar (Products Specific) ── */}
+                        {isProductTab ? (
+                            <aside className="dashboard-child-sidebar">
+                                <nav className="dashboard-child-sidebar__nav">
+                                    <button
+                                        type="button"
+                                        className={`dashboard-child-sidebar__item ${activeTab === 'my-products' ? 'dashboard-child-sidebar__item--active' : ''}`}
+                                        onClick={() => handleTabChange('my-products')}
+                                    >
+                                        <i className="ri-list-check-2"></i>
+                                        <span>My Products</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={`dashboard-child-sidebar__item ${activeTab === 'add-product' ? 'dashboard-child-sidebar__item--active' : ''}`}
+                                        onClick={() => handleTabChange('add-product')}
+                                    >
+                                        <i className="ri-add-line"></i>
+                                        <span>Add Product</span>
+                                    </button>
+                                </nav>
+                            </aside>
+                        ) : null}
+
+                        {/* ── Main Content Area ── */}
+                        <section className="profile-dashboard__main-content">
+                            {activeTab === 'home' ? (
+                                <DashboardHome displayUser={displayUser} />
+                            ) : null}
+
+                            {activeTab === 'account' ? (
+                                <DashboardAccount displayUser={displayUser} />
+                            ) : null}
+
+                            {activeTab === 'my-products' ? (
+                                <DashboardMyProducts
+                                    mockProducts={mockProducts}
+                                    onAddNewProduct={() => handleTabChange('add-product')}
+                                />
+                            ) : null}
+
+                            {activeTab === 'add-product' ? (
+                                <div className="dashboard-add-product">
+                                    <span className="dashboard-overline">04 / CREATION</span>
+                                    <h1 className="dashboard-title">List New Product</h1>
+                                    <CreateProduct
+                                        isEmbedded={true}
+                                        onCancel={() => handleTabChange('my-products')}
+                                        onSuccess={() => handleTabChange('my-products')}
+                                    />
+                                </div>
+                            ) : null}
+                        </section>
                     </div>
                 </div>
             </main>
-
-            <Footer />
         </div>
     );
 };

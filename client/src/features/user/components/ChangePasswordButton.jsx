@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import AuthFormGroup from '../../auth/components/AuthFormGroup';
 
+//TODO: Implement the change password functionality and move this component to the auth feature.
+
 const ChangePasswordButton = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [passwords, setPasswords] = useState({

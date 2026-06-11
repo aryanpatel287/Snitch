@@ -1,0 +1,41 @@
+@use '../../shared/styles/mixins' as *;
+
+.dashboard-my-products {
+    @include displayFlex(stretch, flex-start, column, 32px);
+    width: 100%;
+}
+
+.dashboard-header-with-actions {
+    @include displayFlex(center, space-between, row, 24px);
+    border-bottom: var(--border-thin);
+    padding-bottom: 24px;
+    width: 100%;
+
+    @media (max-width: 600px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+}
+
+.dashboard-header-btn {
+    padding: 12px 24px;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+
+    @media (max-width: 600px) {
+        width: 100%;
+    }
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    width: 100%;
+
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
