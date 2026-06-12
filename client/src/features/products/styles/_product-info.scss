@@ -1,0 +1,110 @@
+@use '../../shared/styles/mixins' as *;
+
+.product-info {
+    @include displayFlex(stretch, flex-start, column, 24px);
+    width: 100%;
+
+    &__row {
+        @include displayFlex(baseline, space-between, row, 24px);
+        width: 100%;
+
+        @media (max-width: 480px) {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+    }
+
+    &__title {
+        font-family: var(--font-body);
+        font-size: 1.6rem;
+        font-weight: 500;
+        line-height: 1.25;
+        color: var(--color-foreground);
+        margin: 0;
+    }
+
+    &__price {
+        font-family: var(--font-body);
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--color-foreground);
+        white-space: nowrap;
+    }
+
+    &__actions {
+        width: 100%;
+        margin-top: 8px;
+    }
+
+    &__cta {
+        width: 100%;
+        padding: 16px 32px;
+        font-size: 0.85rem;
+        letter-spacing: 0.12em;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-family: var(--font-mono);
+    }
+
+    &__accordion {
+        width: 100%;
+        border-top: var(--border-thin);
+        margin-top: 16px;
+    }
+}
+
+/* Accordion Styling with smooth height transition */
+.accordion-item {
+    border-bottom: var(--border-thin);
+    width: 100%;
+
+    &__trigger {
+        width: 100%;
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: 18px 0;
+        cursor: pointer;
+        @include displayFlex(center, space-between, row, 16px);
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        color: var(--color-foreground);
+        transition: opacity var(--transition-fast) ease;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+
+    &__content-wrapper {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 250ms cubic-bezier(0.4, 0, 0.2, 1), padding-bottom 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+
+        &--open {
+            grid-template-rows: 1fr;
+            padding-bottom: 20px;
+        }
+    }
+
+    &__content {
+        min-height: 0;
+        font-family: var(--font-body);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: var(--color-foreground);
+
+        p {
+            margin: 0;
+        }
+    }
+
+    &__muted-text {
+        color: var(--color-muted-foreground);
+        font-style: italic;
+    }
+}

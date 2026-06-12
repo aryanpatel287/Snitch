@@ -67,7 +67,7 @@ async function createProductContoller(req, res) {
  * @access Private (sellers only)
  * @body No body required
  */
-async function getProductsController(req, res) {
+async function getSellerProductsController(req, res) {
     const seller = req.user._id;
 
     try {
@@ -93,4 +93,71 @@ async function getProductsController(req, res) {
     }
 }
 
-export { createProductContoller, getProductsController };
+async function getProductsController(req, res) {
+    try {
+        const products = await productModel.find().populate('seller');
+
+        return sendResponse({
+            res,
+            statusCode: 200,
+            message: 'Products fetched successfully',
+            success: true,
+            products,
+        });
+    } catch (error) {
+        console.error('Error fetching products', error);
+
+        return sendResponse({
+            res,
+            statusCode: 500,
+            message: 'Failed to fetch products',
+            success: false,
+            error: 'Failed to fetch products',
+        });
+    }
+}
+
+async function getAProductController(req, res) {
+    const productId = req.params.productId;
+
+    if (!productId) {
+        return sendResponse({
+            res,
+            statusCode: 400,
+            message: 'Product ID is required',
+            success: false,
+            error: 'Product ID is required',
+        });
+    }
+
+    try {
+        const product = await productModel
+            .findById(productId)
+            .populate('seller');
+
+        return sendResponse({
+            res,
+            statusCode: 200,
+            message: 'Product fetched successfully',
+            success: true,
+            product,
+        });
+    } catch (error) {
+        console.error('Error fetching product', error);
+
+        return sendResponse({
+            res,
+            statusCode: 500,
+            message: 'Failed to fetch product',
+            success: false,
+            error: 'Failed to fetch product',
+        });
+    }
+}
+
+export {
+    createProductContoller,
+    getProductsController,
+    getAProductController,
+    getSellerProductsController,
+};

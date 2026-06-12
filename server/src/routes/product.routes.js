@@ -3,10 +3,11 @@ import multer from 'multer';
 import { authSeller, authUser } from '../middlewares/auth.middleware.js';
 import {
     createProductContoller,
+    getAProductController,
     getProductsController,
+    getSellerProductsController,
 } from '../controllers/product.controller.js';
 import { createProductValidator } from '../validators/product.validator.js';
-import { get } from 'mongoose';
 
 const productRouter = Router();
 
@@ -40,7 +41,23 @@ productRouter.get(
     'seller/get-products',
     authUser,
     authSeller,
-    getProductsController,
+    getSellerProductsController,
 );
+
+/**
+ * @route GET /api/products
+ * @description Get all products
+ * @access Public
+ * @body No body required
+ */
+productRouter.get('/', getProductsController);
+
+/**
+ * @route GET /api/products/:productId
+ * @description Get a single product
+ * @access Public
+ * @body No body required
+ */
+productRouter.get('/:productId', getAProductController);
 
 export default productRouter;

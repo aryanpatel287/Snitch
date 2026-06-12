@@ -8,11 +8,21 @@ import ForbiddenPage from '../features/shared/pages/ForbiddenPage';
 import ProtectedPage from '../features/auth/components/ProtectedPage';
 import UserProfile from '../features/user/pages/UserProfile';
 import LandingPage from '../features/landing/pages/LandingPage';
+import ProductsPage from '../features/products/pages/ProductsPage';
+import ProductDetailsPage from '../features/products/pages/ProductDetailsPage';
 
 export const appRoutes = createBrowserRouter([
     {
         path: '/',
         element: <LandingPage />,
+    },
+    {
+        path: '/products',
+        element: <ProductsPage />,
+    },
+    {
+        path: '/products/:productId',
+        element: <ProductDetailsPage />,
     },
     {
         path: '/profile',

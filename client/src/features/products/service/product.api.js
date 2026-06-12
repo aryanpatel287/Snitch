@@ -18,12 +18,32 @@ export async function createProduct(formData) {
     }
 }
 
-export async function getProducts() {
+export async function getSellerProducts() {
     try {
         const response = await productApiInstance.get('/seller/get-products');
         return response.data;
     } catch (error) {
         console.error('Error fetching products', error);
+        throw error;
+    }
+}
+
+export async function getAllProducts() {
+    try {
+        const response = await productApiInstance.get('/');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching products', error);
+        throw error;
+    }
+}
+
+export async function getActiveProduct(productId) {
+    try {
+        const response = await productApiInstance.get(`/${productId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching product', error);
         throw error;
     }
 }

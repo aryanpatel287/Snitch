@@ -1,0 +1,33 @@
+@use '../../shared/styles/mixins' as *;
+
+.products-header {
+    width: 100%;
+    margin-bottom: 40px;
+
+    &__content {
+        @include displayFlex(baseline, space-between, row, 24px);
+        margin-top: 16px;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+    }
+
+    &__title {
+        font-family: var(--font-display);
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 500;
+        letter-spacing: -0.03em;
+        margin: 0;
+        line-height: 1.1;
+    }
+
+    &__count {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        color: var(--color-muted-foreground);
+    }
+}

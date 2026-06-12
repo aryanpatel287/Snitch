@@ -1,7 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { getProducts, createProduct } from '../service/product.api';
+import {
+    getSellerProducts,
+    createProduct,
+    getActiveProduct,
+    getAllProducts,
+} from '../service/product.api';
 import {
     setSellerProducts,
+    setActiveProduct,
+    setAllProducts,
     setLoading,
     setError,
 } from '../state/product.slice';
@@ -10,9 +17,8 @@ import {
 
 export const useProduct = () => {
     const dispatch = useDispatch();
-    const { sellerProducts, loading, error } = useSelector(
-        (state) => state.product,
-    );
+    const { sellerProducts, activeProduct, allProducts, loading, error } =
+        useSelector((state) => state.product);
 
     async function handleCreateProducts(formData) {
         dispatch(setLoading(true));
@@ -34,13 +40,44 @@ export const useProduct = () => {
         }
     }
 
-    async function handleGetProducts() {
+    async function handleGetSellerProducts() {
         dispatch(setLoading(true));
         dispatch(setError(null));
 
         try {
-            const data = await getProducts();
+            const data = await getSellerProducts();
             dispatch(setSellerProducts(data.products));
+        } catch (error) {
+            console.error(error);
+            dispatch(setError(error.message));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    }
+
+    async function handleGetAllProducts() {
+        dispatch(setLoading(true));
+        dispatch(setError(null));
+
+        try {
+            const data = await getAllProducts();
+            dispatch(setAllProducts(data.products));
+        } catch (error) {
+            console.error(error);
+            dispatch(setError(error.message));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    }
+
+    async function handleGetActiveProduct(productId) {
+        dispatch(setLoading(true));
+        dispatch(setError(null));
+        dispatch(setActiveProduct({}));
+
+        try {
+            const data = await getActiveProduct(productId);
+            dispatch(setActiveProduct(data.product));
         } catch (error) {
             console.error(error);
             dispatch(setError(error.message));
@@ -51,8 +88,13 @@ export const useProduct = () => {
 
     return {
         handleCreateProducts,
-        handleGetProducts,
+        handleGetSellerProducts,
+        handleGetAllProducts,
+        handleGetActiveProduct,
+        handleGetProducts: handleGetSellerProducts,
         sellerProducts,
+        allProducts,
+        activeProduct,
         loading,
         error,
     };

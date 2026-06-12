@@ -74,9 +74,8 @@ const Navbar = () => {
                 </div>
 
                 <div className={`navbar__menu ${isMenuOpen ? 'navbar__menu--open' : ''}`}>
-                    <a href="#collections" className="navbar__link" onClick={closeAllMenus}>Collections</a>
-                    <a href="#story" className="navbar__link" onClick={closeAllMenus}>Story</a>
-                    <a href="#editorial" className="navbar__link" onClick={closeAllMenus}>Editorial</a>
+                    <Link to="/products" className="navbar__link" onClick={closeAllMenus}>Shop</Link>
+                    <a href="/#story" className="navbar__link" onClick={closeAllMenus}>Story</a>
 
                     {user ? (
                         <>
