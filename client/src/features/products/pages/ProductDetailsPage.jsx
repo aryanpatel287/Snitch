@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router';
-import Navbar from '../../landing/components/Navbar';
+import Navbar from '../../shared/components/Navbar';
 import Footer from '../../landing/components/Footer';
 import ProductGallery from '../components/ProductGallery';
 import ProductInfo from '../components/ProductInfo';

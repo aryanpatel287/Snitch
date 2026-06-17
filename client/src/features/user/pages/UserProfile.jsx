@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router';
-import Navbar from '../../landing/components/Navbar';
+import Navbar from '../../shared/components/Navbar';
 import DashboardHome from '../components/DashboardHome';
 import DashboardAccount from '../components/DashboardAccount';
 import DashboardMyProducts from '../../products/components/DashboardMyProducts';

@@ -1,0 +1,62 @@
+@use '../../shared/styles/mixins' as *;
+
+.brand-story {
+    @include sectionWrap(var(--spacing-section));
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 64px;
+    align-items: center;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    &__content {
+        @include displayFlex(flex-start, center, column, var(--spacing-md));
+    }
+
+    &__headline {
+        font-family: var(--font-display);
+        font-size: 2.5rem;
+        font-weight: 500;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+
+        em {
+            font-style: italic;
+        }
+    }
+
+    &__body {
+        font-size: 1.125rem;
+        line-height: 1.8;
+        color: var(--color-foreground);
+    }
+
+    &__dropcap {
+        float: left;
+        font-family: var(--font-display);
+        font-size: 4.2rem;
+        line-height: 0.8;
+        font-weight: 700;
+        padding: 8px 12px;
+        margin-right: 12px;
+        background-color: var(--color-foreground);
+        color: var(--color-background);
+        border: var(--border-thin);
+    }
+
+    &__image-wrapper {
+        border: var(--border-thin);
+        padding: 16px;
+        background-color: var(--color-surface);
+    }
+
+    &__image {
+        width: 100%;
+        height: auto;
+        display: block;
+        filter: grayscale(1);
+    }
+}

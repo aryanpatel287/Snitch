@@ -54,18 +54,28 @@ const Navbar = () => {
                 <Link to="/" className="navbar__wordmark" onClick={closeAllMenus}>
                     SNITCH
                 </Link>
-                
+
                 <div className="navbar__mobile-actions">
-                    <Link 
-                        to={user ? "/profile" : "/login?redirect=/profile"} 
-                        className="navbar__profile-mobile"
-                        onClick={closeAllMenus}
-                        aria-label="User Profile"
-                    >
-                        <i className="ri-user-line"></i>
-                    </Link>
-                    <button 
-                        className="navbar__toggle" 
+                    {user ? (
+                        <Link
+                            to="/profile"
+                            className="navbar__profile-mobile"
+                            onClick={closeAllMenus}
+                            aria-label="User Profile"
+                        >
+                            <i className="ri-user-line"></i>
+                        </Link>
+                    ) : (
+                        <Link
+                            to="/login?redirect=/profile"
+                            className="navbar__login-mobile-btn"
+                            onClick={closeAllMenus}
+                        >
+                            Login
+                        </Link>
+                    )}
+                    <button
+                        className="navbar__toggle"
                         onClick={toggleMenu}
                         aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
                     >
@@ -80,12 +90,12 @@ const Navbar = () => {
                     {user ? (
                         <>
                             {user.role === 'seller' && (
-                                <Link to="/profile?tab=add-product" className="navbar__link" onClick={closeAllMenus}>
-                                    Create Product
+                                <Link to="/profile?tab=my-products" className="navbar__link" onClick={closeAllMenus}>
+                                    My Products
                                 </Link>
                             )}
                             <div className="navbar__profile-dropdown">
-                                <button 
+                                <button
                                     className="navbar__link navbar__link--dropdown-trigger"
                                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                                     aria-expanded={isDropdownOpen}
@@ -95,14 +105,14 @@ const Navbar = () => {
                                 </button>
                                 {isDropdownOpen && (
                                     <div className="navbar__dropdown-menu">
-                                        <Link 
-                                            to="/profile" 
-                                            className="navbar__dropdown-item" 
+                                        <Link
+                                            to="/profile"
+                                            className="navbar__dropdown-item"
                                             onClick={closeAllMenus}
                                         >
                                             Profile
                                         </Link>
-                                        <LogoutButton 
+                                        <LogoutButton
                                             className="navbar__dropdown-item navbar__dropdown-item--logout"
                                             onClick={closeAllMenus}
                                         />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router';
-import Navbar from '../../landing/components/Navbar';
+import Navbar from '../../shared/components/Navbar';
 import Footer from '../../landing/components/Footer';
 import ProductFilters from '../components/ProductFilters';
 import EditorialProductCard from '../components/EditorialProductCard';

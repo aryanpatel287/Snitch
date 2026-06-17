@@ -1,0 +1,66 @@
+@use '../../shared/styles/mixins' as *;
+
+.testimonials {
+    @include sectionWrap(var(--spacing-section));
+
+    &__header {
+        @include displayFlex(flex-start, flex-start, column, 8px);
+        margin-bottom: 64px;
+    }
+
+    &__title {
+        font-family: var(--font-display);
+        font-size: 2.5rem;
+        font-weight: 500;
+    }
+
+    &__quote-container {
+        @include displayFlex(stretch, flex-start, column, 48px);
+    }
+
+    &__card {
+        border-top: var(--border-medium);
+        padding-top: 32px;
+        @include displayFlex(flex-start, space-between, row, 32px);
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            gap: 16px;
+        }
+    }
+
+    &__quote-wrapper {
+        flex: 1;
+    }
+
+    &__mark {
+        font-family: var(--font-display);
+        font-size: 5rem;
+        line-height: 1;
+        font-weight: 700;
+        color: var(--color-foreground);
+        opacity: 0.15;
+        height: 40px;
+        margin-top: -16px;
+    }
+
+    &__quote {
+        font-family: var(--font-display);
+        font-size: 1.75rem;
+        font-weight: 400;
+        line-height: 1.35;
+        font-style: italic;
+        margin-top: 8px;
+
+        @include respond-to('desktop') {
+            font-size: 2.25rem;
+        }
+    }
+
+    &__author {
+        @include labelCaps;
+        font-size: 0.8rem;
+        color: var(--color-muted-foreground);
+        margin-top: 16px;
+    }
+}

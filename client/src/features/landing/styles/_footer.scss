@@ -1,0 +1,116 @@
+@use '../../shared/styles/mixins' as *;
+
+.footer {
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+    padding: 80px 0 var(--spacing-md);
+    position: relative;
+
+    &__container {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-gutter-mobile);
+
+        @include respond-to('mobile') {
+            padding: 0 var(--spacing-gutter-tablet);
+        }
+        @include respond-to('tablet') {
+            padding: 0 var(--spacing-gutter-desktop);
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: 1.5fr repeat(3, 1fr);
+        gap: 48px;
+        padding-bottom: 64px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        @media (max-width: 900px) {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        @media (max-width: 576px) {
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+    }
+
+    &__brand {
+        @include displayFlex(flex-start, flex-start, column, 16px);
+    }
+
+    &__wordmark {
+        font-family: var(--font-display);
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--color-background);
+    }
+
+    &__tagline {
+        font-size: 0.95rem;
+        opacity: 0.7;
+        max-width: 280px;
+        line-height: 1.6;
+    }
+
+    &__nav {
+        @include displayFlex(flex-start, flex-start, column, 12px);
+    }
+
+    &__nav-title {
+        @include labelCaps;
+        color: var(--color-background);
+        opacity: 0.5;
+        font-size: 0.7rem;
+        margin-bottom: 4px;
+    }
+
+    &__link {
+        font-size: 0.9rem;
+        color: var(--color-background);
+        text-decoration: none;
+        opacity: 0.8;
+        transition: opacity var(--transition-fast) ease;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    &__bottom {
+        @include flex-between;
+        padding-top: 32px;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            gap: 16px;
+            text-align: center;
+        }
+    }
+
+    &__copyright {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        opacity: 0.5;
+    }
+
+    &__socials {
+        @include displayFlex(center, flex-end, row, 24px);
+    }
+
+    &__social-link {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: var(--color-background);
+        text-decoration: none;
+        opacity: 0.5;
+        transition: opacity var(--transition-fast) ease;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
