@@ -148,4 +148,6 @@ AGENTS.md
 .ai/
 .agents/
 .github/
+.kilocode
+skills-lock.json
 DESIGN.md

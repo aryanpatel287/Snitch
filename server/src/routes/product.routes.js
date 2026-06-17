@@ -23,7 +23,7 @@ const upload = multer({
  * @body { title, description, price: { amount, currency }, images: [{ url, alt }] }
  */
 productRouter.post(
-    'seller/create-product',
+    '/seller/create-product',
     upload.array('images', 7), // Allow up to 7 images
     createProductValidator,
     authUser,
@@ -38,7 +38,7 @@ productRouter.post(
  * @body No body required
  */
 productRouter.get(
-    'seller/get-products',
+    '/seller/get-products',
     authUser,
     authSeller,
     getSellerProductsController,

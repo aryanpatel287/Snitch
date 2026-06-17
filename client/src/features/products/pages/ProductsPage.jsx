@@ -1,16 +1,15 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import Navbar from '../../landing/components/Navbar';
 import Footer from '../../landing/components/Footer';
 import ProductFilters from '../components/ProductFilters';
-import { EditorialProductCard } from '../components/DashboardMyProducts';
+import EditorialProductCard from '../components/EditorialProductCard';
 import { useProduct } from '../hooks/useProduct';
 import '../styles/_products-page.scss';
 
 const ProductsPage = () => {
-    const navigate = useNavigate();
     const { handleGetAllProducts, allProducts, loading, error } = useProduct();
-    
+
     const [searchQuery, setSearchQuery] = useState('');
     const [sortBy, setSortBy] = useState('newest');
 
@@ -50,7 +49,7 @@ const ProductsPage = () => {
     return (
         <div className="products-page-container texture-lines texture-grid">
             <Navbar />
-            
+
             <main className="products-page-main" id="main-content">
                 <div className="products-page-content">
                     <ProductFilters
@@ -83,7 +82,7 @@ const ProductsPage = () => {
                                     key={product._id}
                                     product={product}
                                     showMetadata={false}
-                                    onClick={() => navigate(`/products/${product._id}`)}
+                                    to={`/products/${product._id}`}
                                 />
                             ))}
                         </div>
