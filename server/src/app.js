@@ -44,4 +44,8 @@ passport.use(
 app.use('/api/auth', authRouter);
 app.use('/api/products', productRouter);
 
+app.get('/', (req, res) => {
+    res.send('Welcome to the E-commerce API');
+});
+
 export default app;

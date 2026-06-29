@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import multer from 'multer';
 import { authSeller, authUser } from '../middlewares/auth.middleware.js';
+import upload from '../middlewares/upload.middleware.js';
 import {
     createProductContoller,
     getAProductController,
@@ -10,11 +10,6 @@ import {
 import { createProductValidator } from '../validators/product.validator.js';
 
 const productRouter = Router();
-
-const upload = multer({
-    storage: multer.memoryStorage(),
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
-});
 
 /**
  * @route POST /api/products/seller/create-product

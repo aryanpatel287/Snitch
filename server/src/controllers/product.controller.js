@@ -2,34 +2,62 @@ import productModel from '../models/product.model.js';
 import { sendResponse } from '../utils/response.utlis.js';
 import { uploadFileToImageKit } from '../services/storage.service.js';
 
+const parseVariants = (variants) => {
+    if (!variants) {
+        return [];
+    }
+
+    if (typeof variants === 'string') {
+        try {
+            return JSON.parse(variants);
+        } catch (error) {
+            throw new Error('Variants must be valid JSON');
+        }
+    }
+
+    return variants;
+};
+
 /**
  * @route POST /api/products/seller/create-product
  * @description Create a new product
  * @access Private (sellers only)
- * @body { title, description, price: { amount, currency }, images: [{ url, alt }] }
+ * @body { title, description, priceAmount, priceCurrency, images, stock, variants }
  */
 async function createProductContoller(req, res) {
-    const { title, description, priceAmount, priceCurrency } = req.body;
-
-    const seller = req.user._id;
-
-    const images = await Promise.all(
-        req.files.map(async (file) => {
-            const uploadResult = await uploadFileToImageKit({
-                buffer: file.buffer,
-                fileName: file.originalname,
-                folder: `products/${seller}`,
-            });
-
-            return {
-                url: uploadResult.url,
-                thumbnailUrl: uploadResult.thumbnailUrl,
-                alt: title,
-            };
-        }),
-    );
-
     try {
+        const {
+            title,
+            description,
+            priceAmount,
+            priceCurrency,
+            stock,
+            variants,
+        } = req.body;
+
+        const seller = req.user._id;
+        const parsedVariants = parseVariants(variants);
+
+        const images = await Promise.all(
+            req.files.map(async (file) => {
+                const uploadResult = await uploadFileToImageKit({
+                    buffer: file.buffer,
+                    fileName: file.originalname,
+                    folder: `products/${seller}`,
+                });
+
+                return {
+                    url: uploadResult.url,
+                    thumbnailUrl: uploadResult.thumbnailUrl,
+                    alt: title,
+                };
+            }),
+        );
+
+        if (!images || images.length === 0) {
+            throw new Error('At least one image is required');
+        }
+
         const product = await productModel.create({
             title,
             description,
@@ -37,7 +65,10 @@ async function createProductContoller(req, res) {
                 amount: priceAmount,
                 currency: priceCurrency || 'INR',
             },
+            stock,
             images,
+            variants: parsedVariants.length > 0 ? parsedVariants : undefined,
+
             seller,
         });
 
@@ -50,6 +81,16 @@ async function createProductContoller(req, res) {
         });
     } catch (error) {
         console.error('Error creating product', error);
+
+        if (error.message === 'Variants must be valid JSON') {
+            return sendResponse({
+                res,
+                statusCode: 400,
+                message: error.message,
+                success: false,
+                error: error.message,
+            });
+        }
 
         sendResponse({
             res,
