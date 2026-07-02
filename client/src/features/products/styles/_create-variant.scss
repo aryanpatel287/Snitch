@@ -1,0 +1,95 @@
+@use '../../shared/styles/mixins' as *;
+@use './product-form-group';
+
+.create-variant-container {
+    width: 100%;
+}
+
+.create-variant-form {
+    @include displayFlex(stretch, flex-start, column, 32px);
+}
+
+.create-variant-form__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+    width: 100%;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+}
+
+.create-variant-form__left {
+    @include displayFlex(stretch, flex-start, column, 32px);
+}
+
+.attributes-header {
+    @include displayFlex(center, space-between, row, 16px);
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.add-attr-btn {
+    padding: 8px 16px;
+    font-size: 0.75rem;
+}
+
+.attributes-list {
+    @include displayFlex(stretch, flex-start, column, 14px);
+    width: 100%;
+}
+
+.attribute-row {
+    @include displayFlex(center, flex-start, row, 12px);
+    width: 100%;
+}
+
+.attribute-field {
+    flex: 1;
+}
+
+.attribute-colon {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--color-foreground);
+    user-select: none;
+}
+
+.attr-key-input,
+.attr-value-input {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    padding: 10px 14px;
+}
+
+.remove-attr-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-muted-foreground);
+    cursor: pointer;
+    padding: 8px;
+    @include displayFlex(center, center);
+    transition: color var(--transition-fast) ease;
+
+    &:hover {
+        color: var(--color-foreground);
+    }
+}
+
+.create-variant-actions {
+    @include displayFlex(center, flex-end, row, 12px);
+    padding-top: 16px;
+    border-top: 1px solid var(--color-border-light);
+    width: 100%;
+
+    @media (max-width: 560px) {
+        flex-direction: column-reverse;
+
+        .button {
+            width: 100%;
+        }
+    }
+}

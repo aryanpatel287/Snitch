@@ -6,6 +6,8 @@ import DashboardHome from '../components/DashboardHome';
 import DashboardAccount from '../components/DashboardAccount';
 import DashboardMyProducts from '../../products/components/DashboardMyProducts';
 import CreateProduct from '../../products/pages/CreateProduct';
+import EditProduct from '../../products/pages/EditProduct';
+import CreateVariant from '../../products/components/CreateVariant';
 import '../styles/_user.scss';
 
 const mockProducts = [
@@ -62,7 +64,8 @@ const UserProfile = () => {
 
     // Derive active tab from search parameter (Vercel best practice: no useEffect)
     const activeTab = searchParams.get('tab') || 'home';
-    const isProductTab = activeTab === 'my-products' || activeTab === 'add-product';
+    const productId = searchParams.get('productId');
+    const isProductTab = ['my-products', 'add-product', 'edit-product', 'add-variant'].includes(activeTab);
     const parentCollapsed = isProductTab || isParentCollapsed;
 
     const handleTabChange = (newTab) => {
@@ -140,7 +143,7 @@ const UserProfile = () => {
                                 <nav className="dashboard-child-sidebar__nav">
                                     <button
                                         type="button"
-                                        className={`dashboard-child-sidebar__item ${activeTab === 'my-products' ? 'dashboard-child-sidebar__item--active' : ''}`}
+                                        className={`dashboard-child-sidebar__item ${['my-products', 'edit-product', 'add-variant'].includes(activeTab) ? 'dashboard-child-sidebar__item--active' : ''}`}
                                         onClick={() => handleTabChange('my-products')}
                                     >
                                         <i className="ri-list-check-2"></i>
@@ -172,6 +175,8 @@ const UserProfile = () => {
                                 <DashboardMyProducts
                                     mockProducts={mockProducts}
                                     onAddNewProduct={() => handleTabChange('add-product')}
+                                    onEditProduct={(id) => setSearchParams({ tab: 'edit-product', productId: id })}
+                                    onAddVariant={(id) => setSearchParams({ tab: 'add-variant', productId: id })}
                                 />
                             ) : null}
 
@@ -183,6 +188,31 @@ const UserProfile = () => {
                                         isEmbedded={true}
                                         onCancel={() => handleTabChange('my-products')}
                                         onSuccess={() => handleTabChange('my-products')}
+                                    />
+                                </div>
+                            ) : null}
+
+                            {activeTab === 'edit-product' ? (
+                                <div className="dashboard-edit-product">
+                                    <span className="dashboard-overline">05 / MODIFICATION</span>
+                                    <h1 className="dashboard-title">Edit Product Details</h1>
+                                    <EditProduct
+                                        productId={productId}
+                                        onCancel={() => handleTabChange('my-products')}
+                                        onSuccess={() => handleTabChange('my-products')}
+                                        onAddVariant={() => setSearchParams({ tab: 'add-variant', productId })}
+                                    />
+                                </div>
+                            ) : null}
+
+                            {activeTab === 'add-variant' ? (
+                                <div className="dashboard-add-variant">
+                                    <span className="dashboard-overline">06 / VARIANT</span>
+                                    <h1 className="dashboard-title">Create Product Variant</h1>
+                                    <CreateVariant
+                                        productId={productId}
+                                        onCancel={() => setSearchParams({ tab: 'edit-product', productId })}
+                                        onSuccess={() => setSearchParams({ tab: 'edit-product', productId })}
                                     />
                                 </div>
                             ) : null}

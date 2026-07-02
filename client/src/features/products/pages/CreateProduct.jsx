@@ -12,6 +12,7 @@ const INITIAL_FORM = {
     description: '',
     priceAmount: '',
     priceCurrency: 'INR',
+    stock: '',
 };
 
 function validate(formData) {
@@ -22,6 +23,9 @@ function validate(formData) {
     if (!formData.priceAmount || Number(formData.priceAmount) <= 0)
         errors.priceAmount = 'Enter a valid price greater than 0.';
     if (!formData.priceCurrency) errors.priceCurrency = 'Currency is required.';
+    if (formData.stock === undefined || formData.stock === null || formData.stock === '' || Number(formData.stock) < 0) {
+        errors.stock = 'Stock must be a positive number.';
+    }
     return errors;
 }
 
@@ -60,6 +64,7 @@ const CreateProduct = ({ isEmbedded = false, onCancel, onSuccess }) => {
         data.append('description', formData.description);
         data.append('priceAmount', formData.priceAmount);
         data.append('priceCurrency', formData.priceCurrency);
+        data.append('stock', formData.stock);
         images.forEach((img) => data.append('images', img.file));
 
         const result = await handleCreateProducts(data);

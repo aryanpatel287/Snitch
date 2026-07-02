@@ -4,6 +4,8 @@ import {
     createProduct,
     getActiveProduct,
     getAllProducts,
+    createVariant,
+    updateProduct,
 } from '../service/product.api';
 import {
     setSellerProducts,
@@ -86,11 +88,53 @@ export const useProduct = () => {
         }
     }
 
+    async function handleCreateVariant(productId, formData) {
+        dispatch(setLoading(true));
+        dispatch(setError(null));
+
+        try {
+            const data = await createVariant(productId, formData);
+            return data;
+        } catch (error) {
+            console.error('error : ', error);
+            console.log(
+                'error.response?.data?.message: ',
+                error.response?.data?.message,
+            );
+            console.log('error.message: ', error.message);
+            dispatch(setError(error.response?.data?.message ?? error.message));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    }
+
+    async function handleUpdateProduct(productId, productData) {
+        dispatch(setLoading(true));
+        dispatch(setError(null));
+
+        try {
+            const data = await updateProduct(productId, productData);
+            return data;
+        } catch (error) {
+            console.error('error : ', error);
+            console.log(
+                'error.response?.data?.message: ',
+                error.response?.data?.message,
+            );
+            console.log('error.message: ', error.message);
+            dispatch(setError(error.response?.data?.message ?? error.message));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    }
+
     return {
         handleCreateProducts,
         handleGetSellerProducts,
         handleGetAllProducts,
         handleGetActiveProduct,
+        handleCreateVariant,
+        handleUpdateProduct,
         handleGetProducts: handleGetSellerProducts,
         sellerProducts,
         allProducts,

@@ -4,7 +4,7 @@ import { useProduct } from '../hooks/useProduct';
 import { EditorialProductCard } from './EditorialProductCard';
 
 
-const DashboardMyProducts = ({ mockProducts, onAddNewProduct }) => {
+const DashboardMyProducts = ({ mockProducts, onAddNewProduct, onEditProduct, onAddVariant }) => {
 
     const { sellerProducts, loading } = useSelector((state) => state.product);
 
@@ -40,7 +40,18 @@ const DashboardMyProducts = ({ mockProducts, onAddNewProduct }) => {
 
             <div className="products-grid">
                 {sellerProducts.map((product) => (
-                    <EditorialProductCard key={product._id} product={product} />
+                    <div key={product._id} className="dashboard-product-card-wrapper">
+                        <EditorialProductCard product={product} />
+                        <div className="dashboard-product-card-actions">
+                            <button
+                                type="button"
+                                className="button secondary-button small-button"
+                                onClick={() => onEditProduct(product._id)}
+                            >
+                                Edit
+                            </button>
+                        </div>
+                    </div>
                 ))}
             </div>
         </div>

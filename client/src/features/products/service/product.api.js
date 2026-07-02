@@ -47,3 +47,29 @@ export async function getActiveProduct(productId) {
         throw error;
     }
 }
+
+export async function updateProduct(productId, formData) {
+    try {
+        const response = await productApiInstance.put(
+            `/seller/${productId}`,
+            formData,
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error updating product', error);
+        throw error;
+    }
+}
+
+export async function createVariant(productId, variantData) {
+    try {
+        const response = await productApiInstance.post(
+            `/seller/${productId}/variants`,
+            variantData,
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error creating variant', error);
+        throw error;
+    }
+}

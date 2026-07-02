@@ -48,6 +48,15 @@ const ProductFormFields = ({ formData, errors, onChange }) => {
           Please check the pricing details.
         </span>
       )}
+
+      <ProductFormGroup
+        label="Stock Quantity"
+        id="stock"
+        type="number"
+        value={formData.stock}
+        onChange={onChange}
+        error={errors.stock}
+      />
     </div>
   );
 };

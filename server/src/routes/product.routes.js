@@ -2,12 +2,17 @@ import { Router } from 'express';
 import { authSeller, authUser } from '../middlewares/auth.middleware.js';
 import upload from '../middlewares/upload.middleware.js';
 import {
-    createProductContoller,
+    createProductController,
     getAProductController,
     getProductsController,
     getSellerProductsController,
+    updateProductController,
+    createVariantController,
 } from '../controllers/product.controller.js';
-import { createProductValidator } from '../validators/product.validator.js';
+import {
+    createProductValidator,
+    createVariantValidator,
+} from '../validators/product.validator.js';
 
 const productRouter = Router();
 
@@ -23,7 +28,20 @@ productRouter.post(
     createProductValidator,
     authUser,
     authSeller,
-    createProductContoller,
+    createProductController,
+);
+
+/**
+ * @route PUT /api/products/seller/:productId
+ * @description Update a product
+ * @access Private (sellers only)
+ * @body { title, description, price: { amount, currency }, stock, images, variants }
+ */
+productRouter.put(
+    '/seller/:productId',
+    authUser,
+    authSeller,
+    updateProductController,
 );
 
 /**
@@ -54,5 +72,19 @@ productRouter.get('/', getProductsController);
  * @body No body required
  */
 productRouter.get('/:productId', getAProductController);
+
+/**
+ * @route POST /api/products/:productId/variants
+ * @description Create a new variant for a product
+ * @access Private (sellers only)
+ * @body { title, description, price: { amount, currency }, stock, images: [{ url, alt }] }
+ */
+productRouter.post(
+    '/seller/:productId/variants',
+    createVariantValidator,
+    authUser,
+    authSeller,
+    createVariantController,
+);
 
 export default productRouter;

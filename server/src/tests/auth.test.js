@@ -23,6 +23,11 @@ vi.mock('../models/user.model.js', () => ({
   },
 }));
 
+// Mock Mail Service
+vi.mock('../services/mail/mail.service.js', () => ({
+  sendEmail: vi.fn().mockResolvedValue('email sent successfully'),
+}));
+
 describe('Auth Endpoints', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -236,6 +241,36 @@ describe('Auth Endpoints', () => {
       expect(response.body.message).toBe('User logged out successfully');
       expect(response.headers['set-cookie']).toBeDefined();
       expect(redis.set).toHaveBeenCalled();
+    });
+  });
+
+  describe('POST /api/auth/forgot-password', () => {
+    it('should send a password reset email if user exists', async () => {
+      userModel.findOne.mockResolvedValue({
+        _id: 'mocked-user-id',
+        email: 'testbuyer@example.com',
+        fullname: 'Test Buyer',
+      });
+
+      const response = await request(app)
+        .post('/api/auth/forgot-password')
+        .send({ email: 'testbuyer@example.com' });
+
+      expect(response.status).toBe(200);
+      expect(response.body.success).toBe(true);
+      expect(response.body.message).toBe('Password reset email sent successfully');
+    });
+
+    it('should fail if user is not found', async () => {
+      userModel.findOne.mockResolvedValue(null);
+
+      const response = await request(app)
+        .post('/api/auth/forgot-password')
+        .send({ email: 'nonexistent@example.com' });
+
+      expect(response.status).toBe(404);
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toBe('User not found');
     });
   });
 });

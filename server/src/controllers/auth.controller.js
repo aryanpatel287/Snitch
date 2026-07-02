@@ -4,7 +4,7 @@ import userModel from '../models/user.model.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { sendResponse } from '../utils/response.utlis.js';
-import { sendEmail } from '../services/mail.service.js';
+import { sendEmail } from '../services/mail/mail.service.js';
 import { resetPasswordEmailTemplate } from '../utils/emailTemplates.utils.js';
 
 /**
@@ -93,7 +93,7 @@ async function RegsiterUserController(req, res) {
         });
 
         return await sendTokenResponse(
-            { user, message: 'User regsitered successfully', isRegister: true },
+            { user, message: 'User registered successfully', isRegister: true },
             res,
         );
     } catch (error) {

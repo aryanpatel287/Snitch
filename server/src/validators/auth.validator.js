@@ -22,6 +22,7 @@ export const validateRegister = [
     .isLength({ min: 3 })
     .withMessage('Full name must be at least 3 characters long'),
   body('isSeller')
+    .optional()
     .isBoolean()
     .withMessage('isSeller must be a boolean value (true or false)'),
 

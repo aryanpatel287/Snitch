@@ -78,4 +78,8 @@ export const config = {
 
     //ImageKit config
     IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY,
+
+    //Resend config
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    RESEND_USER: process.env.RESEND_USER,
 };
