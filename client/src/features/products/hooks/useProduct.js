@@ -15,8 +15,6 @@ import {
     setError,
 } from '../state/product.slice';
 
-// TODO:destructure the errors in the setError dispatch , see how to set the proper message in the error
-
 export const useProduct = () => {
     const dispatch = useDispatch();
     const { sellerProducts, activeProduct, allProducts, loading, error } =
@@ -30,12 +28,6 @@ export const useProduct = () => {
             const data = await createProduct(formData);
             return data;
         } catch (error) {
-            console.error('error : ', error);
-            console.log(
-                'error.response?.data?.message: ',
-                error.response?.data?.message,
-            );
-            console.log('error.message: ', error.message);
             dispatch(setError(error.response?.data?.message ?? error.message));
         } finally {
             dispatch(setLoading(false));
@@ -50,8 +42,7 @@ export const useProduct = () => {
             const data = await getSellerProducts();
             dispatch(setSellerProducts(data.products));
         } catch (error) {
-            console.error(error);
-            dispatch(setError(error.message));
+            dispatch(setError(error.response?.data?.message ?? error.message));
         } finally {
             dispatch(setLoading(false));
         }
@@ -65,8 +56,7 @@ export const useProduct = () => {
             const data = await getAllProducts();
             dispatch(setAllProducts(data.products));
         } catch (error) {
-            console.error(error);
-            dispatch(setError(error.message));
+            dispatch(setError(error.response?.data?.message ?? error.message));
         } finally {
             dispatch(setLoading(false));
         }
@@ -81,8 +71,7 @@ export const useProduct = () => {
             const data = await getActiveProduct(productId);
             dispatch(setActiveProduct(data.product));
         } catch (error) {
-            console.error(error);
-            dispatch(setError(error.message));
+            dispatch(setError(error.response?.data?.message ?? error.message));
         } finally {
             dispatch(setLoading(false));
         }
@@ -96,12 +85,6 @@ export const useProduct = () => {
             const data = await createVariant(productId, formData);
             return data;
         } catch (error) {
-            console.error('error : ', error);
-            console.log(
-                'error.response?.data?.message: ',
-                error.response?.data?.message,
-            );
-            console.log('error.message: ', error.message);
             dispatch(setError(error.response?.data?.message ?? error.message));
         } finally {
             dispatch(setLoading(false));
@@ -116,12 +99,6 @@ export const useProduct = () => {
             const data = await updateProduct(productId, productData);
             return data;
         } catch (error) {
-            console.error('error : ', error);
-            console.log(
-                'error.response?.data?.message: ',
-                error.response?.data?.message,
-            );
-            console.log('error.message: ', error.message);
             dispatch(setError(error.response?.data?.message ?? error.message));
         } finally {
             dispatch(setLoading(false));

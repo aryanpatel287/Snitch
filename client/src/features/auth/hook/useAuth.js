@@ -34,8 +34,7 @@ export const useAuth = () => {
             dispatch(setUser(data.user));
             return data.user;
         } catch (error) {
-            console.log(error);
-            dispatch(setError(error.message));
+            dispatch(setError(error.response?.data?.message ?? error.message));
             return null;
         } finally {
             dispatch(setLoading(false));
@@ -51,8 +50,7 @@ export const useAuth = () => {
             dispatch(setUser(data.user));
             return data.user;
         } catch (error) {
-            console.log(error);
-            dispatch(setError(error.message));
+            dispatch(setError(error.response?.data?.message ?? error.message));
             return null;
         } finally {
             dispatch(setLoading(false));
@@ -67,8 +65,7 @@ export const useAuth = () => {
             const data = await getMe();
             dispatch(setUser(data.user));
         } catch (error) {
-            console.log(error);
-            dispatch(setError(error.message));
+            dispatch(setError(error.response?.data?.message ?? error.message));
         } finally {
             dispatch(setLoading(false));
         }
@@ -86,8 +83,7 @@ export const useAuth = () => {
             await logoutUser();
             dispatch(setUser(null));
         } catch (error) {
-            console.log(error);
-            dispatch(setError(error.message));
+            dispatch(setError(error.response?.data?.message ?? error.message));
         } finally {
             dispatch(setLoading(false));
         }
@@ -100,8 +96,7 @@ export const useAuth = () => {
         try {
             await forgotPassword({ email });
         } catch (error) {
-            console.log(error);
-            dispatch(setError(error.message));
+            dispatch(setError(error.response?.data?.message ?? error.message));
         } finally {
             dispatch(setLoading(false));
         }
@@ -114,8 +109,7 @@ export const useAuth = () => {
         try {
             await resetPassword({ token, password });
         } catch (error) {
-            console.log(error);
-            dispatch(setError(error.message));
+            dispatch(setError(error.response?.data?.message ?? error.message));
         } finally {
             dispatch(setLoading(false));
         }
