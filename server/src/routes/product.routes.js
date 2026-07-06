@@ -12,6 +12,7 @@ import {
 import {
     createProductValidator,
     createVariantValidator,
+    updateProductValidator,
 } from '../validators/product.validator.js';
 
 const productRouter = Router();
@@ -25,9 +26,9 @@ const productRouter = Router();
 productRouter.post(
     '/seller/create-product',
     upload.array('images', 7), // Allow up to 7 images
-    createProductValidator,
     authUser,
     authSeller,
+    createProductValidator,
     createProductController,
 );
 
@@ -35,12 +36,13 @@ productRouter.post(
  * @route PUT /api/products/seller/:productId
  * @description Update a product
  * @access Private (sellers only)
- * @body { title, description, price: { amount, currency }, stock, images, variants }
+ * @body { title, description, price: { amount, currency }, images, variants }
  */
 productRouter.put(
     '/seller/:productId',
     authUser,
     authSeller,
+    updateProductValidator,
     updateProductController,
 );
 

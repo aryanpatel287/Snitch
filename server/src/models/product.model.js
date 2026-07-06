@@ -20,10 +20,6 @@ const productSchema = new mongoose.Schema(
             type: priceSchema,
             required: true,
         },
-        stock: {
-            type: Number,
-            required: true,
-        },
         images: [
             {
                 url: {
@@ -58,6 +54,7 @@ const productSchema = new mongoose.Schema(
                 ],
                 attributes: {
                     type: Map,
+                    of: String,
                     required: true,
                 },
                 stock: {
@@ -66,7 +63,6 @@ const productSchema = new mongoose.Schema(
                 },
                 price: {
                     type: priceSchema,
-                    required: true,
                 },
             },
         ],

@@ -28,11 +28,6 @@ export const createProductValidator = [
         .notEmpty()
         .isIn(['USD', 'INR', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD'])
         .withMessage('Invalid currency'),
-    body('stock')
-        .isNumeric()
-        .withMessage('Stock must be a number')
-        .custom((value) => value >= 0)
-        .withMessage('Stock must be a positive number'),
     body('variants')
         .optional()
         .custom((value) => {
@@ -120,21 +115,47 @@ export const createProductValidator = [
 
 export const createVariantValidator = [
     body('attributes')
-        .notEmpty().withMessage('Variant attributes are required')
-        .isObject().withMessage('Variant attributes must be an object'),
+        .notEmpty()
+        .withMessage('Variant attributes are required')
+        .isObject()
+        .withMessage('Variant attributes must be an object'),
     body('stock')
-        .notEmpty().withMessage('Variant stock is required')
-        .isNumeric().withMessage('Variant stock must be a number')
-        .custom((value) => Number(value) >= 0).withMessage('Variant stock must be a positive number'),
+        .notEmpty()
+        .withMessage('Variant stock is required')
+        .isNumeric()
+        .withMessage('Variant stock must be a number')
+        .custom((value) => Number(value) >= 0)
+        .withMessage('Variant stock must be a positive number'),
     body('price')
-        .notEmpty().withMessage('Variant price is required')
-        .isObject().withMessage('Variant price must be an object'),
+        .notEmpty()
+        .withMessage('Variant price is required')
+        .isObject()
+        .withMessage('Variant price must be an object'),
     body('price.amount')
-        .notEmpty().withMessage('Variant price amount is required')
-        .isNumeric().withMessage('Variant price amount must be a number')
-        .custom((value) => Number(value) >= 0).withMessage('Variant price amount must be a positive number'),
+        .notEmpty()
+        .withMessage('Variant price amount is required')
+        .isNumeric()
+        .withMessage('Variant price amount must be a number')
+        .custom((value) => Number(value) >= 0)
+        .withMessage('Variant price amount must be a positive number'),
     body('price.currency')
-        .notEmpty().withMessage('Variant price currency is required')
-        .isIn(['USD', 'INR', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD']).withMessage('Variant price currency is invalid'),
+        .notEmpty()
+        .withMessage('Variant price currency is required')
+        .isIn(['USD', 'INR', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD'])
+        .withMessage('Variant price currency is invalid'),
     validateRequest,
+];
+
+export const updateProductValidator = [
+    body('title').optional().notEmpty().withMessage('Title cannot be empty'),
+    body('description')
+        .optional()
+        .notEmpty()
+        .withMessage('Description cannot be empty'),
+    body('priceAmount')
+        .optional()
+        .isNumeric()
+        .withMessage('Price amount must be a number')
+        .custom((value) => value >= 0)
+        .withMessage('Price amount must be a positive number'),
 ];

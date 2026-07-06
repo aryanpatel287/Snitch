@@ -18,23 +18,34 @@ const parseVariants = (variants) => {
     return variants;
 };
 
+/**
+ * @route POST /api/products/:productId/variants
+ * @description Create a new variant for a product
+ * @access Private (sellers only)
+ * @param {Object} variantData - The data for the new variant
+ * @returns {Object} - The created variant object
+ * @throws {Error} - Throws an error if the variant creation fails
+ * @body { title, description, price: { amount, currency }, stock, images: [{ url, alt }] }
+ */
 async function createVariant(variantData) {
     try {
-        const {
-            attributes,
-            stock,
-            price,
-            images = [],
-        } = variantData;
+        const { attributes, stock, price, images = [] } = variantData;
 
         const processedImages = await Promise.all(
             images.map(async (image) => {
                 if (image.buffer) {
                     let bufferObj = image.buffer;
                     if (typeof bufferObj === 'string') {
-                        const base64Data = bufferObj.replace(/^data:image\/\w+;base64,/, "");
+                        const base64Data = bufferObj.replace(
+                            /^data:image\/\w+;base64,/,
+                            '',
+                        );
                         bufferObj = Buffer.from(base64Data, 'base64');
-                    } else if (bufferObj && bufferObj.type === 'Buffer' && Array.isArray(bufferObj.data)) {
+                    } else if (
+                        bufferObj &&
+                        bufferObj.type === 'Buffer' &&
+                        Array.isArray(bufferObj.data)
+                    ) {
                         bufferObj = Buffer.from(bufferObj.data);
                     }
 
@@ -77,18 +88,12 @@ async function createVariant(variantData) {
  * @route POST /api/products/seller/create-product
  * @description Create a new product
  * @access Private (sellers only)
- * @body { title, description, priceAmount, priceCurrency, images, stock, variants }
+ * @body { title, description, priceAmount, priceCurrency, images, variants }
  */
 async function createProductController(req, res) {
     try {
-        const {
-            title,
-            description,
-            priceAmount,
-            priceCurrency,
-            stock,
-            variants,
-        } = req.body;
+        const { title, description, priceAmount, priceCurrency, variants } =
+            req.body;
         const files = req.files || [];
 
         const seller = req.user._id;
@@ -125,7 +130,6 @@ async function createProductController(req, res) {
                 amount: priceAmount,
                 currency: priceCurrency || 'INR',
             },
-            stock,
             images,
             seller,
             variants: variantObjects,
@@ -165,7 +169,10 @@ async function createProductController(req, res) {
  * @route PUT /api/products/seller/:productId
  * @description Update a product
  * @access Private (sellers only)
- * @body { title, description, price: { amount, currency }, stock, images, variants }
+ * @param {string} productId - The ID of the product to update
+ * @returns {Object} - The updated product object
+ * @throws {Error} - Throws an error if the product update fails
+ * @body { title, description, price: { amount, currency }, images, variants }
  */
 async function updateProductController(req, res) {
     const productId = req.params.productId;
