@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import '../styles/_product-info.scss';
 
-const ProductInfo = ({ product }) => {
-    const { title, price, description } = product;
+const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
+    const { title, price, description, variants = [] } = product;
     const [openSections, setOpenSections] = useState({
         details: true,
         reviews: false,
         delivery: false,
     });
+    const [showSelectError, setShowSelectError] = useState(false);
 
     const toggleSection = (section) => {
         setOpenSections((prev) => ({
@@ -17,21 +18,88 @@ const ProductInfo = ({ product }) => {
         }));
     };
 
+    const handleVariantClick = (variant) => {
+        setShowSelectError(false);
+        if (selectedVariant && selectedVariant._id === variant._id) {
+            onVariantSelect(null);
+        } else {
+            onVariantSelect(variant);
+        }
+    };
+
+    const handleAddToBag = () => {
+        if (variants.length > 0 && !selectedVariant) {
+            setShowSelectError(true);
+            return;
+        }
+        alert(`ADDED TO BAG: ${title} ${selectedVariant ? JSON.stringify(selectedVariant.attributes) : ''}`);
+    };
+
+    const activePrice = selectedVariant && selectedVariant.price ? selectedVariant.price : price;
+
+    let buttonText = 'ADD TO BAG';
+    let isButtonDisabled = false;
+
+    if (variants.length > 0) {
+        if (!selectedVariant) {
+            buttonText = 'SELECT A SPECIFICATION';
+        } else if (selectedVariant.stock === 0) {
+            buttonText = 'OUT OF STOCK';
+            isButtonDisabled = true;
+        }
+    }
+
     return (
         <div className="product-info">
             {/* Title & Price Row */}
             <div className="product-info__row">
                 <h1 className="product-info__title">{title}</h1>
                 <span className="product-info__price">
-                    {price?.currency === 'INR' ? '₹' : ''}
-                    {price?.amount}
+                    {activePrice?.currency === 'INR' ? '₹' : ''}
+                    {activePrice?.amount}
                 </span>
             </div>
 
+            {/* Variant Selector Section */}
+            {variants.length > 0 && (
+                <div className={`product-info__variants ${showSelectError ? 'product-info__variants--error' : ''}`}>
+                    <span className="product-info__variants-label">SELECT ARCHIVE SPECIFICATION</span>
+                    <div className="product-info__variants-list">
+                        {variants.map((v) => {
+                            const isSelected = selectedVariant && selectedVariant._id === v._id;
+                            const isOutOfStock = v.stock === 0;
+                            const attributeLabel = Object.entries(v.attributes || {})
+                                .map(([key, val]) => `${key.toUpperCase()}: ${val.toUpperCase()}`)
+                                .join(' / ');
+
+                            return (
+                                <button
+                                    key={v._id}
+                                    type="button"
+                                    onClick={() => handleVariantClick(v)}
+                                    className={`variant-item-btn ${isSelected ? 'variant-item-btn--active' : ''} ${isOutOfStock ? 'variant-item-btn--out-of-stock' : ''}`}
+                                >
+                                    <span className="variant-item-btn__text">{attributeLabel}</span>
+                                    {isOutOfStock && <span className="variant-item-btn__stock-status">(OUT OF STOCK)</span>}
+                                </button>
+                            );
+                        })}
+                    </div>
+                    {showSelectError && (
+                        <span className="product-info__variants-error-msg">PLEASE SELECT A SPECIFICATION TO PROCEED</span>
+                    )}
+                </div>
+            )}
+
             {/* CTA Button */}
             <div className="product-info__actions">
-                <button type="button" className="button primary-button product-info__cta">
-                    ADD TO BAG
+                <button
+                    type="button"
+                    onClick={handleAddToBag}
+                    disabled={isButtonDisabled}
+                    className="button primary-button product-info__cta"
+                >
+                    {buttonText}
                 </button>
             </div>
 

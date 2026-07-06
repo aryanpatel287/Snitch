@@ -32,6 +32,98 @@
         white-space: nowrap;
     }
 
+    &__variants {
+        width: 100%;
+        border: 2px solid transparent;
+        padding: 8px 0;
+        @include displayFlex(stretch, flex-start, column, 12px);
+
+        &--error {
+            border: 2px solid var(--color-foreground);
+            padding: 12px;
+        }
+
+        &-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: var(--color-foreground);
+        }
+
+        &-list {
+            @include displayFlex(stretch, flex-start, column, 8px);
+            width: 100%;
+        }
+
+        &-error-msg {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            color: var(--color-foreground);
+            margin-top: 4px;
+        }
+    }
+
+    .variant-item-btn {
+        width: 100%;
+        background-color: var(--color-background);
+        border: 1px solid var(--color-border-light);
+        color: var(--color-foreground);
+        padding: 14px 18px;
+        text-align: left;
+        cursor: pointer;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        border-radius: 0;
+        @include displayFlex(center, space-between, row, 12px);
+        transition: background-color var(--transition-fast) ease, color var(--transition-fast) ease, border-color var(--transition-fast) ease;
+
+        &:hover {
+            background-color: var(--color-foreground);
+            color: var(--color-background);
+            border-color: var(--color-foreground);
+        }
+
+        &--active {
+            background-color: var(--color-foreground);
+            color: var(--color-background);
+            border-color: var(--color-foreground);
+        }
+
+        &--out-of-stock {
+            opacity: 0.55;
+            border: 1px dashed var(--color-border-light);
+            position: relative;
+            overflow: hidden;
+
+            &:hover {
+                background-color: var(--color-background);
+                color: var(--color-foreground);
+                border-color: var(--color-border-light);
+                cursor: not-allowed;
+            }
+
+            // Crossed-out diagonal line styling
+            &::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background-color: var(--color-border-light);
+                transform: rotate(1deg);
+            }
+        }
+
+        &__stock-status {
+            font-weight: 600;
+        }
+    }
+
     &__actions {
         width: 100%;
         margin-top: 8px;

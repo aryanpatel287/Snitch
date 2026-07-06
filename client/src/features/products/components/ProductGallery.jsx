@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import FullScreenPreview from './FullScreenPreview';
 import '../styles/_product-gallery.scss';
@@ -8,6 +8,10 @@ const PLACEHOLDER_IMAGE = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org
 const ProductGallery = ({ images = [], title }) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+    useEffect(() => {
+        setActiveIndex(0);
+    }, [images]);
 
     const hasImages = images && images.length > 0;
     const currentImage = hasImages ? images[activeIndex]?.url : PLACEHOLDER_IMAGE;

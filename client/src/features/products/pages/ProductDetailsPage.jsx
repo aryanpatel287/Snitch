@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router';
 import Navbar from '../../shared/components/Navbar';
 import Footer from '../../landing/components/Footer';
@@ -10,10 +10,12 @@ import '../styles/_product-details-page.scss';
 const ProductDetailsPage = () => {
     const { productId } = useParams();
     const { handleGetActiveProduct, activeProduct, loading, error } = useProduct();
+    const [selectedVariant, setSelectedVariant] = useState(null);
 
     useEffect(() => {
         if (productId) {
             handleGetActiveProduct(productId);
+            setSelectedVariant(null);
         }
     }, [productId]);
 
@@ -53,16 +55,24 @@ const ProductDetailsPage = () => {
                                 RETURN TO SHOP
                             </Link>
                         </div>
-                    ) : (
+                     ) : (
                         <div className="product-details__layout">
                             <div className="product-details__left">
                                 <ProductGallery
-                                    images={activeProduct.images}
+                                    images={
+                                        selectedVariant && selectedVariant.images && selectedVariant.images.length > 0
+                                            ? selectedVariant.images
+                                            : activeProduct.images
+                                    }
                                     title={activeProduct.title}
                                 />
                             </div>
                             <div className="product-details__right">
-                                <ProductInfo product={activeProduct} />
+                                <ProductInfo
+                                    product={activeProduct}
+                                    selectedVariant={selectedVariant}
+                                    onVariantSelect={setSelectedVariant}
+                                />
                             </div>
                         </div>
                     )}
