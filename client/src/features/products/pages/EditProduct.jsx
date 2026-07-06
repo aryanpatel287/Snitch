@@ -14,22 +14,24 @@ function validate(formData) {
     if (!formData.priceAmount || Number(formData.priceAmount) <= 0)
         errors.priceAmount = 'Enter a valid price greater than 0.';
     if (!formData.priceCurrency) errors.priceCurrency = 'Currency is required.';
-    if (formData.stock === undefined || formData.stock === null || formData.stock === '' || Number(formData.stock) < 0) {
-        errors.stock = 'Stock must be a positive number.';
-    }
     return errors;
 }
 
 const EditProduct = ({ productId, onCancel, onSuccess, onAddVariant }) => {
     const navigate = useNavigate();
-    const { handleGetActiveProduct, handleUpdateProduct, activeProduct, loading, error } = useProduct();
+    const {
+        handleGetActiveProduct,
+        handleUpdateProduct,
+        activeProduct,
+        loading,
+        error,
+    } = useProduct();
 
     const [formData, setFormData] = useState({
         title: '',
         description: '',
         priceAmount: '',
         priceCurrency: 'INR',
-        stock: '',
     });
     const [errors, setErrors] = useState({});
     const [submitted, setSubmitted] = useState(false);
@@ -47,7 +49,6 @@ const EditProduct = ({ productId, onCancel, onSuccess, onAddVariant }) => {
                 description: activeProduct.description || '',
                 priceAmount: activeProduct.price?.amount || '',
                 priceCurrency: activeProduct.price?.currency || 'INR',
-                stock: activeProduct.stock !== undefined ? activeProduct.stock : '',
             });
         }
     }, [activeProduct, productId]);
@@ -60,13 +61,14 @@ const EditProduct = ({ productId, onCancel, onSuccess, onAddVariant }) => {
         }
     };
 
-    const hasChanges = activeProduct && (
-        formData.title !== (activeProduct.title || '') ||
-        formData.description !== (activeProduct.description || '') ||
-        formData.priceAmount.toString() !== (activeProduct.price?.amount || '').toString() ||
-        formData.priceCurrency !== (activeProduct.price?.currency || 'INR') ||
-        formData.stock.toString() !== (activeProduct.stock !== undefined ? activeProduct.stock : '').toString()
-    );
+    const hasChanges =
+        activeProduct &&
+        (formData.title !== (activeProduct.title || '') ||
+            formData.description !== (activeProduct.description || '') ||
+            formData.priceAmount.toString() !==
+                (activeProduct.price?.amount || '').toString() ||
+            formData.priceCurrency !==
+                (activeProduct.price?.currency || 'INR'));
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -87,7 +89,6 @@ const EditProduct = ({ productId, onCancel, onSuccess, onAddVariant }) => {
                 amount: Number(formData.priceAmount),
                 currency: formData.priceCurrency,
             },
-            stock: Number(formData.stock),
         };
 
         const result = await handleUpdateProduct(productId, updatedData);
@@ -121,7 +122,9 @@ const EditProduct = ({ productId, onCancel, onSuccess, onAddVariant }) => {
                         <section className="edit-product-form__variants">
                             <div className="variants-section form-card">
                                 <div className="variants-section__header">
-                                    <p className="form-card__label">Product Variants</p>
+                                    <p className="form-card__label">
+                                        Product Variants
+                                    </p>
                                     <button
                                         type="button"
                                         className="button primary-button small-button"
@@ -130,8 +133,10 @@ const EditProduct = ({ productId, onCancel, onSuccess, onAddVariant }) => {
                                         + Add Variant
                                     </button>
                                 </div>
-                                
-                                {activeProduct && activeProduct.variants && activeProduct.variants.length > 0 ? (
+
+                                {activeProduct &&
+                                activeProduct.variants &&
+                                activeProduct.variants.length > 0 ? (
                                     <div className="variants-table-wrapper">
                                         <table className="variants-table">
                                             <thead>
@@ -142,32 +147,69 @@ const EditProduct = ({ productId, onCancel, onSuccess, onAddVariant }) => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {activeProduct.variants.map((v, idx) => (
-                                                    <tr key={v._id || idx}>
-                                                        <td className="variant-attrs-td">
-                                                            {v.attributes ? (
-                                                                Object.entries(v.attributes).map(([key, val]) => (
-                                                                    <span key={key} className="variant-attr-badge">
-                                                                        <strong>{key}:</strong> {val}
+                                                {activeProduct.variants.map(
+                                                    (v, idx) => (
+                                                        <tr key={v._id || idx}>
+                                                            <td className="variant-attrs-td">
+                                                                {v.attributes ? (
+                                                                    Object.entries(
+                                                                        v.attributes,
+                                                                    ).map(
+                                                                        ([
+                                                                            key,
+                                                                            val,
+                                                                        ]) => (
+                                                                            <span
+                                                                                key={
+                                                                                    key
+                                                                                }
+                                                                                className="variant-attr-badge"
+                                                                            >
+                                                                                <strong>
+                                                                                    {
+                                                                                        key
+                                                                                    }
+
+                                                                                    :
+                                                                                </strong>{' '}
+                                                                                {
+                                                                                    val
+                                                                                }
+                                                                            </span>
+                                                                        ),
+                                                                    )
+                                                                ) : (
+                                                                    <span className="variant-no-attr">
+                                                                        No
+                                                                        attributes
                                                                     </span>
-                                                                ))
-                                                            ) : (
-                                                                <span className="variant-no-attr">No attributes</span>
-                                                            )}
-                                                        </td>
-                                                        <td>
-                                                            {v.price?.currency === 'INR' ? '₹' : ''}
-                                                            {v.price?.amount}
-                                                        </td>
-                                                        <td>{v.stock}</td>
-                                                    </tr>
-                                                ))}
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                {v.price
+                                                                    ?.currency ===
+                                                                'INR'
+                                                                    ? '₹'
+                                                                    : ''}
+                                                                {
+                                                                    v.price
+                                                                        ?.amount
+                                                                }
+                                                            </td>
+                                                            <td>{v.stock}</td>
+                                                        </tr>
+                                                    ),
+                                                )}
                                             </tbody>
                                         </table>
                                     </div>
                                 ) : (
                                     <div className="variants-empty-state">
-                                        <p>No variants listed for this product. Click "Add Variant" above to create one.</p>
+                                        <p>
+                                            No variants listed for this product.
+                                            Click "Add Variant" above to create
+                                            one.
+                                        </p>
                                     </div>
                                 )}
                             </div>

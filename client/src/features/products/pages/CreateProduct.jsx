@@ -12,7 +12,6 @@ const INITIAL_FORM = {
     description: '',
     priceAmount: '',
     priceCurrency: 'INR',
-    stock: '',
 };
 
 function validate(formData) {
@@ -23,9 +22,6 @@ function validate(formData) {
     if (!formData.priceAmount || Number(formData.priceAmount) <= 0)
         errors.priceAmount = 'Enter a valid price greater than 0.';
     if (!formData.priceCurrency) errors.priceCurrency = 'Currency is required.';
-    if (formData.stock === undefined || formData.stock === null || formData.stock === '' || Number(formData.stock) < 0) {
-        errors.stock = 'Stock must be a positive number.';
-    }
     return errors;
 }
 
@@ -64,7 +60,6 @@ const CreateProduct = ({ isEmbedded = false, onCancel, onSuccess }) => {
         data.append('description', formData.description);
         data.append('priceAmount', formData.priceAmount);
         data.append('priceCurrency', formData.priceCurrency);
-        data.append('stock', formData.stock);
         images.forEach((img) => data.append('images', img.file));
 
         const result = await handleCreateProducts(data);
@@ -74,7 +69,9 @@ const CreateProduct = ({ isEmbedded = false, onCancel, onSuccess }) => {
     };
 
     return (
-        <div className={`create-product-page ${isEmbedded ? 'create-product-page--embedded' : ''}`}>
+        <div
+            className={`create-product-page ${isEmbedded ? 'create-product-page--embedded' : ''}`}
+        >
             <div className="create-product-page__inner">
                 {/* ── Header ──────────────────────────────────────────────────── */}
                 {!isEmbedded ? (
@@ -88,9 +85,12 @@ const CreateProduct = ({ isEmbedded = false, onCancel, onSuccess }) => {
                             <ArrowLeft size={18} />
                         </button>
                         <div className="create-product-header__text">
-                            <h1 className="create-product-title">New Product</h1>
+                            <h1 className="create-product-title">
+                                New Product
+                            </h1>
                             <p className="create-product-subtitle">
-                                Fill in the details to list your product on Snitch.
+                                Fill in the details to list your product on
+                                Snitch.
                             </p>
                         </div>
                     </header>
