@@ -8,6 +8,7 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 
 import authRouter from './routes/auth.routes.js';
 import productRouter from './routes/product.routes.js';
+import cartRouter from './routes/cart.routes.js';
 
 const app = express();
 
@@ -43,6 +44,7 @@ passport.use(
 // Routes setup
 app.use('/api/auth', authRouter);
 app.use('/api/products', productRouter);
+app.use('/api/cart', cartRouter);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the E-commerce API');
