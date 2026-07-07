@@ -27,7 +27,8 @@
         "test": "vitest run",
         "test:watch": "vitest",
         "dev": "npx nodemon server.js",
-        "seed": "node src/scripts/seed.js"
+        "seed": "node src/scripts/seed.js",
+        "build": "node scripts/sync-client-build.js"
     },
     "devDependencies": {
         "supertest": "^7.0.0",

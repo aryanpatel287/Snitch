@@ -5,12 +5,22 @@ import cookieParser from 'cookie-parser';
 import { config } from './config/config.js';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 import authRouter from './routes/auth.routes.js';
 import productRouter from './routes/product.routes.js';
 import cartRouter from './routes/cart.routes.js';
+import appRouter from './routes/app.routes.js';
+
+import { blockSuspiciousRequests } from './middlewares/app.middleware.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
+
+const publicDir = path.join(__dirname, '../public');
 
 // Server Middleware setup
 app.use(express.json({ limit: '50mb' }));
@@ -23,6 +33,9 @@ app.use(
         credentials: true,
     }),
 );
+
+app.use(blockSuspiciousRequests);
+app.use(express.static(publicDir));
 
 //Googe OAuth setup
 app.use(passport.initialize());
@@ -46,9 +59,6 @@ passport.use(
 app.use('/api/auth', authRouter);
 app.use('/api/products', productRouter);
 app.use('/api/cart', cartRouter);
-
-app.get('/', (req, res) => {
-    res.send('Welcome to the E-commerce API');
-});
+app.use('/', appRouter);
 
 export default app;
