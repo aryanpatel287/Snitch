@@ -8,7 +8,12 @@ import { useProduct } from '../hooks/useProduct';
 import '../styles/_products-page.scss';
 
 const ProductsPage = () => {
-    const { handleGetAllProducts, allProducts = [], loading, error } = useProduct();
+    const {
+        handleGetAllProducts,
+        allProducts = [],
+        loading,
+        error,
+    } = useProduct();
     const [searchParams, setSearchParams] = useSearchParams();
 
     // Local states linked to filters
@@ -18,7 +23,7 @@ const ProductsPage = () => {
     const [selectedSize, setSelectedSize] = useState('');
     const [sortBy, setSortBy] = useState('newest');
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
-    
+
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 9;
@@ -34,7 +39,9 @@ const ProductsPage = () => {
     // Set category if styled URL param is present
     useEffect(() => {
         if (styleUrlVal) {
-            setSelectedCategory(styleUrlVal.charAt(0).toUpperCase() + styleUrlVal.slice(1));
+            setSelectedCategory(
+                styleUrlVal.charAt(0).toUpperCase() + styleUrlVal.slice(1),
+            );
         }
     }, [styleUrlVal]);
 
@@ -56,7 +63,7 @@ const ProductsPage = () => {
             result = result.filter(
                 (p) =>
                     p.title?.toLowerCase().includes(query) ||
-                    p.description?.toLowerCase().includes(query)
+                    p.description?.toLowerCase().includes(query),
             );
         }
 
@@ -65,8 +72,12 @@ const ProductsPage = () => {
             const categoryQuery = selectedCategory.toLowerCase();
             result = result.filter((p) => {
                 // check title, description or attributes
-                const titleMatch = p.title?.toLowerCase().includes(categoryQuery);
-                const descMatch = p.description?.toLowerCase().includes(categoryQuery);
+                const titleMatch = p.title
+                    ?.toLowerCase()
+                    .includes(categoryQuery);
+                const descMatch = p.description
+                    ?.toLowerCase()
+                    .includes(categoryQuery);
                 return titleMatch || descMatch;
             });
         }
@@ -81,10 +92,14 @@ const ProductsPage = () => {
         if (selectedColor) {
             const colorQuery = selectedColor.toLowerCase();
             result = result.filter((p) => {
-                return p.variants?.some((v) => {
-                    const cVal = v.attributes?.get ? v.attributes.get('color') : v.attributes?.color;
-                    return cVal?.toLowerCase() === colorQuery;
-                }) || p.title?.toLowerCase().includes(colorQuery);
+                return (
+                    p.variants?.some((v) => {
+                        const cVal = v.attributes?.get
+                            ? v.attributes.get('color')
+                            : v.attributes?.color;
+                        return cVal?.toLowerCase() === colorQuery;
+                    }) || p.title?.toLowerCase().includes(colorQuery)
+                );
             });
         }
 
@@ -92,30 +107,48 @@ const ProductsPage = () => {
         if (selectedSize) {
             const sizeQuery = selectedSize.toLowerCase();
             result = result.filter((p) => {
-                return p.variants?.some((v) => {
-                    const sVal = v.attributes?.get ? v.attributes.get('size') : v.attributes?.size;
-                    return sVal?.toLowerCase() === sizeQuery;
-                }) || p.description?.toLowerCase().includes(sizeQuery);
+                return (
+                    p.variants?.some((v) => {
+                        const sVal = v.attributes?.get
+                            ? v.attributes.get('size')
+                            : v.attributes?.size;
+                        return sVal?.toLowerCase() === sizeQuery;
+                    }) || p.description?.toLowerCase().includes(sizeQuery)
+                );
             });
         }
 
         // 6. Sorting
         if (sortBy === 'price_asc') {
-            result.sort((a, b) => (a.price?.amount || 0) - (b.price?.amount || 0));
+            result.sort(
+                (a, b) => (a.price?.amount || 0) - (b.price?.amount || 0),
+            );
         } else if (sortBy === 'price_desc') {
-            result.sort((a, b) => (b.price?.amount || 0) - (a.price?.amount || 0));
+            result.sort(
+                (a, b) => (b.price?.amount || 0) - (a.price?.amount || 0),
+            );
         } else {
             // newest
-            result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            result.sort(
+                (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+            );
         }
 
         return result;
-    }, [allProducts, searchUrlVal, selectedCategory, priceRange, selectedColor, selectedSize, sortBy]);
+    }, [
+        allProducts,
+        searchUrlVal,
+        selectedCategory,
+        priceRange,
+        selectedColor,
+        selectedSize,
+        sortBy,
+    ]);
 
-    // Paginated subset
+    // Paginated subset to be implemented on the current page - change the allProducts to processedProducts for pagination over the  processed products
     const paginatedProducts = useMemo(() => {
         const startIndex = (currentPage - 1) * itemsPerPage;
-        return processedProducts.slice(startIndex, startIndex + itemsPerPage);
+        return allProducts.slice(startIndex, startIndex + itemsPerPage);
     }, [processedProducts, currentPage]);
 
     const totalPages = Math.ceil(processedProducts.length / itemsPerPage) || 1;
@@ -123,7 +156,14 @@ const ProductsPage = () => {
     // Reset to page 1 on filter changes
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchUrlVal, selectedCategory, priceRange, selectedColor, selectedSize, sortBy]);
+    }, [
+        searchUrlVal,
+        selectedCategory,
+        priceRange,
+        selectedColor,
+        selectedSize,
+        sortBy,
+    ]);
 
     return (
         <div className="products-page-container">
@@ -132,7 +172,9 @@ const ProductsPage = () => {
             <main className="products-page-main" id="main-content">
                 {/* Breadcrumbs */}
                 <nav className="products-breadcrumbs" aria-label="breadcrumb">
-                    <Link to="/" className="products-breadcrumbs__link">Home</Link>
+                    <Link to="/" className="products-breadcrumbs__link">
+                        Home
+                    </Link>
                     <i className="ri-arrow-right-s-line products-breadcrumbs__sep"></i>
                     <span className="products-breadcrumbs__current">Shop</span>
                 </nav>
@@ -158,29 +200,49 @@ const ProductsPage = () => {
                         <div className="products-catalog-header">
                             <div>
                                 <h1 className="products-catalog-title">
-                                    {selectedCategory ? `${selectedCategory}` : 'Shop'}
+                                    {selectedCategory
+                                        ? `${selectedCategory}`
+                                        : 'Shop'}
                                 </h1>
                                 <span className="products-catalog-count">
-                                    Showing {(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, processedProducts.length)} of {processedProducts.length} Products
+                                    Showing{' '}
+                                    {(currentPage - 1) * itemsPerPage + 1}-
+                                    {Math.min(
+                                        currentPage * itemsPerPage,
+                                        processedProducts.length,
+                                    )}{' '}
+                                    of {processedProducts.length} Products
                                 </span>
                             </div>
 
                             <div className="products-catalog-controls">
-                                <button className="products-mobile-filter-trigger" onClick={() => setIsMobileFiltersOpen(true)}>
-                                    <i className="ri-equalizer-line"></i> Filters
+                                <button
+                                    className="products-mobile-filter-trigger"
+                                    onClick={() => setIsMobileFiltersOpen(true)}
+                                >
+                                    <i className="ri-equalizer-line"></i>{' '}
+                                    Filters
                                 </button>
 
                                 <div className="products-sort-wrapper">
-                                    <span className="products-sort-label">Sort by:</span>
+                                    <span className="products-sort-label">
+                                        Sort by:
+                                    </span>
                                     <select
                                         className="products-sort-select"
                                         value={sortBy}
-                                        onChange={(e) => setSortBy(e.target.value)}
+                                        onChange={(e) =>
+                                            setSortBy(e.target.value)
+                                        }
                                         aria-label="Sort products"
                                     >
                                         <option value="newest">Newest</option>
-                                        <option value="price_asc">Price: Low to High</option>
-                                        <option value="price_desc">Price: High to Low</option>
+                                        <option value="price_asc">
+                                            Price: Low to High
+                                        </option>
+                                        <option value="price_desc">
+                                            Price: High to Low
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -188,18 +250,27 @@ const ProductsPage = () => {
 
                         {loading && allProducts.length === 0 ? (
                             <div className="products-page__loading">
-                                <span className="products-page__loading-text">RETRIEVING CATALOG...</span>
+                                <span className="products-page__loading-text">
+                                    RETRIEVING CATALOG...
+                                </span>
                             </div>
                         ) : error ? (
                             <div className="products-page__error">
-                                <span className="products-page__error-title">SYSTEM ERROR</span>
-                                <p className="products-page__error-desc">{error}</p>
+                                <span className="products-page__error-title">
+                                    SYSTEM ERROR
+                                </span>
+                                <p className="products-page__error-desc">
+                                    {error}
+                                </p>
                             </div>
                         ) : processedProducts.length === 0 ? (
                             <div className="products-page__empty">
-                                <span className="products-page__empty-title">NO RESULTS FOUND</span>
+                                <span className="products-page__empty-title">
+                                    NO RESULTS FOUND
+                                </span>
                                 <p className="products-page__empty-desc">
-                                    Adjust your filter criteria to discover our collection.
+                                    Adjust your filter criteria to discover our
+                                    collection.
                                 </p>
                             </div>
                         ) : (
@@ -221,16 +292,25 @@ const ProductsPage = () => {
                                         <button
                                             className="products-pagination__btn"
                                             disabled={currentPage === 1}
-                                            onClick={() => setCurrentPage((c) => Math.max(1, c - 1))}
+                                            onClick={() =>
+                                                setCurrentPage((c) =>
+                                                    Math.max(1, c - 1),
+                                                )
+                                            }
                                         >
-                                            <i className="ri-arrow-left-line"></i> Previous
+                                            <i className="ri-arrow-left-line"></i>{' '}
+                                            Previous
                                         </button>
                                         <div className="products-pagination__numbers">
-                                            {Array.from({ length: totalPages }).map((_, i) => (
+                                            {Array.from({
+                                                length: totalPages,
+                                            }).map((_, i) => (
                                                 <button
                                                     key={i}
                                                     className={`products-pagination__num-btn ${currentPage === i + 1 ? 'active' : ''}`}
-                                                    onClick={() => setCurrentPage(i + 1)}
+                                                    onClick={() =>
+                                                        setCurrentPage(i + 1)
+                                                    }
                                                 >
                                                     {i + 1}
                                                 </button>
@@ -238,10 +318,17 @@ const ProductsPage = () => {
                                         </div>
                                         <button
                                             className="products-pagination__btn"
-                                            disabled={currentPage === totalPages}
-                                            onClick={() => setCurrentPage((c) => Math.min(totalPages, c + 1))}
+                                            disabled={
+                                                currentPage === totalPages
+                                            }
+                                            onClick={() =>
+                                                setCurrentPage((c) =>
+                                                    Math.min(totalPages, c + 1),
+                                                )
+                                            }
                                         >
-                                            Next <i className="ri-arrow-right-line"></i>
+                                            Next{' '}
+                                            <i className="ri-arrow-right-line"></i>
                                         </button>
                                     </div>
                                 )}

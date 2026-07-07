@@ -65,7 +65,7 @@ export const EditorialProductCard = ({ product, showMetadata = true, onClick, to
                 <img
                     src={imageUrl}
                     alt={imageAlt}
-                    className="product-card__image"
+                    className={`product-card__image ${imageUrl === PLACEHOLDER_IMAGE ? 'product-card__image--placeholder' : ''}`}
                 />
             </div>
             <div className="product-card__details">
