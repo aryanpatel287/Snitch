@@ -144,33 +144,6 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                {/* Bottom Row: Scrollable Clothes Categories */}
-                <div className="navbar__categories-scroll-bar">
-                    <div className="navbar__scroll-container navbar__desktop-only-categories">
-                        {categories.map((cat) => (
-                            <Link 
-                                key={cat.name} 
-                                to={cat.path} 
-                                className="navbar__category-tab"
-                                onClick={closeAllMenus}
-                            >
-                                {cat.name}
-                            </Link>
-                        ))}
-                    </div>
-                    <div className="navbar__mobile-search-container">
-                        <form className="navbar__search-box navbar__search-box--mobile" onSubmit={handleSearchSubmit}>
-                            <i className="ri-search-line navbar__search-icon"></i>
-                            <input
-                                type="text"
-                                placeholder='Search "STRAIGHT FIT JEANS"'
-                                className="navbar__search-field"
-                                value={searchVal}
-                                onChange={(e) => setSearchVal(e.target.value)}
-                            />
-                        </form>
-                    </div>
-                </div>
             </nav>
 
             {/* Slide Drawer Category Menu (Left-sliding) */}
