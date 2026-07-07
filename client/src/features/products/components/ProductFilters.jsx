@@ -63,15 +63,15 @@ const ProductFilters = ({
                 <input
                     type="range"
                     min="0"
-                    max="500"
-                    step="10"
+                    max="5000"
+                    step="50"
                     value={priceRange}
                     onChange={(e) => setPriceRange(Number(e.target.value))}
                     className="product-filters__price-slider"
                 />
                 <div className="product-filters__price-values">
-                    <span>$0</span>
-                    <span>${priceRange}</span>
+                    <span>₹0</span>
+                    <span>₹{priceRange}</span>
                 </div>
             </div>
 

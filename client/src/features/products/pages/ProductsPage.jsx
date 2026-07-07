@@ -18,7 +18,7 @@ const ProductsPage = () => {
 
     // Local states linked to filters
     const [selectedCategory, setSelectedCategory] = useState('');
-    const [priceRange, setPriceRange] = useState(500);
+    const [priceRange, setPriceRange] = useState(5000);
     const [selectedColor, setSelectedColor] = useState('');
     const [selectedSize, setSelectedSize] = useState('');
     const [sortBy, setSortBy] = useState('newest');
@@ -47,11 +47,12 @@ const ProductsPage = () => {
 
     const clearAllFilters = () => {
         setSelectedCategory('');
-        setPriceRange(500);
+        setPriceRange(5000);
         setSelectedColor('');
         setSelectedSize('');
         setSearchParams({});
     };
+
 
     // Filter & Sort Logic
     const processedProducts = useMemo(() => {
@@ -148,7 +149,7 @@ const ProductsPage = () => {
     // Paginated subset to be implemented on the current page - change the allProducts to processedProducts for pagination over the  processed products
     const paginatedProducts = useMemo(() => {
         const startIndex = (currentPage - 1) * itemsPerPage;
-        return allProducts.slice(startIndex, startIndex + itemsPerPage);
+        return processedProducts.slice(startIndex, startIndex + itemsPerPage);
     }, [processedProducts, currentPage]);
 
     const totalPages = Math.ceil(processedProducts.length / itemsPerPage) || 1;
