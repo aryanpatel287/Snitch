@@ -11,6 +11,7 @@ const ProductFormGroup = ({
   error,
   options = [],
   rows = 5,
+  disabled = false,
 }) => {
   const isTextarea = type === 'textarea';
   const isSelect = type === 'select';
@@ -30,6 +31,7 @@ const ProductFormGroup = ({
           onChange={onChange}
           placeholder={placeholder}
           rows={rows}
+          disabled={disabled}
         />
       ) : isSelect ? (
         <select
@@ -38,6 +40,7 @@ const ProductFormGroup = ({
           className="premium-select"
           value={value}
           onChange={onChange}
+          disabled={disabled}
         >
           {options.map((opt) => {
             const val = typeof opt === 'object' ? opt.value : opt;
@@ -58,6 +61,7 @@ const ProductFormGroup = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
+          disabled={disabled}
         />
       )}
       

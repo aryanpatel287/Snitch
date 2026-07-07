@@ -4,7 +4,6 @@ import ChangePasswordButton from './ChangePasswordButton';
 const DashboardAccount = ({ displayUser }) => {
     return (
         <div className="dashboard-account">
-            <span className="dashboard-overline">02 / ACCOUNT DETAILS</span>
             <h1 className="dashboard-title">My Settings</h1>
 
             <div className="dashboard-account__grid">

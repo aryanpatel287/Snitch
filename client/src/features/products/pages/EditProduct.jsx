@@ -35,6 +35,7 @@ const EditProduct = ({ productId, onCancel, onSuccess, onAddVariant }) => {
     });
     const [errors, setErrors] = useState({});
     const [submitted, setSubmitted] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         if (productId) {
@@ -114,6 +115,7 @@ const EditProduct = ({ productId, onCancel, onSuccess, onAddVariant }) => {
                                     formData={formData}
                                     errors={errors}
                                     onChange={handleChange}
+                                    disabled={!isEditing}
                                 />
                             </div>
                         </section>
@@ -225,28 +227,50 @@ const EditProduct = ({ productId, onCancel, onSuccess, onAddVariant }) => {
 
                     {/* ── Actions ─────────────────────────────────────────────── */}
                     <div className="edit-product-actions">
-                        <button
-                            type="button"
-                            className="button secondary-button"
-                            onClick={onCancel}
-                            disabled={loading}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="button primary-button"
-                            disabled={loading || !hasChanges}
-                        >
-                            {loading ? (
-                                <>
-                                    <Loader2 size={16} className="spin-icon" />
-                                    Saving…
-                                </>
-                            ) : (
-                                'Save Changes'
-                            )}
-                        </button>
+                        {!isEditing ? (
+                            <button
+                                type="button"
+                                className="button primary-button full-width"
+                                onClick={() => setIsEditing(true)}
+                            >
+                                Edit
+                            </button>
+                        ) : (
+                            <>
+                                <button
+                                    type="button"
+                                    className="button secondary-button"
+                                    onClick={() => {
+                                        setIsEditing(false);
+                                        if (activeProduct) {
+                                            setFormData({
+                                                title: activeProduct.title || '',
+                                                description: activeProduct.description || '',
+                                                priceAmount: activeProduct.price?.amount || '',
+                                                priceCurrency: activeProduct.price?.currency || 'INR',
+                                            });
+                                        }
+                                    }}
+                                    disabled={loading}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="button primary-button"
+                                    disabled={loading || !hasChanges}
+                                >
+                                    {loading ? (
+                                        <>
+                                            <Loader2 size={16} className="spin-icon" />
+                                            Saving…
+                                        </>
+                                    ) : (
+                                        'Save Changes'
+                                    )}
+                                </button>
+                            </>
+                        )}
                     </div>
                 </form>
             </div>

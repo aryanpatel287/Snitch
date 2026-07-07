@@ -3,7 +3,6 @@ import React from 'react';
 const DashboardHome = ({ displayUser }) => {
     return (
         <div className="dashboard-home">
-            <span className="dashboard-overline">01 / OVERVIEW</span>
             <h1 className="dashboard-title">
                 CHRONICLES OF MOTION.<br />
                 Welcome back, <em>{displayUser.fullname}</em>.

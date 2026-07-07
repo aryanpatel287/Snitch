@@ -45,33 +45,24 @@
     flex-direction: column;
     border: 1px solid var(--color-border);
     background-color: var(--color-background);
-    border-radius: 0;
+    border-radius: var(--border-radius-card);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform var(--transition-fast) ease;
+
+    &:hover {
+        transform: translateY(-4px);
+    }
 
     .editorial-product-card {
         border: none;
         flex-grow: 1;
-        padding-bottom: 0;
-    }
-}
+        padding: 0 16px 16px;
 
-.dashboard-product-card-actions {
-    display: flex;
-    padding: 16px;
-    background-color: var(--color-background);
-    border-top: 1px solid var(--color-border-light);
-    
-    .button {
-        width: 100%;
-        font-size: 0.75rem;
-        padding: 10px 16px;
-        border: 2px solid var(--color-border);
-        background-color: var(--color-background);
-        color: var(--color-foreground);
-        border-radius: 0;
-        
-        &:hover {
-            background-color: var(--color-foreground);
-            color: var(--color-background);
+        .product-card__image-container {
+            margin: 0 -16px;
+            border-radius: var(--border-radius-card) var(--border-radius-card) 0 0;
+            width: calc(100% + 32px);
         }
     }
 }

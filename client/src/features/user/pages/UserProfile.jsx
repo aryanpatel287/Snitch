@@ -182,7 +182,6 @@ const UserProfile = () => {
 
                             {activeTab === 'add-product' ? (
                                 <div className="dashboard-add-product">
-                                    <span className="dashboard-overline">04 / CREATION</span>
                                     <h1 className="dashboard-title">List New Product</h1>
                                     <CreateProduct
                                         isEmbedded={true}
@@ -194,8 +193,7 @@ const UserProfile = () => {
 
                             {activeTab === 'edit-product' ? (
                                 <div className="dashboard-edit-product">
-                                    <span className="dashboard-overline">05 / MODIFICATION</span>
-                                    <h1 className="dashboard-title">Edit Product Details</h1>
+                                    <h1 className="dashboard-title">Product Details</h1>
                                     <EditProduct
                                         productId={productId}
                                         onCancel={() => handleTabChange('my-products')}
@@ -207,7 +205,6 @@ const UserProfile = () => {
 
                             {activeTab === 'add-variant' ? (
                                 <div className="dashboard-add-variant">
-                                    <span className="dashboard-overline">06 / VARIANT</span>
                                     <h1 className="dashboard-title">Create Product Variant</h1>
                                     <CreateVariant
                                         productId={productId}

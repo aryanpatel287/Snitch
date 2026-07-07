@@ -26,7 +26,6 @@ const DashboardMyProducts = ({ mockProducts, onAddNewProduct, onEditProduct, onA
         <div className="dashboard-my-products">
             <div className="dashboard-header-with-actions">
                 <div>
-                    <span className="dashboard-overline">03 / INVENTORY</span>
                     <h1 className="dashboard-title">My Catalog</h1>
                 </div>
                 <button
@@ -40,17 +39,13 @@ const DashboardMyProducts = ({ mockProducts, onAddNewProduct, onEditProduct, onA
 
             <div className="products-grid">
                 {sellerProducts.map((product) => (
-                    <div key={product._id} className="dashboard-product-card-wrapper">
+                    <div 
+                        key={product._id} 
+                        className="dashboard-product-card-wrapper"
+                        onClick={() => onEditProduct(product._id)}
+                        style={{ cursor: 'pointer' }}
+                    >
                         <EditorialProductCard product={product} />
-                        <div className="dashboard-product-card-actions">
-                            <button
-                                type="button"
-                                className="button secondary-button small-button"
-                                onClick={() => onEditProduct(product._id)}
-                            >
-                                Edit
-                            </button>
-                        </div>
                     </div>
                 ))}
             </div>

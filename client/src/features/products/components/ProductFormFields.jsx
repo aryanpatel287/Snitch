@@ -3,7 +3,7 @@ import ProductFormGroup from './ProductFormGroup';
 
 const CURRENCIES = ['INR', 'USD', 'EUR', 'GBP', 'AED', 'SGD'];
 
-const ProductFormFields = ({ formData, errors, onChange }) => {
+const ProductFormFields = ({ formData, errors, onChange, disabled = false }) => {
     return (
         <div className="product-form-fields">
             <ProductFormGroup
@@ -12,6 +12,7 @@ const ProductFormFields = ({ formData, errors, onChange }) => {
                 value={formData.title}
                 onChange={onChange}
                 error={errors.title}
+                disabled={disabled}
             />
 
             <ProductFormGroup
@@ -21,6 +22,7 @@ const ProductFormFields = ({ formData, errors, onChange }) => {
                 value={formData.description}
                 onChange={onChange}
                 error={errors.description}
+                disabled={disabled}
             />
 
             <div className="premium-price-row">
@@ -32,6 +34,7 @@ const ProductFormFields = ({ formData, errors, onChange }) => {
                     value={formData.priceCurrency}
                     onChange={onChange}
                     error={errors.priceCurrency}
+                    disabled={disabled}
                 />
 
                 <ProductFormGroup
@@ -41,6 +44,7 @@ const ProductFormFields = ({ formData, errors, onChange }) => {
                     value={formData.priceAmount}
                     onChange={onChange}
                     error={errors.priceAmount}
+                    disabled={disabled}
                 />
             </div>
             {(errors.priceAmount || errors.priceCurrency) && (

@@ -25,6 +25,15 @@
     }
 }
 
+.form-card {
+    background-color: var(--color-card);
+    border: var(--border-thin);
+    border-radius: var(--border-radius-card);
+    padding: 32px;
+    @include displayFlex(stretch, flex-start, column, 20px);
+    width: 100%;
+}
+
 .premium-label {
     font-family: var(--font-sans);
     font-size: 0.9rem;
@@ -37,10 +46,9 @@
 .premium-textarea,
 .premium-select {
     width: 100%;
-    padding: 12px 16px;
+    padding: 12px 24px;
     background-color: var(--color-surface);
     border: 2px solid var(--color-border);
-    border-radius: var(--border-radius);
     color: var(--color-foreground);
     font-family: var(--font-body);
     font-size: 1rem;
@@ -48,7 +56,6 @@
 
     &::placeholder {
         font-family: var(--font-body);
-        font-style: italic;
         color: var(--color-text-muted);
     }
 
@@ -58,9 +65,16 @@
     }
 }
 
+.premium-input,
+.premium-select {
+    border-radius: var(--border-radius-btn);
+}
+
 .premium-textarea {
+    border-radius: var(--border-radius-card);
     resize: vertical;
     min-height: 140px;
+    padding: 16px 24px;
 }
 
 .premium-select {

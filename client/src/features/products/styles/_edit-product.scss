@@ -48,9 +48,9 @@
 /* Variants Section Styles */
 .variants-section {
     border: 1px solid var(--color-border);
-    padding: 24px;
+    padding: 32px;
     background-color: var(--color-background);
-    border-radius: 0;
+    border-radius: var(--border-radius-card);
 }
 
 .variants-section__header {
@@ -66,6 +66,7 @@
     width: 100%;
     overflow-x: auto;
     border: 1px solid var(--color-border);
+    border-radius: 12px;
 }
 
 .variants-table {
@@ -104,11 +105,11 @@
 
 .variant-attr-badge {
     display: inline-block;
-    padding: 4px 8px;
+    padding: 6px 12px;
     background-color: var(--color-muted);
     border: 1px solid var(--color-border-light);
     font-size: 0.75rem;
-    border-radius: 0;
+    border-radius: var(--border-radius-btn);
     white-space: nowrap;
 
     strong {
