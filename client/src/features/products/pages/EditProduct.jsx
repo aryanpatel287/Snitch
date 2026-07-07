@@ -230,7 +230,7 @@ const EditProduct = ({ productId, onCancel, onSuccess, onAddVariant }) => {
                         {!isEditing ? (
                             <button
                                 type="button"
-                                className="button primary-button full-width"
+                                className="button primary-button"
                                 onClick={() => setIsEditing(true)}
                             >
                                 Edit
@@ -244,10 +244,17 @@ const EditProduct = ({ productId, onCancel, onSuccess, onAddVariant }) => {
                                         setIsEditing(false);
                                         if (activeProduct) {
                                             setFormData({
-                                                title: activeProduct.title || '',
-                                                description: activeProduct.description || '',
-                                                priceAmount: activeProduct.price?.amount || '',
-                                                priceCurrency: activeProduct.price?.currency || 'INR',
+                                                title:
+                                                    activeProduct.title || '',
+                                                description:
+                                                    activeProduct.description ||
+                                                    '',
+                                                priceAmount:
+                                                    activeProduct.price
+                                                        ?.amount || '',
+                                                priceCurrency:
+                                                    activeProduct.price
+                                                        ?.currency || 'INR',
                                             });
                                         }
                                     }}
@@ -262,7 +269,10 @@ const EditProduct = ({ productId, onCancel, onSuccess, onAddVariant }) => {
                                 >
                                     {loading ? (
                                         <>
-                                            <Loader2 size={16} className="spin-icon" />
+                                            <Loader2
+                                                size={16}
+                                                className="spin-icon"
+                                            />
                                             Saving…
                                         </>
                                     ) : (
