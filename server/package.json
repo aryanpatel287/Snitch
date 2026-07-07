@@ -1,6 +1,7 @@
 {
     "dependencies": {
         "@imagekit/nodejs": "^7.5.0",
+        "axios": "^1.18.1",
         "bcryptjs": "^3.0.3",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.6",
@@ -25,7 +26,8 @@
     "scripts": {
         "test": "vitest run",
         "test:watch": "vitest",
-        "dev": "npx nodemon server.js"
+        "dev": "npx nodemon server.js",
+        "seed": "node src/scripts/seed.js"
     },
     "devDependencies": {
         "supertest": "^7.0.0",
