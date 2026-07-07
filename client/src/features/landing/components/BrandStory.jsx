@@ -1,28 +1,33 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 const BrandStory = () => {
     return (
-        <section id="story" className="brand-story">
-            <div className="brand-story__content">
-                <h2 className="brand-story__headline">
-                    THE ARCHITECTURE <br />
-                    OF <em>SILHOUETTE</em>
-                </h2>
-                <div className="brand-story__body">
-                    <span className="brand-story__dropcap">S</span>
-                    nitch was born out of a desire to create a luxury brand campaign space. We build garments that serve as architectural blocks for your wardrobe. With zero decoration, strict geometry, and uncompromising dedication to monochrome tones, each piece allows you to declare presence without noise.
+        <section id="story" className="dress-style-section">
+            <div className="dress-style">
+                <h2 className="dress-style__title">BROWSE BY DRESS STYLE</h2>
+                
+                <div className="dress-style__grid">
+                    <Link to="/products?style=casual" className="dress-style__card dress-style__card--small">
+                        <img src="/linen_overshirt.png" alt="Casual style" className="dress-style__img" />
+                        <span className="dress-style__name">Casual</span>
+                    </Link>
+
+                    <Link to="/products?style=formal" className="dress-style__card dress-style__card--wide">
+                        <img src="/onyx_blazer.png" alt="Formal style" className="dress-style__img" />
+                        <span className="dress-style__name">Formal</span>
+                    </Link>
+
+                    <Link to="/products?style=party" className="dress-style__card dress-style__card--wide">
+                        <img src="/editorial_banner.png" alt="Party style" className="dress-style__img" />
+                        <span className="dress-style__name">Party</span>
+                    </Link>
+
+                    <Link to="/products?style=gym" className="dress-style__card dress-style__card--small">
+                        <img src="/hero_model.png" alt="Gym style" className="dress-style__img" />
+                        <span className="dress-style__name">Gym</span>
+                    </Link>
                 </div>
-                <div className="brand-story__body">
-                    We believe in reduction. When you remove color, you highlight form, texture, and light. When you remove rounded softness, you introduce authority and precision.
-                </div>
-            </div>
-            <div className="brand-story__image-wrapper">
-                <img 
-                    src="/hero_model.png" 
-                    alt="Textured fabric silhouette" 
-                    className="brand-story__image" 
-                    style={{ aspectRatio: '4/5', objectFit: 'cover' }}
-                />
             </div>
         </section>
     );

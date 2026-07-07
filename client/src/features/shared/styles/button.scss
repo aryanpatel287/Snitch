@@ -6,11 +6,11 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 16px 32px;
-  border-radius: var(--border-radius);
-  font-family: var(--font-mono);
+  border-radius: var(--border-radius-btn);
+  font-family: var(--font-body);
   font-size: 0.875rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   width: fit-content;
   border: none;
@@ -27,7 +27,7 @@
     border: 2px solid var(--color-foreground);
 
     &:hover:not(:disabled) {
-      background-color: var(--color-background);
+      background-color: transparent;
       color: var(--color-foreground);
       border-color: var(--color-foreground);
     }
@@ -40,11 +40,12 @@
   &.secondary-button {
     background-color: transparent;
     color: var(--color-foreground);
-    border: 2px solid var(--color-foreground);
+    border: 2px solid var(--color-border);
 
     &:hover:not(:disabled) {
       background-color: var(--color-foreground);
       color: var(--color-background);
+      border-color: var(--color-foreground);
     }
 
     &:active:not(:disabled) {

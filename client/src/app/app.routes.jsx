@@ -10,6 +10,7 @@ import UserProfile from '../features/user/pages/UserProfile';
 import LandingPage from '../features/landing/pages/LandingPage';
 import ProductsPage from '../features/products/pages/ProductsPage';
 import ProductDetailsPage from '../features/products/pages/ProductDetailsPage';
+import CartPage from '../features/products/pages/CartPage';
 
 export const appRoutes = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ export const appRoutes = createBrowserRouter([
     {
         path: '/products/:productId',
         element: <ProductDetailsPage />,
+    },
+    {
+        path: '/cart',
+        element: <CartPage />,
     },
     {
         path: '/profile',

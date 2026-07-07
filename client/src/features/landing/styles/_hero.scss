@@ -2,221 +2,195 @@
 
 .hero-section {
     width: 100%;
+    background-color: #f2f0f1;
+    overflow: hidden;
+    padding-top: 72px;
 }
 
 .hero {
-    @include sectionWrap(140px);
+    max-width: 1440px;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: 48px;
-    align-items: center;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: stretch;
+    padding: 60px var(--spacing-gutter-desktop) 0;
 
     @media (max-width: 992px) {
         grid-template-columns: 1fr;
-        padding-top: 100px;
-        text-align: center;
+        padding: 40px var(--spacing-gutter-tablet) 0;
         gap: 32px;
     }
-
+    
     &__content {
-        @include displayFlex(flex-start, center, column, var(--spacing-md));
-        
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding-bottom: 60px;
+
         @media (max-width: 992px) {
-            align-items: center;
+            padding-bottom: 0;
         }
     }
 
     &__headline {
         font-family: var(--font-display);
-        font-size: 3rem;
-        font-weight: 600;
-        line-height: 0.95;
-        letter-spacing: -0.04em;
-        margin-bottom: 8px;
+        font-size: 4.5rem;
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: -0.03em;
+        margin: 0 0 24px;
+        color: var(--color-foreground);
 
-        @include respond-to('mobile') {
-            font-size: 4rem;
+        @media (max-width: 1200px) {
+            font-size: 3.5rem;
         }
 
-        @include respond-to('tablet') {
-            font-size: 5.5rem;
-        }
-
-        @include respond-to('desktop') {
-            font-size: 7.5rem;
-        }
-
-        @include respond-to('wide') {
-            font-size: 9rem;
-        }
-
-        em {
-            font-style: italic;
-            font-weight: 400;
+        @media (max-width: 640px) {
+            font-size: 2.25rem;
+            line-height: 1.1;
         }
     }
 
     &__lead {
-        font-size: 1.125rem;
-        line-height: 1.6;
+        font-family: var(--font-body);
+        font-size: 1rem;
+        line-height: 1.5;
         color: var(--color-muted-foreground);
-        max-width: 480px;
-        margin-bottom: 16px;
+        margin: 0 0 32px;
+        max-width: 520px;
     }
 
-    &__actions {
-        @include displayFlex(center, flex-start, column, 16px);
-        margin-bottom: 24px;
-        width: 100%;
+    &__cta {
+        min-width: 220px;
+        padding: 18px 48px;
+        font-size: 1rem;
+        margin-bottom: 48px;
 
-        .button {
+        @media (max-width: 640px) {
             width: 100%;
         }
-
-        @media (max-width: 992px) {
-            justify-content: center;
-        }
-
-        @include respond-to('tablet') {
-            flex-direction: row;
-            width: auto;
-
-            .button {
-                width: auto;
-            }
-        }
-    }
-
-    &__indicator {
-        width: 200px;
-        margin: 16px 0 24px;
-        position: relative;
-    }
-
-    &__rule-marker {
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%) translateX(50%);
-        width: 12px;
-        height: 12px;
-        background-color: var(--color-background);
-        border: var(--border-thin);
     }
 
     &__image-wrapper {
-        border: var(--border-thin);
-        padding: 16px;
-        background-color: var(--color-surface);
         position: relative;
-        width: 100%;
-        max-width: 460px;
-        justify-self: end;
-
-        @media (max-width: 992px) {
-            justify-self: center;
-        }
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
     }
 
     &__image {
         width: 100%;
-        height: auto;
+        max-height: 600px;
+        object-fit: cover;
         display: block;
-        filter: grayscale(1);
+    }
+
+    &__sparkle {
+        position: absolute;
+        color: var(--color-foreground);
+        
+        i {
+            font-size: inherit;
+        }
+
+        &--large {
+            top: 15%;
+            right: 10%;
+            font-size: 3.5rem;
+            @media (max-width: 640px) {
+                font-size: 2rem;
+            }
+        }
+
+        &--small {
+            top: 45%;
+            left: 5%;
+            font-size: 2.2rem;
+            @media (max-width: 640px) {
+                font-size: 1.25rem;
+            }
+        }
     }
 }
 
-.hero-stats {
-    background-color: var(--color-foreground);
-    color: var(--color-background);
+.hero-stats__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
     width: 100%;
-    border-top: var(--border-thin);
-    border-bottom: var(--border-thin);
-    padding: 32px 0;
+    margin-top: auto;
+
+    @media (max-width: 640px) {
+        justify-content: center;
+        gap: 16px 32px;
+    }
+}
+
+.hero-stats__col {
+    display: flex;
+    flex-direction: column;
     
+    &:not(:last-child) {
+        border-right: 1px solid var(--color-border);
+        padding-right: 32px;
+        @media (max-width: 640px) {
+            border-right: none;
+            padding-right: 0;
+        }
+    }
+}
+
+.hero-stats__num {
+    font-family: var(--font-body);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    line-height: 1;
+
+    @media (max-width: 640px) {
+        font-size: 1.75rem;
+    }
+}
+
+.hero-stats__label {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-muted-foreground);
+    margin-top: 8px;
+}
+
+.hero-sponsors {
+    background-color: var(--color-foreground);
+    padding: 44px 0;
+    width: 100%;
+
     &__container {
         max-width: 1440px;
         margin: 0 auto;
-        padding: 0 var(--spacing-gutter-mobile);
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-
-        @include respond-to('mobile') {
-            padding: 0 var(--spacing-gutter-tablet);
-        }
-        @include respond-to('tablet') {
-            padding: 0 var(--spacing-gutter-desktop);
-        }
-        
-        @media (max-width: 768px) {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 32px 0;
-        }
-        
-        @media (max-width: 480px) {
-            grid-template-columns: 1fr;
-            gap: 24px 0;
-        }
-    }
-    
-    &__col {
-        position: relative;
-        padding: 8px var(--spacing-md);
+        padding: 0 var(--spacing-gutter-desktop);
         display: flex;
-        flex-direction: column;
+        justify-content: space-between;
         align-items: center;
-        text-align: center;
-        
-        &:not(:first-child) {
-            border-left: 1px solid rgba(255, 255, 255, 0.15);
-            
-            @media (max-width: 768px) {
-                border-left: none;
-            }
-        }
-        
-        &:nth-child(2n) {
-            @media (max-width: 768px) {
-                border-left: 1px solid rgba(255, 255, 255, 0.15);
-            }
-            @media (max-width: 480px) {
-                border-left: none;
-            }
-        }
-        
-        .plus-marker--top {
-            top: 0;
-            left: 0;
-            color: var(--color-background);
-            @media (max-width: 768px) {
-                display: none;
-            }
-        }
-        
-        .plus-marker--bottom {
-            bottom: 0;
-            left: 0;
-            color: var(--color-background);
-            @media (max-width: 768px) {
-                display: none;
-            }
+        flex-wrap: wrap;
+        gap: 24px;
+
+        @media (max-width: 768px) {
+            padding: 0 var(--spacing-gutter-tablet);
+            justify-content: center;
+            gap: 16px 40px;
         }
     }
-    
-    &__num {
-        font-family: var(--font-display);
-        font-size: 2.5rem;
-        font-weight: 600;
-        line-height: 1.1;
-        letter-spacing: -0.02em;
-    }
-    
-    &__label {
-        font-family: var(--font-mono);
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        opacity: 0.7;
-        margin-top: 4px;
+
+    .sponsor-logo {
+        color: #ffffff;
+        font-family: 'Archivo Black', sans-serif;
+        font-size: 2rem;
+        font-weight: 900;
+        letter-spacing: 0.05em;
+
+        @media (max-width: 768px) {
+            font-size: 1.5rem;
+        }
     }
 }

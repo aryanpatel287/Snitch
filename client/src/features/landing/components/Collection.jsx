@@ -1,54 +1,82 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useProduct } from '../../products/hooks/useProduct';
+import EditorialProductCard from '../../products/components/EditorialProductCard';
+import { Link } from 'react-router';
 
 const Collection = () => {
-    const items = [
-        {
-            id: 1,
-            name: '01 / ONYX TAILORED BLAZER',
-            price: '$420.00',
-            image: '/onyx_blazer.png',
-            badge: 'New'
-        },
-        {
-            id: 2,
-            name: '02 / RAW LINEN OVERSHIRT',
-            price: '$180.00',
-            image: '/linen_overshirt.png',
-            badge: 'Essential'
-        }
-    ];
+    const { handleGetAllProducts, allProducts = [], loading } = useProduct();
+
+    useEffect(() => {
+        handleGetAllProducts();
+    }, []);
+
+    // Filter and slice items
+    const sortedByNew = [...allProducts]
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 4);
+
+    const sortedBySelling = [...allProducts]
+        .sort((a, b) => a.title.localeCompare(b.title)) // different order for Top Selling visual variety
+        .slice(2, 6);
 
     return (
-        <section id="collections" className="collection">
-            <div className="collection__header">
-                <div className="section-header-line">
-                    <span className="section-header-line__label">01 / Curation</span>
-                    <span className="section-header-line__rule"></span>
+        <section id="collections" className="collection-section">
+            {/* New Arrivals Section */}
+            <div className="collection">
+                <div className="collection__header">
+                    <h2 className="collection__title">NEW ARRIVALS</h2>
                 </div>
-                <h2 className="collection__title">EDITORIAL SELECTIONS</h2>
-            </div>
-            
-            <div className="collection__grid">
-                {items.map((item) => (
-                    <article key={item.id} className="collection__card">
-                        <div className="collection__card-media">
-                            <img 
-                                src={item.image} 
-                                alt={item.name} 
-                                className="collection__card-img"
+                
+                {loading && allProducts.length === 0 ? (
+                    <div className="collection__loading">LOADING CURATION...</div>
+                ) : (
+                    <div className="collection__grid">
+                        {sortedByNew.map((product) => (
+                            <EditorialProductCard 
+                                key={product._id} 
+                                product={product} 
+                                showMetadata={false}
+                                to={`/products/${product._id}`}
                             />
-                            {item.badge && (
-                                <span className="collection__card-badge">
-                                    {item.badge}
-                                </span>
-                            )}
-                        </div>
-                        <div className="collection__card-details">
-                            <h3 className="collection__card-name">{item.name}</h3>
-                            <span className="collection__card-price">{item.price}</span>
-                        </div>
-                    </article>
-                ))}
+                        ))}
+                    </div>
+                )}
+                
+                <div className="collection__actions">
+                    <Link to="/products" className="button secondary-button collection__view-all">
+                        View All
+                    </Link>
+                </div>
+            </div>
+
+            <hr className="collection-divider" />
+
+            {/* Top Selling Section */}
+            <div className="collection">
+                <div className="collection__header">
+                    <h2 className="collection__title">TOP SELLING</h2>
+                </div>
+                
+                {loading && allProducts.length === 0 ? (
+                    <div className="collection__loading">LOADING CURATION...</div>
+                ) : (
+                    <div className="collection__grid">
+                        {sortedBySelling.map((product) => (
+                            <EditorialProductCard 
+                                key={product._id} 
+                                product={product} 
+                                showMetadata={false}
+                                to={`/products/${product._id}`}
+                            />
+                        ))}
+                    </div>
+                )}
+                
+                <div className="collection__actions">
+                    <Link to="/products" className="button secondary-button collection__view-all">
+                        View All
+                    </Link>
+                </div>
             </div>
         </section>
     );

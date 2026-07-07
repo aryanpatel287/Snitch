@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 const Hero = () => {
     return (
@@ -6,61 +7,59 @@ const Hero = () => {
             <div className="hero">
                 <div className="hero__content">
                     <h1 className="hero__headline">
-                        THE ART OF <br />
-                        <em>REDUCTION</em>
+                        FIND CLOTHES <br />
+                        THAT MATCHES <br />
+                        YOUR STYLE
                     </h1>
                     
-                    <div className="hero__indicator">
-                        <hr className="editorial-divider" />
-                        <div className="hero__rule-marker" />
+                    <p className="hero__lead">
+                        Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style.
+                    </p>
+                    
+                    <div className="hero__actions">
+                        <Link to="/products" className="button primary-button hero__cta">
+                            Shop Now
+                        </Link>
                     </div>
 
-                    <p className="hero__lead">
-                        A study in monochrome luxury. Austere silhouettes, structured geometry, and strict monochrome palettes designed for the uncompromising editor.
-                    </p>
-                    <div className="hero__actions">
-                        <a href="#collections" className="button primary-button">
-                            Explore Collection
-                        </a>
-                        <a href="#collections" className="button secondary-button">
-                            New Arrivals
-                        </a>
+                    <div className="hero-stats__grid">
+                        <div className="hero-stats__col">
+                            <span className="hero-stats__num">200+</span>
+                            <span className="hero-stats__label">International Brands</span>
+                        </div>
+                        <div className="hero-stats__col">
+                            <span className="hero-stats__num">2,000+</span>
+                            <span className="hero-stats__label">High-Quality Products</span>
+                        </div>
+                        <div className="hero-stats__col">
+                            <span className="hero-stats__num">30,000+</span>
+                            <span className="hero-stats__label">Happy Customers</span>
+                        </div>
                     </div>
                 </div>
+                
                 <div className="hero__image-wrapper">
                     <img 
                         src="/hero_model.png" 
-                        alt="Editorial model in stark monochrome clothing" 
+                        alt="Streetwear styles" 
                         className="hero__image"
                     />
+                    <div className="hero__sparkle hero__sparkle--large">
+                        <i className="ri-sparkling-fill"></i>
+                    </div>
+                    <div className="hero__sparkle hero__sparkle--small">
+                        <i className="ri-sparkling-fill"></i>
+                    </div>
                 </div>
             </div>
 
-            {/* Statistics Banner - Inverted Grid (Black) with vertical borders and + markers */}
-            <div className="hero-stats texture-noise--inverted">
-                <div className="hero-stats__container">
-                    <div className="hero-stats__col">
-                        <span className="hero-stats__num">500k+</span>
-                        <span className="hero-stats__label">Active Users</span>
-                    </div>
-                    <div className="hero-stats__col">
-                        <div className="plus-marker plus-marker--top">+</div>
-                        <div className="plus-marker plus-marker--bottom">+</div>
-                        <span className="hero-stats__num">99.99%</span>
-                        <span className="hero-stats__label">Uptime SLA</span>
-                    </div>
-                    <div className="hero-stats__col">
-                        <div className="plus-marker plus-marker--top">+</div>
-                        <div className="plus-marker plus-marker--bottom">+</div>
-                        <span className="hero-stats__num">24/7</span>
-                        <span className="hero-stats__label">Support Access</span>
-                    </div>
-                    <div className="hero-stats__col">
-                        <div className="plus-marker plus-marker--top">+</div>
-                        <div className="plus-marker plus-marker--bottom">+</div>
-                        <span className="hero-stats__num">$10M+</span>
-                        <span className="hero-stats__label">Customer Savings</span>
-                    </div>
+            <div className="hero-sponsors">
+                <div className="hero-sponsors__container">
+                    <span className="sponsor-logo">VERSACE</span>
+                    <span className="sponsor-logo">ZARA</span>
+                    <span className="sponsor-logo">GUCCI</span>
+                    <span className="sponsor-logo">PRADA</span>
+                    <span className="sponsor-logo">Calvin Klein</span>
                 </div>
             </div>
         </header>

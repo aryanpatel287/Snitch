@@ -3,14 +3,13 @@ import Navbar from '../../shared/components/Navbar';
 import Hero from '../components/Hero';
 import Collection from '../components/Collection';
 import BrandStory from '../components/BrandStory';
-import EditorialBanner from '../components/EditorialBanner';
 import Testimonials from '../components/Testimonials';
 import Newsletter from '../components/Newsletter';
 import Footer from '../components/Footer';
 
 const LandingPage = () => {
     return (
-        <div className="landing-page texture-lines texture-grid">
+        <div className="landing-page">
             {/* Accessibility Skip Link */}
             <a href="#main-content" className="button primary-button" style={{
                 position: 'absolute',
@@ -33,13 +32,8 @@ const LandingPage = () => {
             
             <main id="main-content">
                 <Hero />
-                <hr className="editorial-divider editorial-divider--thick" />
                 <Collection />
-                <hr className="editorial-divider" />
                 <BrandStory />
-                <hr className="editorial-divider editorial-divider--thick" />
-                <EditorialBanner />
-                <hr className="editorial-divider" />
                 <Testimonials />
                 <Newsletter />
             </main>

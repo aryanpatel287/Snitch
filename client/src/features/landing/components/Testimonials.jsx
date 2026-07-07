@@ -1,39 +1,63 @@
 import React from 'react';
 
 const Testimonials = () => {
-    const quotes = [
+    const reviews = [
         {
             id: 1,
-            quote: '“Snitch rejects the temporary. Their pieces do not ask to be noticed; they command attention through silence.”',
-            author: 'VOGUE EDITORIAL, ISSUE 842'
+            name: 'Sarah M.',
+            verified: true,
+            stars: 5,
+            review: `"I'm blown away by the quality and style of these clothes. The attention to detail is outstanding, and the fit is absolutely perfect. Snitch is my new favorite fashion brand!"`
         },
         {
             id: 2,
-            quote: '“By stripping color and curves, they have created a timeless design language that is both severe and luxurious.”',
-            author: 'THE NEW YORK ARCHIVE'
+            name: 'Alex K.',
+            verified: true,
+            stars: 5,
+            review: `"Finding streetwear items that look great and feel comfortable is usually tough. The collections here are exactly what I wanted. Clean, loud, and premium fabric."`
+        },
+        {
+            id: 3,
+            name: 'James L.',
+            verified: true,
+            stars: 5,
+            review: `"The shopping process was seamless and the delivery was fast. I ordered three t-shirts and they've already become my daily wardrobe pieces. Highly recommend!"`
         }
     ];
 
     return (
-        <section className="testimonials">
-            <div className="testimonials__header">
-                <div className="section-header-line">
-                    <span className="section-header-line__label">02 / Press</span>
-                    <span className="section-header-line__rule"></span>
+        <section className="testimonials-section">
+            <div className="testimonials">
+                <div className="testimonials__header">
+                    <h2 className="testimonials__title">OUR HAPPY CUSTOMERS</h2>
+                    <div className="testimonials__nav-arrows">
+                        <button className="testimonials__arrow-btn" aria-label="Previous testimonials">
+                            <i className="ri-arrow-left-line"></i>
+                        </button>
+                        <button className="testimonials__arrow-btn" aria-label="Next testimonials">
+                            <i className="ri-arrow-right-line"></i>
+                        </button>
+                    </div>
                 </div>
-                <h2 className="testimonials__title">EDITORIAL VERDICTS</h2>
-            </div>
-            
-            <div className="testimonials__quote-container">
-                {quotes.map((item) => (
-                    <blockquote key={item.id} className="testimonials__card">
-                        <span className="testimonials__mark">“</span>
-                        <div className="testimonials__quote-wrapper">
-                            <p className="testimonials__quote">{item.quote}</p>
-                            <cite className="testimonials__author">{item.author}</cite>
+                
+                <div className="testimonials__grid">
+                    {reviews.map((r) => (
+                        <div key={r.id} className="testimonial-card">
+                            <div className="testimonial-card__stars">
+                                {Array.from({ length: r.stars }).map((_, i) => (
+                                    <i key={i} className="ri-star-fill testimonial-card__star"></i>
+                                ))}
+                            </div>
+                            <div className="testimonial-card__author">
+                                <span className="testimonial-card__name">{r.name}</span>
+                                {r.verified && (
+                                    <i className="ri-checkbox-circle-fill testimonial-card__verified"></i>
+                                )}
+                            </div>
+                            <p className="testimonial-card__text">{r.review}</p>
                         </div>
-                    </blockquote>
-                ))}
+                    ))}
+                </div>
             </div>
         </section>
     );

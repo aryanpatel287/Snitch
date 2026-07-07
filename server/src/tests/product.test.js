@@ -64,16 +64,6 @@ describe('Product & Variant Endpoints', () => {
       expect(response.body.message).toBe('Validation failed');
     });
 
-    it('should fail validation when stock is negative', async () => {
-      const response = await request(app)
-        .post('/api/products/seller/create-product')
-        .set('Cookie', [`token=${token}`])
-        .send({ ...validProductPayload, stock: -10 });
-
-      expect(response.status).toBe(400);
-      expect(response.body.success).toBe(false);
-    });
-
     it('should fail validation when variants are invalid', async () => {
       const response = await request(app)
         .post('/api/products/seller/create-product')

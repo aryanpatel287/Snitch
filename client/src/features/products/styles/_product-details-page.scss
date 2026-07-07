@@ -11,95 +11,64 @@
 .product-details-main {
     flex: 1;
     width: 100%;
-    padding-top: 100px; // Offset for sticky navbar
-    padding-bottom: var(--spacing-section);
+    padding-top: 100px;
+    padding-bottom: 80px;
+
+    @media (max-width: 992px) {
+        padding-top: 90px;
+        padding-bottom: 60px;
+    }
 }
 
 .product-details-content {
     max-width: 1440px;
     margin: 0 auto;
     width: 100%;
-    padding: 0 var(--spacing-gutter-mobile);
+    padding: 0 var(--spacing-gutter-desktop);
 
-    @include respond-to('mobile') {
+    @media (max-width: 992px) {
         padding: 0 var(--spacing-gutter-tablet);
-    }
-    @include respond-to('tablet') {
-        padding: 0 var(--spacing-gutter-desktop);
-    }
-}
-
-.product-details__nav {
-    margin-bottom: 32px;
-}
-
-.product-details__back-link {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    color: var(--color-foreground);
-    text-transform: uppercase;
-    @include displayFlex(center, flex-start, row, 8px);
-    transition: opacity var(--transition-fast) ease;
-
-    &:hover {
-        opacity: 0.7;
     }
 }
 
 .product-details__layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 64px;
+    gap: 40px;
     align-items: start;
 
     @media (max-width: 992px) {
         grid-template-columns: 1fr;
-        gap: 48px;
+        gap: 32px;
     }
 }
 
 .product-details__loading,
 .product-details__error,
 .product-details__empty {
-    padding: 120px 0;
+    padding: 80px 0;
     text-align: center;
-    border: var(--border-thin);
-    @include displayFlex(center, center, column, 24px);
+    border-radius: var(--border-radius-card);
+    background-color: var(--color-card);
 }
 
 .product-details__loading-text {
     font-family: var(--font-mono);
-    font-size: 0.875rem;
-    letter-spacing: 0.15em;
-    animation: detailsPulse 1.5s infinite ease-in-out;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
 }
 
 .product-details__error-title,
 .product-details__empty-title {
     font-family: var(--font-display);
-    font-size: 1.75rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
+    font-size: 1.5rem;
+    font-weight: 800;
 }
 
 .product-details__error-desc,
 .product-details__empty-desc {
     font-family: var(--font-body);
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: var(--color-muted-foreground);
-    max-width: 450px;
-    margin: 0 auto;
-}
-
-@keyframes detailsPulse {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
-}
-
-.section-header-line--thick {
-    .section-header-line__rule {
-        height: 4px;
-        background-color: var(--color-border);
-    }
+    margin-top: 8px;
 }

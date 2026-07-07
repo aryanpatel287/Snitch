@@ -22,24 +22,31 @@ const ProductDetailsPage = () => {
     const hasProductData = activeProduct && Object.keys(activeProduct).length > 0 && activeProduct._id === productId;
 
     return (
-        <div className="product-details-container texture-lines texture-grid">
+        <div className="product-details-container">
             <Navbar />
 
             <main className="product-details-main" id="main-content">
-                <div className="product-details-content">
-                    <div className="product-details__nav">
-                        <Link to="/products" className="product-details__back-link">
-                            <i className="ri-arrow-left-line"></i> BACK TO ALL PRODUCTS
-                        </Link>
-                    </div>
+                {/* Breadcrumbs */}
+                <nav className="products-breadcrumbs" aria-label="breadcrumb" style={{ maxWidth: '1440px', margin: '0 auto 24px' }}>
+                    <Link to="/" className="products-breadcrumbs__link">Home</Link>
+                    <i className="ri-arrow-right-s-line products-breadcrumbs__sep"></i>
+                    <Link to="/products" className="products-breadcrumbs__link">Shop</Link>
+                    {hasProductData && (
+                        <>
+                            <i className="ri-arrow-right-s-line products-breadcrumbs__sep"></i>
+                            <span className="products-breadcrumbs__current">{activeProduct.title}</span>
+                        </>
+                    )}
+                </nav>
 
+                <div className="product-details-content">
                     {loading ? (
                         <div className="product-details__loading">
                             <span className="product-details__loading-text">RETRIEVING PRODUCT SPECIFICATIONS...</span>
                         </div>
                     ) : error ? (
                         <div className="product-details__error">
-                            <span className="product-details__error-title">ARCHIVE RETRIEVAL ERROR</span>
+                            <span className="product-details__error-title">RETRIEVING ERROR</span>
                             <p className="product-details__error-desc">{error}</p>
                             <Link to="/products" className="button secondary-button">
                                 RETURN TO SHOP
@@ -49,7 +56,7 @@ const ProductDetailsPage = () => {
                         <div className="product-details__empty">
                             <span className="product-details__empty-title">PRODUCT NOT FOUND</span>
                             <p className="product-details__empty-desc">
-                                The requested product could not be located in the catalog archives.
+                                The requested product could not be located in the catalog.
                             </p>
                             <Link to="/products" className="button secondary-button">
                                 RETURN TO SHOP
