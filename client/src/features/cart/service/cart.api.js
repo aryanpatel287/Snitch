@@ -7,7 +7,7 @@ const cartApiInstance = axios.create({
 
 export const getCartItems = async () => {
     try {
-        const response = await axios.get(cartApiInstance);
+        const response = await cartApiInstance.get('/');
         return response.data;
     } catch (error) {
         console.error('Error fetching cart items', error);
@@ -17,8 +17,9 @@ export const getCartItems = async () => {
 
 export const addToCart = async ({ productId, variantId, quantity }) => {
     try {
-        const response = await axios.post(
-            `${cartApiInstance}/${productId}/${variantId}`,
+        const cleanVariantId = variantId && variantId !== 'undefined' && variantId !== 'null' ? variantId : null;
+        const response = await cartApiInstance.post(
+            `add/${productId}${cleanVariantId ? `/${cleanVariantId}` : ''}`,
             {
                 quantity,
             },

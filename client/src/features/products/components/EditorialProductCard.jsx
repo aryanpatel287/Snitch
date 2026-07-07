@@ -80,14 +80,12 @@ export const EditorialProductCard = ({ product, showMetadata = true, onClick, to
                 {/* Price Display */}
                 <div className="product-card__price-row">
                     <span className="product-card__price">
-                        {product.price?.currency === 'INR' ? '₹' : '$'}
-                        {activePrice}
+                        ₹{activePrice}
                     </span>
                     {hasDiscount && (
                         <>
                             <span className="product-card__price-original">
-                                {product.price?.currency === 'INR' ? '₹' : '$'}
-                                {originalPrice}
+                                ₹{originalPrice}
                             </span>
                             <span className="product-card__discount-badge">
                                 -{discountPercent}%

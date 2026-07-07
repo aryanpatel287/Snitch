@@ -1,9 +1,16 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import { useSelector } from 'react-redux';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import cartReducer from '../state/cart.slice';
+import authReducer from '../../auth/state/auth.slice';
+import productReducer from '../../products/state/product.slice';
 import CartPage from '../pages/CartPage';
+import { getCartItems, addToCart } from '../service/cart.api';
+
+vi.mock('../service/cart.api');
 
 // Mock localStorage stub for headless environment
 const localStorageMock = (() => {
@@ -27,63 +34,93 @@ Object.defineProperty(window, 'localStorage', {
     writable: true,
 });
 
-let mockState = {
-    cart: { items: [] },
-    auth: { user: null },
-    user: { user: null }
-};
-
-vi.mock('react-redux', () => ({
-    useSelector: vi.fn((fn) => fn(mockState)),
-    useDispatch: vi.fn(() => vi.fn()),
-}));
-
 describe('CartPage Component', () => {
+    let store;
+
     beforeEach(() => {
         vi.clearAllMocks();
         window.localStorage.clear();
-        mockState.cart.items = [];
-        mockState.auth = { user: null };
-        mockState.user = { user: null };
+
+        store = configureStore({
+            reducer: {
+                cart: cartReducer,
+                auth: authReducer,
+                product: productReducer,
+            },
+            preloadedState: {
+                cart: { items: [], loading: false, error: null },
+                auth: { user: null },
+                product: { products: [] }
+            }
+        });
     });
 
-    it('should render empty state when cart is empty', () => {
-        render(
-            <MemoryRouter>
-                <CartPage />
-            </MemoryRouter>,
+    const renderWithProvider = (ui) => {
+        return render(
+            <Provider store={store}>
+                <MemoryRouter>
+                    {ui}
+                </MemoryRouter>
+            </Provider>
         );
+    };
 
-        expect(screen.getByText('Your cart is empty.')).toBeInTheDocument();
+    it('should render empty state when cart is empty', async () => {
+        getCartItems.mockResolvedValueOnce({
+            success: true,
+            cart: { items: [] },
+        });
+
+        renderWithProvider(<CartPage />);
+
+        await waitFor(() => {
+            expect(screen.getByText('Your cart is empty.')).toBeInTheDocument();
+        });
         expect(screen.getByText('Go To Shop')).toBeInTheDocument();
     });
 
-    it('should render cart items and calculate price breakdown correctly', () => {
-        const mockCart = [
+    it('should render cart items and calculate price breakdown correctly', async () => {
+        const mockProduct = {
+            _id: 'prod1',
+            title: 'Street Hoodie',
+            images: [{ url: '/hoodie.png', alt: 'Street Hoodie' }],
+            variants: [
+                {
+                    _id: 'variant1',
+                    attributes: {
+                        size: 'L',
+                        color: 'Black'
+                    },
+                    stock: 10,
+                    price: { amount: 100, currency: 'INR' }
+                }
+            ]
+        };
+
+        const mockCartItems = [
             {
-                id: 'prod1-Black-L',
-                productId: 'prod1',
-                title: 'Street Hoodie',
-                image: '/hoodie.png',
-                price: 100,
-                color: 'Black',
-                size: 'L',
+                _id: 'cart-item-1',
+                product: mockProduct,
+                variant: 'variant1',
+                price: { amount: 100, currency: 'INR' },
                 quantity: 2,
             },
         ];
-        mockState.cart.items = mockCart;
 
-        render(
-            <MemoryRouter>
-                <CartPage />
-            </MemoryRouter>,
-        );
+        getCartItems.mockResolvedValueOnce({
+            success: true,
+            cart: { items: mockCartItems },
+        });
+
+        renderWithProvider(<CartPage />);
 
         // Verify item details are rendered
-        expect(screen.getByText('Street Hoodie')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('Street Hoodie')).toBeInTheDocument();
+        });
         expect(screen.getByText('L')).toBeInTheDocument();
         expect(screen.getByText('Black')).toBeInTheDocument();
-        expect(screen.getByText('$100')).toBeInTheDocument();
+        expect(screen.getByText('₹100')).toBeInTheDocument();
         expect(
             screen.getByText('2', { selector: '.cart-quantity-stepper__val' }),
         ).toBeInTheDocument();
@@ -92,85 +129,145 @@ describe('CartPage Component', () => {
         // Discount: 200 * 0.2 = 40
         // Delivery: 15
         // Total: 200 - 40 + 15 = 175
-        expect(screen.getByText('$200.00')).toBeInTheDocument();
-        expect(screen.getByText('-$40.00')).toBeInTheDocument();
-        expect(screen.getByText('$15.00')).toBeInTheDocument();
-        expect(screen.getByText('$175.00')).toBeInTheDocument();
+        expect(screen.getByText('₹200.00')).toBeInTheDocument();
+        expect(screen.getByText('-₹40.00')).toBeInTheDocument();
+        expect(screen.getByText('₹15.00')).toBeInTheDocument();
+        expect(screen.getByText('₹175.00')).toBeInTheDocument();
     });
 
-    it('should increment and decrement quantity and update calculations', () => {
-        const mockCart = [
+    it('should increment and decrement quantity and update calculations', async () => {
+        const mockProduct = {
+            _id: 'prod1',
+            title: 'Street Hoodie',
+            images: [{ url: '/hoodie.png', alt: 'Street Hoodie' }],
+            variants: [
+                {
+                    _id: 'variant1',
+                    attributes: {
+                        size: 'L',
+                        color: 'Black'
+                    },
+                    stock: 10,
+                    price: { amount: 100, currency: 'INR' }
+                }
+            ]
+        };
+
+        const initialCartItems = [
             {
-                id: 'prod1-Black-L',
-                productId: 'prod1',
-                title: 'Street Hoodie',
-                image: '/hoodie.png',
-                price: 100,
-                color: 'Black',
-                size: 'L',
+                _id: 'cart-item-1',
+                product: mockProduct,
+                variant: 'variant1',
+                price: { amount: 100, currency: 'INR' },
                 quantity: 1,
             },
         ];
-        mockState.cart.items = mockCart;
 
-        render(
-            <MemoryRouter>
-                <CartPage />
-            </MemoryRouter>,
-        );
+        const incrementedCartItems = [
+            {
+                _id: 'cart-item-1',
+                product: mockProduct,
+                variant: 'variant1',
+                price: { amount: 100, currency: 'INR' },
+                quantity: 2,
+            },
+        ];
+
+        getCartItems.mockResolvedValueOnce({
+            success: true,
+            cart: { items: initialCartItems },
+        });
+
+        addToCart.mockResolvedValueOnce({
+            success: true,
+            cart: { items: incrementedCartItems },
+        });
+
+        addToCart.mockResolvedValueOnce({
+            success: true,
+            cart: { items: initialCartItems },
+        });
+
+        renderWithProvider(<CartPage />);
+
+        await waitFor(() => {
+            expect(screen.getByText('Street Hoodie')).toBeInTheDocument();
+        });
 
         expect(
             screen.getByText('1', { selector: '.cart-quantity-stepper__val' }),
         ).toBeInTheDocument();
-        expect(screen.getByText('$100.00')).toBeInTheDocument(); // Subtotal
+        expect(screen.getByText('₹100.00')).toBeInTheDocument(); // Subtotal
 
         // Increment
         const incrementBtn = screen.getByLabelText('Increase quantity');
         fireEvent.click(incrementBtn);
 
-        expect(
-            screen.getByText('2', { selector: '.cart-quantity-stepper__val' }),
-        ).toBeInTheDocument();
-        expect(screen.getByText('$200.00')).toBeInTheDocument(); // Subtotal updated
+        await waitFor(() => {
+            expect(
+                screen.getByText('2', { selector: '.cart-quantity-stepper__val' }),
+            ).toBeInTheDocument();
+        });
+        expect(screen.getByText('₹200.00')).toBeInTheDocument(); // Subtotal updated
 
         // Decrement
         const decrementBtn = screen.getByLabelText('Decrease quantity');
         fireEvent.click(decrementBtn);
 
-        expect(
-            screen.getByText('1', { selector: '.cart-quantity-stepper__val' }),
-        ).toBeInTheDocument();
-        expect(screen.getByText('$100.00')).toBeInTheDocument(); // Subtotal updated back
+        await waitFor(() => {
+            expect(
+                screen.getByText('1', { selector: '.cart-quantity-stepper__val' }),
+            ).toBeInTheDocument();
+        });
+        expect(screen.getByText('₹100.00')).toBeInTheDocument(); // Subtotal updated back
     });
 
-    it('should remove item from cart when delete button is clicked', () => {
-        const mockCart = [
+    it('should remove item from cart when delete button is clicked', async () => {
+        const mockProduct = {
+            _id: 'prod1',
+            title: 'Street Hoodie',
+            images: [{ url: '/hoodie.png', alt: 'Street Hoodie' }],
+            variants: [
+                {
+                    _id: 'variant1',
+                    attributes: {
+                        size: 'L',
+                        color: 'Black'
+                    },
+                    stock: 10,
+                    price: { amount: 100, currency: 'INR' }
+                }
+            ]
+        };
+
+        const mockCartItems = [
             {
-                id: 'prod1-Black-L',
-                productId: 'prod1',
-                title: 'Street Hoodie',
-                image: '/hoodie.png',
-                price: 100,
-                color: 'Black',
-                size: 'L',
+                _id: 'cart-item-1',
+                product: mockProduct,
+                variant: 'variant1',
+                price: { amount: 100, currency: 'INR' },
                 quantity: 1,
             },
         ];
-        mockState.cart.items = mockCart;
 
-        render(
-            <MemoryRouter>
-                <CartPage />
-            </MemoryRouter>,
-        );
+        getCartItems.mockResolvedValueOnce({
+            success: true,
+            cart: { items: mockCartItems },
+        });
 
-        expect(screen.getByText('Street Hoodie')).toBeInTheDocument();
+        renderWithProvider(<CartPage />);
+
+        await waitFor(() => {
+            expect(screen.getByText('Street Hoodie')).toBeInTheDocument();
+        });
 
         const deleteBtn = screen.getByLabelText('Remove item');
         fireEvent.click(deleteBtn);
 
         // Should return to empty state
-        expect(screen.queryByText('Street Hoodie')).not.toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.queryByText('Street Hoodie')).not.toBeInTheDocument();
+        });
         expect(screen.getByText('Your cart is empty.')).toBeInTheDocument();
     });
 });

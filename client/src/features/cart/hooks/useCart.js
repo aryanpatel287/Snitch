@@ -8,8 +8,8 @@ export const useCart = () => {
     async function handleSetCartItems() {
         dispatch(setLoading(true));
         try {
-            const cart = await getCartItems();
-            const items = [...cart.items];
+            const data = await getCartItems();
+            const items = data?.cart?.items || [];
             dispatch(setItems(items));
         } catch (error) {
             dispatch(setError(error.response?.data?.message ?? error.message));
@@ -21,8 +21,9 @@ export const useCart = () => {
     async function handleAddToCart({ productId, variantId, quantity }) {
         dispatch(setLoading(true));
         try {
-            const item = await addToCart({ productId, variantId, quantity });
-            dispatch(addItem(item));
+            const data = await addToCart({ productId, variantId, quantity });
+            const items = data?.cart?.items || [];
+            dispatch(setItems(items));
         } catch (error) {
             dispatch(setError(error.response?.data?.message ?? error.message));
         } finally {

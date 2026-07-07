@@ -23,6 +23,20 @@ cartRouter.post(
 );
 
 /**
+ * @route POST /api/cart/add/:productId
+ * @desc Add a product to cart
+ * @access Private
+ * @argument productId - The ID of the product to add to the cart
+ * @argument quantity - The quantity of the product to add to the cart (optional, default is 1)
+ */
+cartRouter.post(
+    '/add/:productId',
+    authUser,
+    validateAddToCart,
+    addToCartController,
+);
+
+/**
  * @route GET /api/cart
  * @desc Get the current user's cart
  * @access Private

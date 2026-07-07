@@ -4,15 +4,16 @@ import { stockOfProduct } from '../dao/product.dao.js';
 import productModel from '../models/product.model.js';
 
 const addToCartController = async (req, res) => {
-    const { productId, variantId } = req.params;
+    let { productId, variantId } = req.params;
     const { quantity = 1 } = req.body;
     const userId = req.user._id;
 
+    if (variantId === 'undefined' || variantId === 'null') {
+        variantId = undefined;
+    }
+
     try {
-        const product = await productModel.find({
-            id: productId,
-            'variants._id': variantId,
-        });
+        const product = await productModel.findById(productId);
 
         if (!product) {
             return await sendResponse({
@@ -26,10 +27,16 @@ const addToCartController = async (req, res) => {
 
         let productPrice = product.price;
         if (variantId) {
-            const variant = product.variants.find(
-                (v) => v._id.toString() === variantId,
-            );
-
+            const variant = product.variants.id(variantId);
+            if (!variant) {
+                return await sendResponse({
+                    res,
+                    statusCode: 404,
+                    message: 'Variant not found',
+                    success: false,
+                    error: 'Variant not found',
+                });
+            }
             productPrice = variant.price;
         }
 
@@ -42,7 +49,9 @@ const addToCartController = async (req, res) => {
         const isProductInCart = cart.items.find(
             (item) =>
                 item.product.toString() === productId &&
-                item.variant.toString() === variantId,
+                (variantId
+                    ? item.variant?.toString() === variantId
+                    : !item.variant),
         );
 
         if (isProductInCart) {
@@ -57,13 +66,7 @@ const addToCartController = async (req, res) => {
                 });
             }
 
-            cart.items.push({
-                product: productId,
-                variant: variantId,
-                quantity,
-                price: productPrice,
-            });
-
+            isProductInCart.quantity += quantity;
             await cart.save();
 
             return await sendResponse({

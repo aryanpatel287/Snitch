@@ -44,6 +44,42 @@
 
         @media (max-width: 992px) {
             display: none;
+            flex-direction: column;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--color-background);
+            padding: 48px var(--spacing-gutter-mobile);
+            gap: 32px;
+            z-index: 99;
+            align-items: center;
+            justify-content: flex-start;
+            border-top: 1px solid var(--color-border);
+
+            &--open {
+                display: flex;
+            }
+        }
+
+        // Scope the mobile drawer link styles so they don't affect other navbar links (like user name)
+        .navbar__link {
+            @media (max-width: 992px) {
+                font-family: var(--font-display);
+                font-size: 1.75rem;
+                font-weight: 900;
+                text-transform: uppercase;
+                letter-spacing: -0.02em;
+                width: 100%;
+                text-align: center;
+                padding: 12px 0;
+                border-bottom: 1px solid var(--color-border);
+
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
         }
     }
 
