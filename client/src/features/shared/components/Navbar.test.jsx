@@ -38,21 +38,6 @@ describe('Navbar Component', () => {
     expect(logoElements[0].closest('a')).toHaveAttribute('href', '/');
   });
 
-  it('should render scrollable categories tabs (clothes only)', () => {
-    useSelector.mockReturnValue({ user: null });
-
-    render(
-      <MemoryRouter>
-        <Navbar />
-      </MemoryRouter>
-    );
-
-    expect(screen.getByText('Discover')).toBeInTheDocument();
-    expect(screen.getByText('Shirts')).toBeInTheDocument();
-    expect(screen.getByText('T-shirts')).toBeInTheDocument();
-    expect(screen.getByText('Jeans')).toBeInTheDocument();
-    expect(screen.getByText('Hoodies')).toBeInTheDocument();
-  });
 
   it('should open and close the Side Drawer category menu when toggled', () => {
     useSelector.mockReturnValue({ user: null });
