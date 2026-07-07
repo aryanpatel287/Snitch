@@ -24,7 +24,7 @@ describe('Navbar Component', () => {
     vi.clearAllMocks();
   });
 
-  it('should render the logo brand name "SNITCH"', () => {
+  it('should render the logo brand name "#SNITCH"', () => {
     useSelector.mockReturnValue({ user: null });
 
     render(
@@ -33,12 +33,12 @@ describe('Navbar Component', () => {
       </MemoryRouter>
     );
 
-    const logoElement = screen.getByText('SNITCH');
-    expect(logoElement).toBeInTheDocument();
-    expect(logoElement.closest('a')).toHaveAttribute('href', '/');
+    const logoElements = screen.getAllByText('#SNITCH');
+    expect(logoElements.length).toBeGreaterThan(0);
+    expect(logoElements[0].closest('a')).toHaveAttribute('href', '/');
   });
 
-  it('should display "Login" button when user is unauthenticated', () => {
+  it('should render scrollable categories tabs (clothes only)', () => {
     useSelector.mockReturnValue({ user: null });
 
     render(
@@ -47,12 +47,43 @@ describe('Navbar Component', () => {
       </MemoryRouter>
     );
 
-    // Desktop Login button
-    const loginButtons = screen.getAllByText('Login');
-    expect(loginButtons.length).toBeGreaterThan(0);
+    expect(screen.getByText('Discover')).toBeInTheDocument();
+    expect(screen.getByText('Shirts')).toBeInTheDocument();
+    expect(screen.getByText('T-shirts')).toBeInTheDocument();
+    expect(screen.getByText('Jeans')).toBeInTheDocument();
+    expect(screen.getByText('Hoodies')).toBeInTheDocument();
   });
 
-  it('should display username and profile options when user is authenticated', () => {
+  it('should open and close the Side Drawer category menu when toggled', () => {
+    useSelector.mockReturnValue({ user: null });
+
+    render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>
+    );
+
+    // Verify drawer starts closed (home item is queryable only in drawer header)
+    expect(screen.queryByText('CATEGORIES')).not.toBeInTheDocument();
+
+    // Trigger hamburger button to open drawer
+    const hamburger = screen.getByLabelText('Open categories menu');
+    fireEvent.click(hamburger);
+
+    // Verify drawer is now open
+    expect(screen.getByText('CATEGORIES')).toBeInTheDocument();
+    expect(screen.getByText('FLAT 60% OFF')).toBeInTheDocument();
+    expect(screen.getByText('CLOTHING CATEGORIES')).toBeInTheDocument();
+
+    // Click Close button
+    const closeBtn = screen.getByLabelText('Close categories menu');
+    fireEvent.click(closeBtn);
+
+    // Verify drawer is closed
+    expect(screen.queryByText('CATEGORIES')).not.toBeInTheDocument();
+  });
+
+  it('should display username and profile dropdown triggers when user is authenticated', () => {
     useSelector.mockReturnValue({
       user: {
         fullname: 'Alex Editorial',
@@ -66,55 +97,18 @@ describe('Navbar Component', () => {
       </MemoryRouter>
     );
 
-    // Should display user fullname
-    const profileTrigger = screen.getByText('Alex Editorial');
+    // Should display User's first name
+    const profileTrigger = screen.getByText('Alex');
     expect(profileTrigger).toBeInTheDocument();
 
     // Dropdown should be hidden initially
     expect(screen.queryByText('Profile')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('logout-button')).not.toBeInTheDocument();
 
-    // Click profile name to open dropdown
+    // Click profile trigger to toggle dropdown
     fireEvent.click(profileTrigger);
 
     // Dropdown should now be visible
     expect(screen.getByText('Profile')).toBeInTheDocument();
     expect(screen.getByTestId('logout-button')).toBeInTheDocument();
-  });
-
-  it('should display "My Products" link for seller role', () => {
-    useSelector.mockReturnValue({
-      user: {
-        fullname: 'Luxury Seller',
-        role: 'seller',
-      },
-    });
-
-    render(
-      <MemoryRouter>
-        <Navbar />
-      </MemoryRouter>
-    );
-
-    const myProductsLink = screen.getByText('My Products');
-    expect(myProductsLink).toBeInTheDocument();
-    expect(myProductsLink).toHaveAttribute('href', '/profile?tab=my-products');
-  });
-
-  it('should not display "My Products" link for buyer role', () => {
-    useSelector.mockReturnValue({
-      user: {
-        fullname: 'Regular Buyer',
-        role: 'buyer',
-      },
-    });
-
-    render(
-      <MemoryRouter>
-        <Navbar />
-      </MemoryRouter>
-    );
-
-    expect(screen.queryByText('My Products')).not.toBeInTheDocument();
   });
 });

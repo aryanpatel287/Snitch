@@ -5,25 +5,26 @@ import LogoutButton from '../../auth/components/LogoutButton';
 
 const Navbar = () => {
     const { user } = useSelector((state) => state.auth);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [searchVal, setSearchVal] = useState('');
     const navigate = useNavigate();
 
     const [cartCount, setCartCount] = useState(0);
 
-    const syncCartCount = () => {
-        try {
-            const items = useSelector((state) => state.cart.items);
-            const count = items.reduce((acc, curr) => acc + curr.quantity, 0);
+    const items = useSelector((state) => state.cart?.items || []);
+    
+    useEffect(() => {
+        if (Array.isArray(items)) {
+            const count = items.reduce((acc, curr) => acc + (curr.quantity || 0), 0);
             setCartCount(count);
-        } catch (e) {
+        } else {
             setCartCount(0);
         }
-    };
+    }, [items]);
 
     useEffect(() => {
-        if (isMenuOpen) {
+        if (isDrawerOpen) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = '';
@@ -31,160 +32,215 @@ const Navbar = () => {
         return () => {
             document.body.style.overflow = '';
         };
-    }, [isMenuOpen]);
-
-    useEffect(() => {
-        syncCartCount();
-        window.addEventListener('storage', syncCartCount);
-        window.addEventListener('cart-updated', syncCartCount);
-        return () => {
-            window.removeEventListener('storage', syncCartCount);
-            window.removeEventListener('cart-updated', syncCartCount);
-        };
-    }, []);
+    }, [isDrawerOpen]);
 
     const closeAllMenus = () => {
-        setIsMenuOpen(false);
+        setIsDrawerOpen(false);
         setIsDropdownOpen(false);
     };
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
         if (searchVal.trim()) {
-            navigate(
-                `/products?search=${encodeURIComponent(searchVal.trim())}`,
-            );
+            navigate(`/products?search=${encodeURIComponent(searchVal.trim())}`);
+            closeAllMenus();
         }
     };
 
-    return (
-        <nav className="navbar">
-            <div className="navbar__container">
-                <Link
-                    to="/"
-                    className="navbar__wordmark"
-                    onClick={closeAllMenus}
-                >
-                    SNITCH
-                </Link>
+    // Clothes-only categories
+    const categories = [
+        { name: 'Discover', path: '/products' },
+        { name: 'Shirts', path: '/products?category=Shirts' },
+        { name: 'T-shirts', path: '/products?category=T-Shirts' },
+        { name: 'Jeans', path: '/products?category=Jeans' },
+        { name: 'Hoodies', path: '/products?category=Hoodies' },
+        { name: 'Blazers', path: '/products?category=Blazers' },
+        { name: 'Casual', path: '/products?category=Casual' },
+        { name: 'Formal', path: '/products?category=Formal' },
+        { name: 'Gym', path: '/products?category=Gym' },
+        { name: 'Party', path: '/products?category=Party' }
+    ];
 
-                <div
-                    className={`navbar__menu ${isMenuOpen ? 'navbar__menu--open' : ''}`}
-                >
-                    <Link
-                        to="/products"
-                        className="navbar__link"
-                        onClick={closeAllMenus}
+    return (
+        <>
+            <nav className="navbar">
+                {/* Top Header Row */}
+                <div className="navbar__top-row">
+                    {/* Left: Hamburger menu toggle */}
+                    <button 
+                        className="navbar__toggle-btn"
+                        onClick={() => setIsDrawerOpen(true)}
+                        aria-label="Open categories menu"
                     >
-                        Shop
+                        <i className="ri-menu-line"></i>
+                    </button>
+
+                    {/* Center: Logo #SNITCH */}
+                    <Link to="/" className="navbar__logo-link" onClick={closeAllMenus}>
+                        #SNITCH
                     </Link>
-                    <a
-                        href="/#story"
-                        className="navbar__link"
-                        onClick={closeAllMenus}
-                    >
-                        Story
-                    </a>
-                    {user && user.role === 'seller' && (
-                        <Link
-                            to="/profile?tab=my-products"
-                            className="navbar__link"
-                            onClick={closeAllMenus}
-                        >
-                            My Products
+
+                    {/* Right Actions */}
+                    <div className="navbar__right-actions">
+                        {/* Search Input Box */}
+                        <form className="navbar__search-box" onSubmit={handleSearchSubmit}>
+                            <i className="ri-search-line navbar__search-icon"></i>
+                            <input
+                                type="text"
+                                placeholder='Search "STRAIGHT FIT JEANS"'
+                                className="navbar__search-field"
+                                value={searchVal}
+                                onChange={(e) => setSearchVal(e.target.value)}
+                            />
+                        </form>
+
+                        {/* Profile Shortcut / Dropdown */}
+                        {user ? (
+                            <div className="navbar__user-menu">
+                                <button
+                                    className="navbar__icon-link navbar__profile-trigger"
+                                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                    aria-expanded={isDropdownOpen}
+                                    aria-label="User profile options"
+                                >
+                                    <i className="ri-user-line"></i>
+                                    <span className="navbar__user-badge-name">{user.fullname.split(' ')[0]}</span>
+                                </button>
+                                {isDropdownOpen && (
+                                    <div className="navbar__profile-dropdown-list">
+                                        <Link to="/profile" className="navbar__dropdown-link-item" onClick={closeAllMenus}>
+                                            Profile
+                                        </Link>
+                                        {user.role === 'seller' && (
+                                            <Link to="/profile?tab=my-products" className="navbar__dropdown-link-item" onClick={closeAllMenus}>
+                                                My Products
+                                            </Link>
+                                        )}
+                                        <LogoutButton
+                                            className="navbar__dropdown-link-item navbar__dropdown-link-item--logout"
+                                            onClick={closeAllMenus}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <Link 
+                                to="/login?redirect=/profile" 
+                                className="navbar__icon-link" 
+                                onClick={closeAllMenus}
+                                aria-label="Sign in"
+                            >
+                                <i className="ri-user-line"></i>
+                            </Link>
+                        )}
+
+                        {/* Cart Icon */}
+                        <Link to="/cart" className="navbar__icon-link navbar__cart-shortcut" onClick={closeAllMenus} aria-label="Shopping Cart">
+                            <i className="ri-shopping-bag-line"></i>
+                            {cartCount > 0 && (
+                                <span className="navbar__cart-indicator-badge">{cartCount}</span>
+                            )}
                         </Link>
-                    )}
+                    </div>
                 </div>
 
-                <form
-                    className="navbar__search-form"
-                    onSubmit={handleSearchSubmit}
-                >
-                    <i className="ri-search-line navbar__search-icon"></i>
-                    <input
-                        type="text"
-                        placeholder="Search for products..."
-                        className="navbar__search-input"
-                        value={searchVal}
-                        onChange={(e) => setSearchVal(e.target.value)}
-                    />
-                </form>
-
-                <div className="navbar__actions-group">
-                    <Link
-                        to="/cart"
-                        className="navbar__icon-btn"
-                        aria-label="Shopping Cart"
-                    >
-                        <i className="ri-shopping-cart-2-line"></i>
-                        {cartCount > 0 && (
-                            <span className="navbar__cart-badge">
-                                {cartCount}
-                            </span>
-                        )}
-                    </Link>
-
-                    {user ? (
-                        <div className="navbar__profile-dropdown">
-                            <button
-                                className="navbar__link navbar__link--dropdown-trigger"
-                                onClick={() =>
-                                    setIsDropdownOpen(!isDropdownOpen)
-                                }
-                                aria-expanded={isDropdownOpen}
-                                style={{
-                                    background: 'none',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '4px',
-                                }}
+                {/* Bottom Row: Scrollable Clothes Categories */}
+                <div className="navbar__categories-scroll-bar">
+                    <div className="navbar__scroll-container">
+                        {categories.map((cat) => (
+                            <Link 
+                                key={cat.name} 
+                                to={cat.path} 
+                                className="navbar__category-tab"
+                                onClick={closeAllMenus}
                             >
-                                {user.fullname}
-                                <i className="ri-arrow-down-s-line"></i>
+                                {cat.name}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            </nav>
+
+            {/* Slide Drawer Category Menu (Left-sliding) */}
+            {isDrawerOpen && (
+                <div className="drawer-overlay">
+                    <div className="drawer-overlay__backdrop" onClick={closeAllMenus}></div>
+                    
+                    <div className="drawer-overlay__drawer-panel">
+                        {/* Header */}
+                        <div className="drawer-overlay__header-row">
+                            <button 
+                                className="drawer-overlay__close-trigger" 
+                                onClick={closeAllMenus}
+                                aria-label="Close categories menu"
+                            >
+                                <i className="ri-close-line"></i>
                             </button>
-                            {isDropdownOpen && (
-                                <div className="navbar__dropdown-menu">
-                                    <Link
-                                        to="/profile"
-                                        className="navbar__dropdown-item"
-                                        onClick={closeAllMenus}
-                                    >
-                                        Profile
-                                    </Link>
+                            <span className="drawer-overlay__header-title">CATEGORIES</span>
+                            <span className="drawer-overlay__logo-display">#SNITCH</span>
+                        </div>
+
+                        {/* Scrollable Content */}
+                        <div className="drawer-overlay__scroll-body">
+                            {/* Horizontal Promotional Scroll */}
+                            <div className="drawer-overlay__promo-row">
+                                <div className="drawer-overlay__promo-tile">
+                                    <span className="drawer-overlay__promo-tag">FLAT 60% OFF</span>
+                                    <span className="drawer-overlay__promo-sub">B'DAY SALE</span>
+                                </div>
+                                <div className="drawer-overlay__promo-tile">
+                                    <span className="drawer-overlay__promo-tag">NEW IN</span>
+                                    <span className="drawer-overlay__promo-sub">LINEN EDIT</span>
+                                </div>
+                                <div className="drawer-overlay__promo-tile">
+                                    <span className="drawer-overlay__promo-tag">BESTSELLERS</span>
+                                    <span className="drawer-overlay__promo-sub">TRENDING NOW</span>
+                                </div>
+                                <div className="drawer-overlay__promo-tile">
+                                    <span className="drawer-overlay__promo-tag">SUMMER CAPSULE</span>
+                                    <span className="drawer-overlay__promo-sub">LIGHTWEIGHTS</span>
+                                </div>
+                            </div>
+
+                            {/* Nav Curation Lists */}
+                            <Link to="/products?sort=newest" className="drawer-overlay__menu-link" onClick={closeAllMenus}>
+                                NEW ARRIVALS
+                            </Link>
+                            <Link to="/products?sort=popular" className="drawer-overlay__menu-link" onClick={closeAllMenus}>
+                                BESTSELLERS
+                            </Link>
+                            <Link to="/products" className="drawer-overlay__menu-link" onClick={closeAllMenus}>
+                                SHOP ALL
+                            </Link>
+
+                            {/* Separator Title */}
+                            <div className="drawer-overlay__category-section-title">CLOTHING CATEGORIES</div>
+                            
+                            {categories.slice(1).map((cat) => (
+                                <Link 
+                                    key={cat.name} 
+                                    to={cat.path} 
+                                    className="drawer-overlay__menu-link drawer-overlay__menu-link--category"
+                                    onClick={closeAllMenus}
+                                >
+                                    <span>{cat.name.toUpperCase()}</span>
+                                    <i className="ri-arrow-right-s-line"></i>
+                                </Link>
+                            ))}
+
+                            {user && (
+                                <div style={{ marginTop: '32px' }}>
                                     <LogoutButton
-                                        className="navbar__dropdown-item navbar__dropdown-item--logout"
+                                        className="drawer-overlay__logout-action"
                                         onClick={closeAllMenus}
                                     />
                                 </div>
                             )}
                         </div>
-                    ) : (
-                        <Link
-                            to="/login?redirect=/profile"
-                            className="navbar__login-btn"
-                            onClick={closeAllMenus}
-                            style={{ textDecoration: 'none' }}
-                        >
-                            Login
-                        </Link>
-                    )}
-
-                    <button
-                        className="navbar__toggle"
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        aria-label="Toggle menu"
-                    >
-                        {isMenuOpen ? (
-                            <i className="ri-close-line"></i>
-                        ) : (
-                            <i className="ri-menu-line"></i>
-                        )}
-                    </button>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            )}
+        </>
     );
 };
 
