@@ -207,74 +207,7 @@
         justify-content: center;
     }
 
-    // Category Tabs Scrollbar
-    &__categories-scroll-bar {
-        width: 100%;
-        background-color: var(--color-background);
-        border-top: 1px solid var(--color-border-light);
-        height: 44px;
-        display: flex;
-        align-items: center;
-        padding: 0 16px;
-    }
 
-    &__scroll-container {
-        display: flex;
-        align-items: center;
-        gap: 24px;
-        overflow-x: auto;
-        width: 100%;
-        max-width: 1440px;
-        margin: 0 auto;
-        height: 100%;
-        
-        // Hide Scrollbars
-        scrollbar-width: none;
-        &::-webkit-scrollbar {
-            display: none;
-        }
-    }
-
-    &__desktop-only-categories {
-        display: flex;
-        @media (max-width: 992px) {
-            display: none !important;
-        }
-    }
-
-    &__mobile-search-container {
-        display: none;
-        width: 100%;
-        @media (max-width: 992px) {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    }
-
-    &__search-box--mobile {
-        display: flex !important;
-        width: 100% !important;
-    }
-
-    &__category-tab {
-        font-family: var(--font-body);
-        font-size: 0.85rem;
-        font-weight: 700;
-        text-decoration: none;
-        color: var(--color-foreground);
-        text-transform: uppercase;
-        white-space: nowrap;
-        display: flex;
-        align-items: center;
-        height: 100%;
-        border-bottom: 2px solid transparent;
-        transition: color var(--transition-fast) ease, border-color var(--transition-fast) ease;
-
-        &:hover {
-            color: var(--color-muted-foreground);
-        }
-    }
 }
 
 // Left-sliding Category Side Drawer
