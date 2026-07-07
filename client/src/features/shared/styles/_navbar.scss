@@ -30,13 +30,17 @@
         font-size: 1.55rem;
         cursor: pointer;
         padding: 6px;
-        display: flex;
+        display: none; // HIDE ON DESKTOP
         align-items: center;
         justify-content: center;
         transition: opacity var(--transition-fast) ease;
 
         &:hover {
             opacity: 0.7;
+        }
+
+        @media (max-width: 992px) {
+            display: flex; // SHOW ON MOBILE
         }
     }
 
@@ -74,8 +78,8 @@
             border-color: var(--color-foreground); // constant 2px border, transition color only
         }
 
-        @media (max-width: 768px) {
-            display: none; // Hide on tablet and mobile
+        @media (max-width: 992px) {
+            display: none !important; // Hide desktop search bar on mobile & tablet
         }
     }
 
@@ -229,6 +233,28 @@
         &::-webkit-scrollbar {
             display: none;
         }
+    }
+
+    &__desktop-only-categories {
+        display: flex;
+        @media (max-width: 992px) {
+            display: none !important;
+        }
+    }
+
+    &__mobile-search-container {
+        display: none;
+        width: 100%;
+        @media (max-width: 992px) {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    &__search-box--mobile {
+        display: flex !important;
+        width: 100% !important;
     }
 
     &__category-tab {
@@ -394,7 +420,6 @@
         font-family: var(--font-body);
         font-size: 0.95rem;
         font-weight: 700;
-        border-bottom: 1px solid var(--color-border-light);
         transition: color var(--transition-fast) ease;
 
         &:hover {
@@ -402,7 +427,8 @@
         }
 
         &--category {
-            font-weight: 500;
+            font-weight: 500; // Categories not bolded out too much
+            border-bottom: 1px solid var(--color-border-light); // Keep line only for categories
             
             i {
                 font-size: 1.1rem;
