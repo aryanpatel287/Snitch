@@ -13,10 +13,13 @@ const Navbar = () => {
     const [cartCount, setCartCount] = useState(0);
 
     const items = useSelector((state) => state.cart?.items || []);
-    
+
     useEffect(() => {
         if (Array.isArray(items)) {
-            const count = items.reduce((acc, curr) => acc + (curr.quantity || 0), 0);
+            const count = items.reduce(
+                (acc, curr) => acc + (curr.quantity || 0),
+                0,
+            );
             setCartCount(count);
         } else {
             setCartCount(0);
@@ -42,7 +45,9 @@ const Navbar = () => {
     const handleSearchSubmit = (e) => {
         e.preventDefault();
         if (searchVal.trim()) {
-            navigate(`/products?search=${encodeURIComponent(searchVal.trim())}`);
+            navigate(
+                `/products?search=${encodeURIComponent(searchVal.trim())}`,
+            );
             closeAllMenus();
         }
     };
@@ -58,7 +63,7 @@ const Navbar = () => {
         { name: 'Casual', path: '/products?category=Casual' },
         { name: 'Formal', path: '/products?category=Formal' },
         { name: 'Gym', path: '/products?category=Gym' },
-        { name: 'Party', path: '/products?category=Party' }
+        { name: 'Party', path: '/products?category=Party' },
     ];
 
     return (
@@ -67,7 +72,7 @@ const Navbar = () => {
                 {/* Top Header Row */}
                 <div className="navbar__top-row">
                     {/* Left: Hamburger menu toggle */}
-                    <button 
+                    <button
                         className="navbar__toggle-btn"
                         onClick={() => setIsDrawerOpen(true)}
                         aria-label="Open categories menu"
@@ -76,14 +81,21 @@ const Navbar = () => {
                     </button>
 
                     {/* Center: Logo #SNITCH */}
-                    <Link to="/" className="navbar__logo-link" onClick={closeAllMenus}>
+                    <Link
+                        to="/"
+                        className="navbar__logo-link"
+                        onClick={closeAllMenus}
+                    >
                         #SNITCH
                     </Link>
 
                     {/* Right Actions */}
                     <div className="navbar__right-actions">
                         {/* Search Input Box */}
-                        <form className="navbar__search-box" onSubmit={handleSearchSubmit}>
+                        <form
+                            className="navbar__search-box"
+                            onSubmit={handleSearchSubmit}
+                        >
                             <i className="ri-search-line navbar__search-icon"></i>
                             <input
                                 type="text"
@@ -93,26 +105,38 @@ const Navbar = () => {
                                 onChange={(e) => setSearchVal(e.target.value)}
                             />
                         </form>
-
+                        {console.log(user)}
                         {/* Profile Shortcut / Dropdown */}
                         {user ? (
                             <div className="navbar__user-menu">
                                 <button
                                     className="navbar__icon-link navbar__profile-trigger"
-                                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                    onClick={() =>
+                                        setIsDropdownOpen(!isDropdownOpen)
+                                    }
                                     aria-expanded={isDropdownOpen}
                                     aria-label="User profile options"
                                 >
                                     <i className="ri-user-line"></i>
-                                    <span className="navbar__user-badge-name">{user.fullname.split(' ')[0]}</span>
+                                    <span className="navbar__user-badge-name">
+                                        {user.fullname.split(' ')[0]}
+                                    </span>
                                 </button>
                                 {isDropdownOpen && (
                                     <div className="navbar__profile-dropdown-list">
-                                        <Link to="/profile" className="navbar__dropdown-link-item" onClick={closeAllMenus}>
+                                        <Link
+                                            to="/profile"
+                                            className="navbar__dropdown-link-item"
+                                            onClick={closeAllMenus}
+                                        >
                                             Profile
                                         </Link>
                                         {user.role === 'seller' && (
-                                            <Link to="/profile?tab=my-products" className="navbar__dropdown-link-item" onClick={closeAllMenus}>
+                                            <Link
+                                                to="/profile?tab=my-products"
+                                                className="navbar__dropdown-link-item"
+                                                onClick={closeAllMenus}
+                                            >
                                                 My Products
                                             </Link>
                                         )}
@@ -124,9 +148,9 @@ const Navbar = () => {
                                 )}
                             </div>
                         ) : (
-                            <Link 
-                                to="/login?redirect=/profile" 
-                                className="navbar__icon-link" 
+                            <Link
+                                to="/login?redirect=/profile"
+                                className="navbar__icon-link"
                                 onClick={closeAllMenus}
                                 aria-label="Sign in"
                             >
@@ -135,33 +159,44 @@ const Navbar = () => {
                         )}
 
                         {/* Cart Icon */}
-                        <Link to="/cart" className="navbar__icon-link navbar__cart-shortcut" onClick={closeAllMenus} aria-label="Shopping Cart">
+                        <Link
+                            to="/cart"
+                            className="navbar__icon-link navbar__cart-shortcut"
+                            onClick={closeAllMenus}
+                            aria-label="Shopping Cart"
+                        >
                             <i className="ri-shopping-bag-line"></i>
                             {cartCount > 0 && (
-                                <span className="navbar__cart-indicator-badge">{cartCount}</span>
+                                <span className="navbar__cart-indicator-badge">
+                                    {cartCount}
+                                </span>
                             )}
                         </Link>
                     </div>
                 </div>
-
             </nav>
 
             {/* Slide Drawer Category Menu (Left-sliding) */}
             {isDrawerOpen && (
                 <div className="drawer-overlay">
-                    <div className="drawer-overlay__backdrop" onClick={closeAllMenus}></div>
-                    
+                    <div
+                        className="drawer-overlay__backdrop"
+                        onClick={closeAllMenus}
+                    ></div>
+
                     <div className="drawer-overlay__drawer-panel">
                         {/* Header */}
                         <div className="drawer-overlay__header-row">
-                            <button 
-                                className="drawer-overlay__close-trigger" 
+                            <button
+                                className="drawer-overlay__close-trigger"
                                 onClick={closeAllMenus}
                                 aria-label="Close categories menu"
                             >
                                 <i className="ri-close-line"></i>
                             </button>
-                            <span className="drawer-overlay__header-title">CATEGORIES</span>
+                            <span className="drawer-overlay__header-title">
+                                CATEGORIES
+                            </span>
                         </div>
 
                         {/* Scrollable Content */}
@@ -169,41 +204,71 @@ const Navbar = () => {
                             {/* Horizontal Promotional Scroll */}
                             <div className="drawer-overlay__promo-row">
                                 <div className="drawer-overlay__promo-tile">
-                                    <span className="drawer-overlay__promo-tag">FLAT 60% OFF</span>
-                                    <span className="drawer-overlay__promo-sub">B'DAY SALE</span>
+                                    <span className="drawer-overlay__promo-tag">
+                                        FLAT 60% OFF
+                                    </span>
+                                    <span className="drawer-overlay__promo-sub">
+                                        B'DAY SALE
+                                    </span>
                                 </div>
                                 <div className="drawer-overlay__promo-tile">
-                                    <span className="drawer-overlay__promo-tag">NEW IN</span>
-                                    <span className="drawer-overlay__promo-sub">LINEN EDIT</span>
+                                    <span className="drawer-overlay__promo-tag">
+                                        NEW IN
+                                    </span>
+                                    <span className="drawer-overlay__promo-sub">
+                                        LINEN EDIT
+                                    </span>
                                 </div>
                                 <div className="drawer-overlay__promo-tile">
-                                    <span className="drawer-overlay__promo-tag">BESTSELLERS</span>
-                                    <span className="drawer-overlay__promo-sub">TRENDING NOW</span>
+                                    <span className="drawer-overlay__promo-tag">
+                                        BESTSELLERS
+                                    </span>
+                                    <span className="drawer-overlay__promo-sub">
+                                        TRENDING NOW
+                                    </span>
                                 </div>
                                 <div className="drawer-overlay__promo-tile">
-                                    <span className="drawer-overlay__promo-tag">SUMMER CAPSULE</span>
-                                    <span className="drawer-overlay__promo-sub">LIGHTWEIGHTS</span>
+                                    <span className="drawer-overlay__promo-tag">
+                                        SUMMER CAPSULE
+                                    </span>
+                                    <span className="drawer-overlay__promo-sub">
+                                        LIGHTWEIGHTS
+                                    </span>
                                 </div>
                             </div>
 
                             {/* Nav Curation Lists */}
-                            <Link to="/products?sort=newest" className="drawer-overlay__menu-link" onClick={closeAllMenus}>
+                            <Link
+                                to="/products?sort=newest"
+                                className="drawer-overlay__menu-link"
+                                onClick={closeAllMenus}
+                            >
                                 NEW ARRIVALS
                             </Link>
-                            <Link to="/products?sort=popular" className="drawer-overlay__menu-link" onClick={closeAllMenus}>
+                            <Link
+                                to="/products?sort=popular"
+                                className="drawer-overlay__menu-link"
+                                onClick={closeAllMenus}
+                            >
                                 BESTSELLERS
                             </Link>
-                            <Link to="/products" className="drawer-overlay__menu-link" onClick={closeAllMenus}>
+                            <Link
+                                to="/products"
+                                className="drawer-overlay__menu-link"
+                                onClick={closeAllMenus}
+                            >
                                 SHOP ALL
                             </Link>
 
                             {/* Separator Title */}
-                            <div className="drawer-overlay__category-section-title">CLOTHING CATEGORIES</div>
-                            
+                            <div className="drawer-overlay__category-section-title">
+                                CLOTHING CATEGORIES
+                            </div>
+
                             {categories.slice(1).map((cat) => (
-                                <Link 
-                                    key={cat.name} 
-                                    to={cat.path} 
+                                <Link
+                                    key={cat.name}
+                                    to={cat.path}
                                     className="drawer-overlay__menu-link drawer-overlay__menu-link--category"
                                     onClick={closeAllMenus}
                                 >

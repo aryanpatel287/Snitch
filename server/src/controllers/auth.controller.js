@@ -189,6 +189,22 @@ async function googleAuthController(req, res) {
     res.redirect(config.CLIENT_ORIGIN);
 }
 
+// cache helper
+async function getCachedUser(userId) {
+    const cacheKey = `snitch:user:${userId}`;
+    const cached = await redis.get(cacheKey);
+
+    if (cached) {
+        return JSON.parse(cached);
+    }
+
+    const user = await userModel.findById(userId).lean();
+    if (!user) return null;
+
+    await redis.set(cacheKey, JSON.stringify(user), 'EX', 60 * 10); // 10 min
+    return user;
+}
+
 /**
  * @route GET /api/auth/get-me
  * @description Get current logged in user
@@ -196,26 +212,36 @@ async function googleAuthController(req, res) {
  * @body No body required
  */
 async function getMeController(req, res) {
-    const userId = req.user._id;
+    const userId = req.user?._id;
 
-    const user = await userModel.findById(userId);
-
-    if (!user) {
-        return await sendResponse({
-            res,
-            statusCode: 404,
-            message: 'User not found',
+    if (!userId) {
+        return res.status(401).json({
+            message: 'unauthorized access',
             success: false,
+            error: 'user details not attached in the req',
         });
     }
 
-    return await sendResponse({
-        res,
-        statusCode: 200,
-        message: 'User found',
+    const user = await getCachedUser(userId);
+
+    if (!user) {
+        return res.status(404).json({
+            message: 'user not found',
+            success: false,
+            error: 'user not found',
+        });
+    }
+
+    return res.status(200).json({
+        message: 'user found successfully',
         success: true,
         user,
     });
+}
+
+// call this after any profile update
+async function invalidateUserCache(userId) {
+    await redis.del(`snitch:user:${userId}`);
 }
 
 /**
@@ -346,7 +372,7 @@ async function logoutController(req, res) {
     res.clearCookie('token');
 
     await redis.set(
-        `snitch-blacklist:${token}`,
+        `snitch:blacklist:${token}`,
         Date.now().toString(),
         'EX',
         3600 * 24,

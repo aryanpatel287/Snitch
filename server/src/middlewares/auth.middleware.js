@@ -16,7 +16,7 @@ async function authUser(req, res, next) {
         });
     }
 
-    const isBlacklisted = await redis.get(`snitch-blacklist:${token}`);
+    const isBlacklisted = await redis.get(`snitch:blacklist:${token}`);
 
     if (isBlacklisted) {
         return await sendResponse({
