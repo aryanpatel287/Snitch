@@ -8,6 +8,7 @@ const Navbar = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [searchVal, setSearchVal] = useState('');
+    const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
     const navigate = useNavigate();
 
     const [cartCount, setCartCount] = useState(0);
@@ -40,6 +41,7 @@ const Navbar = () => {
     const closeAllMenus = () => {
         setIsDrawerOpen(false);
         setIsDropdownOpen(false);
+        setIsMobileSearchOpen(false);
     };
 
     const handleSearchSubmit = (e) => {
@@ -71,108 +73,146 @@ const Navbar = () => {
             <nav className="navbar">
                 {/* Top Header Row */}
                 <div className="navbar__top-row">
-                    {/* Left: Hamburger menu toggle */}
-                    <button
-                        className="navbar__toggle-btn"
-                        onClick={() => setIsDrawerOpen(true)}
-                        aria-label="Open categories menu"
-                    >
-                        <i className="ri-menu-line"></i>
-                    </button>
-
-                    {/* Center: Logo #SNITCH */}
-                    <Link
-                        to="/"
-                        className="navbar__logo-link"
-                        onClick={closeAllMenus}
-                    >
-                        #SNITCH
-                    </Link>
-
-                    {/* Right Actions */}
-                    <div className="navbar__right-actions">
-                        {/* Search Input Box */}
+                    {isMobileSearchOpen ? (
                         <form
-                            className="navbar__search-box"
+                            className="navbar__mobile-search-form"
                             onSubmit={handleSearchSubmit}
                         >
-                            <i className="ri-search-line navbar__search-icon"></i>
-                            <input
-                                type="text"
-                                placeholder='Search "STRAIGHT FIT JEANS"'
-                                className="navbar__search-field"
-                                value={searchVal}
-                                onChange={(e) => setSearchVal(e.target.value)}
-                            />
-                        </form>
-                        {console.log(user)}
-                        {/* Profile Shortcut / Dropdown */}
-                        {user ? (
-                            <div className="navbar__user-menu">
-                                <button
-                                    className="navbar__icon-link navbar__profile-trigger"
-                                    onClick={() =>
-                                        setIsDropdownOpen(!isDropdownOpen)
-                                    }
-                                    aria-expanded={isDropdownOpen}
-                                    aria-label="User profile options"
-                                >
-                                    <i className="ri-user-line"></i>
-                                    <span className="navbar__user-badge-name">
-                                        {user.fullname.split(' ')[0]}
-                                    </span>
-                                </button>
-                                {isDropdownOpen && (
-                                    <div className="navbar__profile-dropdown-list">
-                                        <Link
-                                            to="/profile"
-                                            className="navbar__dropdown-link-item"
-                                            onClick={closeAllMenus}
-                                        >
-                                            Profile
-                                        </Link>
-                                        {user.role === 'seller' && (
-                                            <Link
-                                                to="/profile?tab=my-products"
-                                                className="navbar__dropdown-link-item"
-                                                onClick={closeAllMenus}
-                                            >
-                                                My Products
-                                            </Link>
-                                        )}
-                                        <LogoutButton
-                                            className="navbar__dropdown-link-item navbar__dropdown-link-item--logout"
-                                            onClick={closeAllMenus}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        ) : (
-                            <Link
-                                to="/login?redirect=/profile"
-                                className="navbar__icon-link"
-                                onClick={closeAllMenus}
-                                aria-label="Sign in"
+                            <button
+                                type="button"
+                                className="navbar__mobile-search-close"
+                                onClick={() => setIsMobileSearchOpen(false)}
+                                aria-label="Close search bar"
                             >
-                                <i className="ri-user-line"></i>
-                            </Link>
-                        )}
+                                <i className="ri-arrow-left-line"></i>
+                            </button>
+                            <div className="navbar__mobile-search-input-wrap">
+                                <i className="ri-search-line navbar__search-icon"></i>
+                                <input
+                                    type="text"
+                                    placeholder='Search "STRAIGHT FIT JEANS"'
+                                    className="navbar__search-field"
+                                    value={searchVal}
+                                    onChange={(e) => setSearchVal(e.target.value)}
+                                    autoFocus
+                                />
+                            </div>
+                        </form>
+                    ) : (
+                        <>
+                            {/* Left: Hamburger menu toggle */}
+                            <button
+                                className="navbar__toggle-btn"
+                                onClick={() => setIsDrawerOpen(true)}
+                                aria-label="Open categories menu"
+                            >
+                                <i className="ri-menu-line"></i>
+                            </button>
 
-                        {/* Cart Icon */}
-                        <Link
-                            to="/cart"
-                            className="navbar__icon-link navbar__cart-shortcut"
-                            onClick={closeAllMenus}
-                            aria-label="Shopping Cart"
-                        >
-                            <i className="ri-shopping-bag-line"></i>
-                            {cartCount > 0 && (
-                                <span className="navbar__cart-indicator-badge">
-                                    {cartCount}
-                                </span>
-                            )}
-                        </Link>
-                    </div>
+                            {/* Center: Logo #SNITCH */}
+                            <Link
+                                to="/"
+                                className="navbar__logo-link"
+                                onClick={closeAllMenus}
+                            >
+                                #SNITCH
+                            </Link>
+
+                            {/* Right Actions */}
+                            <div className="navbar__right-actions">
+                                {/* Mobile Search Toggle Trigger */}
+                                <button
+                                    className="navbar__icon-link navbar__search-toggle-mobile"
+                                    onClick={() => setIsMobileSearchOpen(true)}
+                                    aria-label="Open search bar"
+                                >
+                                    <i className="ri-search-line"></i>
+                                </button>
+
+                                {/* Search Input Box (Desktop) */}
+                                <form
+                                    className="navbar__search-box"
+                                    onSubmit={handleSearchSubmit}
+                                >
+                                    <i className="ri-search-line navbar__search-icon"></i>
+                                    <input
+                                        type="text"
+                                        placeholder='Search "STRAIGHT FIT JEANS"'
+                                        className="navbar__search-field"
+                                        value={searchVal}
+                                        onChange={(e) => setSearchVal(e.target.value)}
+                                    />
+                                </form>
+                                {console.log(user)}
+                                {/* Profile Shortcut / Dropdown */}
+                                {user ? (
+                                    <div className="navbar__user-menu">
+                                        <button
+                                            className="navbar__icon-link navbar__profile-trigger"
+                                            onClick={() =>
+                                                setIsDropdownOpen(!isDropdownOpen)
+                                            }
+                                            aria-expanded={isDropdownOpen}
+                                            aria-label="User profile options"
+                                        >
+                                            <i className="ri-user-line"></i>
+                                            <span className="navbar__user-badge-name">
+                                                {user.fullname.split(' ')[0]}
+                                            </span>
+                                        </button>
+                                        {isDropdownOpen && (
+                                            <div className="navbar__profile-dropdown-list">
+                                                <Link
+                                                    to="/profile"
+                                                    className="navbar__dropdown-link-item"
+                                                    onClick={closeAllMenus}
+                                                >
+                                                    Profile
+                                                </Link>
+                                                {user.role === 'seller' && (
+                                                    <Link
+                                                        to="/profile?tab=my-products"
+                                                        className="navbar__dropdown-link-item"
+                                                        onClick={closeAllMenus}
+                                                    >
+                                                        My Products
+                                                    </Link>
+                                                )}
+                                                <LogoutButton
+                                                    className="navbar__dropdown-link-item navbar__dropdown-link-item--logout"
+                                                    onClick={closeAllMenus}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <Link
+                                        to="/login?redirect=/profile"
+                                        className="navbar__icon-link"
+                                        onClick={closeAllMenus}
+                                        aria-label="Sign in"
+                                    >
+                                        <i className="ri-user-line"></i>
+                                    </Link>
+                                )}
+
+                                {/* Cart Icon */}
+                                <Link
+                                    to="/cart"
+                                    className="navbar__icon-link navbar__cart-shortcut"
+                                    onClick={closeAllMenus}
+                                    aria-label="Shopping Cart"
+                                >
+                                    <i className="ri-shopping-bag-line"></i>
+                                    {cartCount > 0 && (
+                                        <span className="navbar__cart-indicator-badge">
+                                            {cartCount}
+                                        </span>
+                                    )}
+                                </Link>
+                            </div>
+                        </>
+                    )}
                 </div>
             </nav>
 

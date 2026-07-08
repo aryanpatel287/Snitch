@@ -96,4 +96,32 @@ describe('Navbar Component', () => {
     expect(screen.getByText('Profile')).toBeInTheDocument();
     expect(screen.getByTestId('logout-button')).toBeInTheDocument();
   });
+
+  it('should toggle mobile search overlay and submit search', () => {
+    useSelector.mockReturnValue({ user: null });
+    
+    render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>
+    );
+
+    // Mobile search toggle button should be visible (queried by aria-label)
+    const searchToggle = screen.getByLabelText('Open search bar');
+    expect(searchToggle).toBeInTheDocument();
+
+    // Click to open search takeover
+    fireEvent.click(searchToggle);
+
+    // Search input should now be visible and auto-focused
+    const searchInput = screen.getByPlaceholderText('Search "STRAIGHT FIT JEANS"');
+    expect(searchInput).toBeInTheDocument();
+
+    // Click back button to close
+    const closeSearch = screen.getByLabelText('Close search bar');
+    fireEvent.click(closeSearch);
+
+    // Mobile search takeover should be closed
+    expect(screen.queryByLabelText('Close search bar')).not.toBeInTheDocument();
+  });
 });
