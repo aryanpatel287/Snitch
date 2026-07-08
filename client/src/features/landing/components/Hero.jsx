@@ -40,24 +40,6 @@ const Hero = () => {
                         </div>
                     </div>
                 </div>
-
-                <div className="hero__image-container">
-                    <img 
-                        src="https://ik.imagekit.io/ji8wynr3i/tr:w-1920,f-auto,q-80/snitch/landing/hero-banner-2.jpg" 
-                        alt="Streetwear models" 
-                        className="hero__banner-img"
-                    />
-                </div>
-            </div>
-
-            <div className="hero-sponsors">
-                <div className="hero-sponsors__container">
-                    <span className="sponsor-logo">VERSACE</span>
-                    <span className="sponsor-logo">ZARA</span>
-                    <span className="sponsor-logo">GUCCI</span>
-                    <span className="sponsor-logo">PRADA</span>
-                    <span className="sponsor-logo">Calvin Klein</span>
-                </div>
             </div>
         </header>
     );
