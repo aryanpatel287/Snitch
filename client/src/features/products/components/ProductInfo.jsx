@@ -4,12 +4,20 @@ import { getMockProductMetaData } from './EditorialProductCard';
 import '../styles/_product-info.scss';
 import { useSelector } from 'react-redux';
 import { useCart } from '../../cart/hooks/useCart';
+import { useNavigate } from 'react-router';
 
 const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
     const { _id, title, price, description, variants = [] } = product;
 
     const cartErrorMsg = useSelector((state) => state.cart.error);
+    const cartLoading = useSelector((state) => state.cart.loading);
+    const user = useSelector((state) => state.auth.user);
+    const userLoading = useSelector((state) => state.auth.loading);
     const { handleAddToCart } = useCart();
+
+    const isUserLoggedIn = !!user && !userLoading;
+
+    const navigate = useNavigate();
 
     // Extracted Unique options
     const colors = Array.from(
@@ -107,6 +115,11 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
     };
 
     const handleAddToCartClick = async () => {
+        if (!isUserLoggedIn) {
+            navigate('/login');
+            return;
+        }
+
         if (variants.length > 0) {
             const hasColors = colors.length > 0;
             const hasSizes = sizes.length > 0;
@@ -284,7 +297,7 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
                     className="button primary-button product-info__add-btn"
                     onClick={handleAddToCartClick}
                 >
-                    Add to Cart
+                    {cartLoading ? 'ADDING TO CART...' : 'ADD TO CART'}
                 </button>
             </div>
 

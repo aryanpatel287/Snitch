@@ -1,45 +1,3 @@
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/Integral-CF/Demo_Fonts/Fontspring-DEMO-integralcf-regular.otf') format('opentype');
-    font-weight: 400;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/Integral-CF/Demo_Fonts/Fontspring-DEMO-integralcf-medium.otf') format('opentype');
-    font-weight: 500;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/Integral-CF/Demo_Fonts/Fontspring-DEMO-integralcf-demibold.otf') format('opentype');
-    font-weight: 600;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/Integral-CF/Demo_Fonts/Fontspring-DEMO-integralcf-bold.otf') format('opentype');
-    font-weight: 700;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/Integral-CF/Demo_Fonts/Fontspring-DEMO-integralcf-extrabold.otf') format('opentype');
-    font-weight: 800;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Integral CF';
-    src: url('/Integral-CF/Demo_Fonts/Fontspring-DEMO-integralcf-heavy.otf') format('opentype');
-    font-weight: 900;
-    font-style: normal;
-}
-
 :root {
     /* Colors */
     --color-background: #ffffff;
@@ -73,7 +31,7 @@
     --color-error-transparent: rgba(255, 51, 51, 0.05);
 
     /* Fonts */
-    --font-display: 'Integral CF', 'Archivo Black', sans-serif;
+    --font-display: 'Poppins', sans-serif;
     --font-body: 'Satoshi', sans-serif;
     --font-sans: 'Satoshi', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
