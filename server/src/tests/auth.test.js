@@ -18,7 +18,9 @@ vi.mock('../models/user.model.js', () => ({
   default: {
     findOne: vi.fn(),
     create: vi.fn(),
-    findById: vi.fn(),
+    findById: vi.fn().mockImplementation(() => ({
+      lean: vi.fn().mockResolvedValue(null),
+    })),
     findByIdAndUpdate: vi.fn(),
   },
 }));
@@ -179,7 +181,9 @@ describe('Auth Endpoints', () => {
         role: 'buyer',
       };
 
-      userModel.findById.mockResolvedValue(mockUser);
+      userModel.findById.mockReturnValue({
+        lean: vi.fn().mockResolvedValue(mockUser),
+      });
 
       // Generate a mock JWT token
       const token = jwt.sign(

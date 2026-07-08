@@ -3,7 +3,10 @@ import { Link } from 'react-router';
 
 const Hero = () => {
     return (
-        <header className="hero-section">
+        <header 
+            className="hero-section"
+            style={{ backgroundImage: `url('https://ik.imagekit.io/ji8wynr3i/tr:w-1920,f-auto,q-80/snitch/landing/hero-banner-2.jpg')` }}
+        >
             <div className="hero">
                 <div className="hero__content">
                     <h1 className="hero__headline">
@@ -37,19 +40,13 @@ const Hero = () => {
                         </div>
                     </div>
                 </div>
-                
-                <div className="hero__image-wrapper">
+
+                <div className="hero__image-container">
                     <img 
-                        src="/hero_model.png" 
-                        alt="Streetwear styles" 
-                        className="hero__image"
+                        src="https://ik.imagekit.io/ji8wynr3i/tr:w-1920,f-auto,q-80/snitch/landing/hero-banner-2.jpg" 
+                        alt="Streetwear models" 
+                        className="hero__banner-img"
                     />
-                    <div className="hero__sparkle hero__sparkle--large">
-                        <i className="ri-sparkling-fill"></i>
-                    </div>
-                    <div className="hero__sparkle hero__sparkle--small">
-                        <i className="ri-sparkling-fill"></i>
-                    </div>
                 </div>
             </div>
 
