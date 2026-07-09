@@ -51,7 +51,6 @@ export const removeFromCart = async ({ productId, variantId }) => {
 };
 
 export const updateCartItem = async ({ productId, variantId, quantity }) => {
-    console.log('Updating cart Api:', { productId, variantId, quantity });
     try {
         const cleanVariantId =
             variantId && variantId !== 'undefined' && variantId !== 'null'

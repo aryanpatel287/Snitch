@@ -50,20 +50,13 @@ export const useCart = () => {
     }
 
     async function handleUpdateCartItem({ productId, variantId, quantity }) {
-        console.log('Updating cart item hook:', {
-            productId,
-            variantId,
-            quantity,
-        });
         dispatch(setLoading(true));
         try {
-            console.log('udpate cart item calling from hook');
             const data = await updateCartItem({
                 productId,
                 variantId,
                 quantity,
             });
-            console.log('update cart item data', data);
             const items = data?.cart?.items || [];
             dispatch(setItems(items));
         } catch (error) {
