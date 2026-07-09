@@ -1,0 +1,27 @@
+.products-breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+
+    &__link {
+        text-decoration: none;
+        color: var(--color-muted-foreground);
+        transition: color var(--transition-fast) ease;
+
+        &:hover {
+            color: var(--color-foreground);
+        }
+    }
+
+    &__sep {
+        color: var(--color-muted-foreground);
+    }
+
+    &__current {
+        color: var(--color-foreground);
+        font-weight: 500;
+    }
+}
