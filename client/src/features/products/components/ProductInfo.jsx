@@ -20,44 +20,56 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
 
     const navigate = useNavigate();
 
-    // Extracted Unique options
-    const colors = Array.from(
-        new Set(
-            variants
-                .map((v) => {
-                    if (!v.attributes) return null;
-                    return (
-                        v.attributes.color ||
-                        v.attributes.Color ||
-                        (typeof v.attributes.get === 'function'
-                            ? v.attributes.get('color')
-                            : null)
-                    );
-                })
-                .filter(Boolean),
-        ),
-    );
+    // Helper function to safely read attribute values from Map/Object
+    const getAttributeValue = (attributes, key) => {
+        if (!attributes) return null;
+        if (attributes instanceof Map) {
+            return attributes.get(key) || attributes.get(key.charAt(0).toUpperCase() + key.slice(1));
+        }
+        if (typeof attributes.get === 'function') {
+            return attributes.get(key) || attributes.get(key.charAt(0).toUpperCase() + key.slice(1));
+        }
+        const foundKey = Object.keys(attributes).find(
+            (k) => k.toLowerCase() === key.toLowerCase()
+        );
+        return foundKey ? attributes[foundKey] : null;
+    };
 
-    const sizes = Array.from(
-        new Set(
-            variants
-                .map((v) => {
-                    if (!v.attributes) return null;
-                    return (
-                        v.attributes.size ||
-                        v.attributes.Size ||
-                        (typeof v.attributes.get === 'function'
-                            ? v.attributes.get('size')
-                            : null)
-                    );
-                })
-                .filter(Boolean),
-        ),
-    );
+    // Dynamic extraction of unique attributes
+    const groupedAttributes = {};
+    variants.forEach((v) => {
+        if (!v.attributes) return;
+
+        let attributesObj = {};
+        if (v.attributes instanceof Map) {
+            attributesObj = Object.fromEntries(v.attributes);
+        } else if (typeof v.attributes.toJSON === 'function') {
+            attributesObj = v.attributes.toJSON();
+        } else {
+            attributesObj = v.attributes;
+        }
+
+        Object.entries(attributesObj).forEach(([key, val]) => {
+            if (!val) return;
+            const groupKey = key.toLowerCase();
+            if (!groupedAttributes[groupKey]) {
+                groupedAttributes[groupKey] = {
+                    name: key, // original key capitalization
+                    values: new Set()
+                };
+            }
+            groupedAttributes[groupKey].values.add(val);
+        });
+    });
+
+    const attributesList = Object.keys(groupedAttributes).map((groupKey) => ({
+        key: groupKey,
+        name: groupedAttributes[groupKey].name,
+        values: Array.from(groupedAttributes[groupKey].values)
+    }));
 
     // Active selections
-    const [selectedColor, setSelectedColor] = useState('');
-    const [selectedSize, setSelectedSize] = useState('');
+    const [selectedAttributes, setSelectedAttributes] = useState({});
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('details');
     const [validationError, setValidationError] = useState('');
@@ -65,55 +77,28 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
     // Ratings & original price calculation
     const { rating, discountPercent } = getMockProductMetaData(product);
 
-    // Find active variant matching selected color & size
+    // Find active variant matching all selected attributes
     useEffect(() => {
-        const hasColors = colors.length > 0;
-        const hasSizes = sizes.length > 0;
-        const isColorSelected = !hasColors || !!selectedColor;
-        const isSizeSelected = !hasSizes || !!selectedSize;
+        if (variants.length === 0 || attributesList.length === 0) {
+            onVariantSelect(null);
+            return;
+        }
 
-        if (
-            variants.length > 0 &&
-            isColorSelected &&
-            isSizeSelected &&
-            (selectedColor || selectedSize)
-        ) {
+        const allSelected = attributesList.every((attr) => !!selectedAttributes[attr.key]);
+
+        if (allSelected) {
             const match = variants.find((v) => {
-                const cVal =
-                    v.attributes.color ||
-                    v.attributes.Color ||
-                    (typeof v.attributes.get === 'function'
-                        ? v.attributes.get('color')
-                        : null);
-                const sVal =
-                    v.attributes.size ||
-                    v.attributes.Size ||
-                    (typeof v.attributes.get === 'function'
-                        ? v.attributes.get('size')
-                        : null);
-                const colorMatches =
-                    !hasColors ||
-                    cVal?.toLowerCase() === selectedColor?.toLowerCase();
-                const sizeMatches =
-                    !hasSizes ||
-                    sVal?.toLowerCase() === selectedSize?.toLowerCase();
-                return colorMatches && sizeMatches;
+                return attributesList.every((attr) => {
+                    const vVal = getAttributeValue(v.attributes, attr.key);
+                    const selectedVal = selectedAttributes[attr.key];
+                    return vVal?.toLowerCase() === selectedVal?.toLowerCase();
+                });
             });
             onVariantSelect(match || null);
         } else {
             onVariantSelect(null);
         }
-    }, [selectedColor, selectedSize, variants, colors, sizes]);
-
-    const handleColorSelect = (c) => {
-        setSelectedColor(c);
-        setValidationError('');
-    };
-
-    const handleSizeSelect = (s) => {
-        setSelectedSize(s);
-        setValidationError('');
-    };
+    }, [selectedAttributes, variants]);
 
     const handleAddToCartClick = async () => {
         if (!isAuthReady) {
@@ -126,18 +111,15 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
         }
 
         if (variants.length > 0) {
-            const hasColors = colors.length > 0;
-            const hasSizes = sizes.length > 0;
-            if (hasColors && !selectedColor && hasSizes && !selectedSize) {
-                setValidationError('Please select a color and a size.');
-                return;
-            }
-            if (hasColors && !selectedColor) {
-                setValidationError('Please select a color.');
-                return;
-            }
-            if (hasSizes && !selectedSize) {
-                setValidationError('Please select a size.');
+            const unselected = attributesList.filter((attr) => !selectedAttributes[attr.key]);
+            if (unselected.length > 0) {
+                const names = unselected.map((attr) => attr.name.toLowerCase());
+                if (names.length === 1) {
+                    setValidationError(`Please select a ${names[0]}.`);
+                } else {
+                    const last = names.pop();
+                    setValidationError(`Please select a ${names.join(', ')} and ${last}.`);
+                }
                 return;
             }
         }
@@ -220,59 +202,71 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
 
             <hr className="product-info__divider" />
 
-            {/* Color Swatches */}
-            {colors.length > 0 && (
-                <div className="product-info__option-group">
-                    <span className="product-info__option-label">
-                        Select Color
-                    </span>
-                    <div className="product-info__colors">
-                        {colors.map((c) => (
-                            <button
-                                key={c}
-                                className={`product-info__color-btn ${selectedColor === c ? 'active' : ''}`}
-                                style={{ backgroundColor: getHex(c) }}
-                                onClick={() => handleColorSelect(c)}
-                                title={c}
-                                aria-label={`Select color ${c}`}
-                            >
-                                {selectedColor === c && (
-                                    <i
-                                        className="ri-check-line"
-                                        style={{
-                                            color:
-                                                c.toLowerCase() === 'white' ||
-                                                c.toLowerCase() === 'yellow'
-                                                    ? '#000000'
-                                                    : '#ffffff',
-                                        }}
-                                    ></i>
-                                )}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
+            {/* Dynamic Variant Attributes */}
+            {attributesList.map((attr) => {
+                const isColor = attr.key === 'color';
+                const isSize = attr.key === 'size';
 
-            {/* Size selector pills */}
-            {sizes.length > 0 && (
-                <div className="product-info__option-group">
-                    <span className="product-info__option-label">
-                        Choose Size
-                    </span>
-                    <div className="product-info__sizes">
-                        {sizes.map((s) => (
-                            <button
-                                key={s}
-                                className={`product-info__size-btn ${selectedSize === s ? 'active' : ''}`}
-                                onClick={() => handleSizeSelect(s)}
-                            >
-                                {s}
-                            </button>
-                        ))}
+                return (
+                    <div key={attr.key} className="product-info__option-group">
+                        <span className="product-info__option-label">
+                            {isColor ? 'Select Color' : isSize ? 'Choose Size' : `Select ${attr.name}`}
+                        </span>
+
+                        {isColor ? (
+                            <div className="product-info__colors">
+                                {attr.values.map((c) => (
+                                    <button
+                                        key={c}
+                                        className={`product-info__color-btn ${selectedAttributes.color === c ? 'active' : ''}`}
+                                        style={{ backgroundColor: getHex(c) }}
+                                        onClick={() => {
+                                            setSelectedAttributes((prev) => ({
+                                                ...prev,
+                                                color: c,
+                                            }));
+                                            setValidationError('');
+                                        }}
+                                        title={c}
+                                        aria-label={`Select color ${c}`}
+                                    >
+                                        {selectedAttributes.color === c && (
+                                            <i
+                                                className="ri-check-line"
+                                                style={{
+                                                    color:
+                                                        c.toLowerCase() === 'white' ||
+                                                        c.toLowerCase() === 'yellow'
+                                                            ? '#000000'
+                                                            : '#ffffff',
+                                                }}
+                                            ></i>
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="product-info__sizes">
+                                {attr.values.map((val) => (
+                                    <button
+                                        key={val}
+                                        className={`product-info__size-btn ${selectedAttributes[attr.key] === val ? 'active' : ''}`}
+                                        onClick={() => {
+                                            setSelectedAttributes((prev) => ({
+                                                ...prev,
+                                                [attr.key]: val,
+                                            }));
+                                            setValidationError('');
+                                        }}
+                                    >
+                                        {val}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                </div>
-            )}
+                );
+            })}
 
             <hr className="product-info__divider" />
 
