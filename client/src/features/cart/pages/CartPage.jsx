@@ -34,7 +34,7 @@ const CartPage = () => {
 
         handleUpdateCartItem({
             productId: item.product?._id,
-            variantId: item.variant?._id,
+            variantId: item.variant,
             quantity: change,
         });
     };
@@ -131,19 +131,25 @@ const CartPage = () => {
                                         key={item._id}
                                         className="cart-item-card"
                                     >
-                                        <div className="cart-item-card__img-container">
+                                        <Link
+                                            to={`/products/${item.product?._id}`}
+                                            className="cart-item-card__img-container"
+                                        >
                                             <img
                                                 src={image}
                                                 alt={title}
                                                 className="cart-item-card__img"
                                             />
-                                        </div>
+                                        </Link>
 
                                         <div className="cart-item-card__details">
                                             <div className="cart-item-card__header">
-                                                <h3 className="cart-item-card__title">
+                                                <Link
+                                                    to={`/products/${item.product?._id}`}
+                                                    className="cart-item-card__title"
+                                                >
                                                     {title}
-                                                </h3>
+                                                </Link>
                                                 <button
                                                     className="cart-item-card__delete-btn"
                                                     onClick={() =>
@@ -156,12 +162,15 @@ const CartPage = () => {
                                             </div>
 
                                             <p className="cart-item-card__attr">
-                                                {attributes && attributes.map((attr) => (
-                                                    <span key={attr.name}>
-                                                        {attr.name}:{' '}
-                                                        <strong>{attr.value}</strong>
-                                                    </span>
-                                                ))}
+                                                {attributes &&
+                                                    attributes.map((attr) => (
+                                                        <span key={attr.name}>
+                                                            {attr.name}:{' '}
+                                                            <strong>
+                                                                {attr.value}
+                                                            </strong>
+                                                        </span>
+                                                    ))}
                                             </p>
 
                                             <div className="cart-item-card__price-row">

@@ -17,7 +17,10 @@ export const getCartItems = async () => {
 
 export const addToCart = async ({ productId, variantId, quantity }) => {
     try {
-        const cleanVariantId = variantId && variantId !== 'undefined' && variantId !== 'null' ? variantId : null;
+        const cleanVariantId =
+            variantId && variantId !== 'undefined' && variantId !== 'null'
+                ? variantId
+                : null;
         const response = await cartApiInstance.post(
             `add/${productId}${cleanVariantId ? `/${cleanVariantId}` : ''}`,
             {
@@ -27,6 +30,42 @@ export const addToCart = async ({ productId, variantId, quantity }) => {
         return response.data;
     } catch (error) {
         console.error('Error adding to cart', error);
+        throw error;
+    }
+};
+
+export const removeFromCart = async ({ productId, variantId }) => {
+    try {
+        const cleanVariantId =
+            variantId && variantId !== 'undefined' && variantId !== 'null'
+                ? variantId
+                : null;
+        const response = await cartApiInstance.post(
+            `remove/${productId}${cleanVariantId ? `/${cleanVariantId}` : ''}`,
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error removing from cart', error);
+        throw error;
+    }
+};
+
+export const updateCartItem = async ({ productId, variantId, quantity }) => {
+    console.log('Updating cart Api:', { productId, variantId, quantity });
+    try {
+        const cleanVariantId =
+            variantId && variantId !== 'undefined' && variantId !== 'null'
+                ? variantId
+                : null;
+        const response = await cartApiInstance.post(
+            `update/${productId}${cleanVariantId ? `/${cleanVariantId}` : ''}`,
+            {
+                quantity,
+            },
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error updating cart item', error);
         throw error;
     }
 };

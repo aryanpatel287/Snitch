@@ -6,7 +6,7 @@ const validateRequest = (req, res, next) => {
     if (!errors.isEmpty()) {
         return sendResponse({
             res,
-            status: 400,
+            statusCode: 400,
             success: false,
             message: 'Validation Error',
             error: errors.array(),
@@ -21,6 +21,21 @@ export const validateAddToCart = [
     body('quantity')
         .isInt({ min: 1 })
         .withMessage('Quantity must be at least 1'),
+
+    validateRequest,
+];
+
+export const validateUpdateCartItem = [
+    param('productId').isMongoId().withMessage('Invalid Product ID'),
+    param('variantId').optional().isMongoId().withMessage('Invalid Variant ID'),
+    body('quantity').isInt().withMessage('Quantity must be a Integer'),
+
+    validateRequest,
+];
+
+export const validateRemoveFromCart = [
+    param('productId').isMongoId().withMessage('Invalid Product ID'),
+    param('variantId').optional().isMongoId().withMessage('Invalid Variant ID'),
 
     validateRequest,
 ];
