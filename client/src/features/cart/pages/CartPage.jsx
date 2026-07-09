@@ -2,51 +2,61 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import Navbar from '../../shared/components/Navbar';
 import Footer from '../../landing/components/Footer';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { setItems } from '../state/cart.slice';
 import '../styles/_cart-page.scss';
 import { useCart } from '../hooks/useCart';
 
 const CartPage = () => {
     const cartItems = useSelector((state) => state.cart.items);
-    const dispatch = useDispatch();
 
-    const { handleAddToCart, handleSetCartItems } = useCart();
+    const {
+        handleAddToCart,
+        handleSetCartItems,
+        handleRemoveFromCart,
+        handleUpdateCartItem,
+    } = useCart();
 
     // Load cart items on mount
     useEffect(() => {
         handleSetCartItems();
-        console.log('Cart items loaded:', cartItems);
     }, []);
 
     // Save cart items & dispatch update event
     const saveCart = (newItems) => {};
 
     const updateQuantity = (id, change) => {
-        const item = cartItems.find((i) => i._id === id);
-        if (!item) return;
-        if (change === -1 && item.quantity <= 1) return;
+        console.log('Updating quantity for item ID:', id, 'Change:', change);
 
-        handleAddToCart({
+        const item = cartItems.find((i) => i._id === id);
+        console.log(item);
+        if (!item) return;
+
+        handleUpdateCartItem({
             productId: item.product?._id,
-            variantId: item.variant,
+            variantId: item.variant?._id,
             quantity: change,
         });
     };
 
     const removeItem = (id) => {
-        dispatch(setItems(cartItems.filter((item) => item._id !== id)));
+        const item = cartItems.find((i) => i._id === id);
+        if (!item) return;
+
+        handleRemoveFromCart({
+            productId: item.product?._id,
+            variantId: item.variant,
+        });
     };
 
-    // Helper to safely extract title, image, size, and color from cart item
+    // Helper to safely extract title, image, and dynamic attributes from cart item
     const getCartItemDetails = (item) => {
         const product = item.product;
         if (!product) return {};
 
         let title = product.title;
         let image = product.images?.[0]?.url || '';
-        let size = null;
-        let color = null;
+        let attributes = [];
 
         if (item.variant) {
             const variantObj = product.variants?.find(
@@ -56,16 +66,19 @@ const CartPage = () => {
                 if (variantObj.images?.length > 0) {
                     image = variantObj.images[0].url;
                 }
-                const attrs = variantObj.attributes instanceof Map 
-                    ? Object.fromEntries(variantObj.attributes)
-                    : variantObj.attributes || {};
-                
-                size = attrs.size || attrs.Size || null;
-                color = attrs.color || attrs.Color || null;
+                const attrs =
+                    variantObj.attributes instanceof Map
+                        ? Object.fromEntries(variantObj.attributes)
+                        : variantObj.attributes || {};
+
+                attributes = Object.entries(attrs).map(([key, val]) => ({
+                    name: key.charAt(0).toUpperCase() + key.slice(1), // capitalize key name
+                    value: val,
+                }));
             }
         }
 
-        return { title, image, size, color };
+        return { title, image, attributes };
     };
 
     // Calculations
@@ -111,9 +124,13 @@ const CartPage = () => {
                         {/* Left side: Cart Items List */}
                         <div className="cart-items-list">
                             {cartItems.map((item) => {
-                                const { title, image, size, color } = getCartItemDetails(item);
+                                const { title, image, attributes } =
+                                    getCartItemDetails(item);
                                 return (
-                                    <div key={item._id} className="cart-item-card">
+                                    <div
+                                        key={item._id}
+                                        className="cart-item-card"
+                                    >
                                         <div className="cart-item-card__img-container">
                                             <img
                                                 src={image}
@@ -139,20 +156,12 @@ const CartPage = () => {
                                             </div>
 
                                             <p className="cart-item-card__attr">
-                                                {size && (
-                                                    <span>
-                                                        Size:{' '}
-                                                        <strong>{size}</strong>
+                                                {attributes && attributes.map((attr) => (
+                                                    <span key={attr.name}>
+                                                        {attr.name}:{' '}
+                                                        <strong>{attr.value}</strong>
                                                     </span>
-                                                )}
-                                                {color && (
-                                                    <span>
-                                                        Color:{' '}
-                                                        <strong>
-                                                            {color}
-                                                        </strong>
-                                                    </span>
-                                                )}
+                                                ))}
                                             </p>
 
                                             <div className="cart-item-card__price-row">
