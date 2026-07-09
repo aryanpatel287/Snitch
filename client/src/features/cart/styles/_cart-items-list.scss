@@ -1,0 +1,11 @@
+@use '../../shared/styles/mixins' as *;
+
+.cart-items-list {
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-card);
+    padding: 20px;
+    background-color: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}

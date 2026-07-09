@@ -8,7 +8,7 @@ import cartReducer from '../state/cart.slice';
 import authReducer from '../../auth/state/auth.slice';
 import productReducer from '../../products/state/product.slice';
 import CartPage from '../pages/CartPage';
-import { getCartItems, addToCart } from '../service/cart.api';
+import { getCartItems, addToCart, updateCartItem, removeFromCart } from '../service/cart.api';
 
 vi.mock('../service/cart.api');
 
@@ -178,15 +178,17 @@ describe('CartPage Component', () => {
             cart: { items: initialCartItems },
         });
 
-        addToCart.mockResolvedValueOnce({
+        updateCartItem.mockResolvedValueOnce({
             success: true,
             cart: { items: incrementedCartItems },
         });
 
-        addToCart.mockResolvedValueOnce({
+        updateCartItem.mockResolvedValueOnce({
             success: true,
             cart: { items: initialCartItems },
         });
+
+
 
         renderWithProvider(<CartPage />);
 
@@ -253,6 +255,11 @@ describe('CartPage Component', () => {
         getCartItems.mockResolvedValueOnce({
             success: true,
             cart: { items: mockCartItems },
+        });
+
+        removeFromCart.mockResolvedValueOnce({
+            success: true,
+            cart: { items: [] },
         });
 
         renderWithProvider(<CartPage />);

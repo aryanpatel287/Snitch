@@ -1,0 +1,29 @@
+@use '../../shared/styles/mixins' as *;
+
+.cart-empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    background-color: var(--color-card);
+    border-radius: var(--border-radius-card);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+
+    &__icon {
+        font-size: 3rem;
+        color: var(--color-muted-foreground);
+    }
+
+    &__text {
+        font-family: var(--font-body);
+        font-size: 1.1rem;
+        color: var(--color-muted-foreground);
+        margin: 0;
+    }
+
+    &__btn {
+        padding: 12px 32px;
+        font-size: 0.95rem;
+    }
+}
