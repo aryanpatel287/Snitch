@@ -93,7 +93,9 @@ const Navbar = () => {
                                     placeholder='Search "STRAIGHT FIT JEANS"'
                                     className="navbar__search-field"
                                     value={searchVal}
-                                    onChange={(e) => setSearchVal(e.target.value)}
+                                    onChange={(e) =>
+                                        setSearchVal(e.target.value)
+                                    }
                                     autoFocus
                                 />
                             </div>
@@ -140,17 +142,21 @@ const Navbar = () => {
                                         placeholder='Search "STRAIGHT FIT JEANS"'
                                         className="navbar__search-field"
                                         value={searchVal}
-                                        onChange={(e) => setSearchVal(e.target.value)}
+                                        onChange={(e) =>
+                                            setSearchVal(e.target.value)
+                                        }
                                     />
                                 </form>
-                                {console.log(user)}
+
                                 {/* Profile Shortcut / Dropdown */}
                                 {user ? (
                                     <div className="navbar__user-menu">
                                         <button
                                             className="navbar__icon-link navbar__profile-trigger"
                                             onClick={() =>
-                                                setIsDropdownOpen(!isDropdownOpen)
+                                                setIsDropdownOpen(
+                                                    !isDropdownOpen,
+                                                )
                                             }
                                             aria-expanded={isDropdownOpen}
                                             aria-label="User profile options"
