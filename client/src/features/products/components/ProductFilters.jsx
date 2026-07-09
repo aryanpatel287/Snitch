@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useProductFilter } from '../hooks/useProductFilter';
 import '../styles/_product-filters.scss';
 
-const ProductFilters = ({
-    selectedCategory,
-    setSelectedCategory,
-    priceRange,
-    setPriceRange,
-    selectedColor,
-    setSelectedColor,
-    selectedSize,
-    setSelectedSize,
-    clearAllFilters,
-    isOpen,
-    setIsOpen
-}) => {
+const ProductFilters = () => {
+    const {
+        selectedCategory,
+        setSelectedCategory,
+        priceRange,
+        setPriceRange,
+        selectedColor,
+        setSelectedColor,
+        selectedSize,
+        setSelectedSize,
+        clearAllFilters,
+        isMobileFiltersOpen: isOpen,
+        setIsMobileFiltersOpen: setIsOpen
+    } = useProductFilter();
     const categories = ['T-Shirts', 'Shirts', 'Hoodies', 'Jeans', 'Blazers', 'Casual', 'Formal', 'Gym', 'Party'];
     const colors = [
         { name: 'Black', hex: '#000000' },
