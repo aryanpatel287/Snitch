@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AuthFormGroup from '../components/AuthFormGroup';
 import ContinueWithGoogle from '../components/ContinueWIthGoogle';
 import '../styles/_auth.scss';
@@ -13,10 +13,13 @@ const Login = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const redirectPath = searchParams.get('redirect') || '/';
+    const hasRedirectPath = searchParams.has('redirect');
 
-    if (!loading && user) {
-        navigate(redirectPath);
-    }
+    useEffect(() => {
+        if (!loading && user) {
+            navigate(redirectPath, { replace: true });
+        }
+    }, [loading, user, redirectPath, navigate]);
 
     const [formData, setFormData] = useState({
         email: '',
@@ -35,6 +38,12 @@ const Login = () => {
 
         try {
             const user = await handleLogin({ email, password });
+
+            if (hasRedirectPath) {
+                navigate(redirectPath, { replace: true });
+                return;
+            }
+
             redirectUserAfterAuth({ role: user.role, navigate });
         } catch (error) {
             console.log(error);

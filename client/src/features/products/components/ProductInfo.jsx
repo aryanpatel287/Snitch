@@ -15,7 +15,8 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
     const userLoading = useSelector((state) => state.auth.loading);
     const { handleAddToCart } = useCart();
 
-    const isUserLoggedIn = !!user && !userLoading;
+    const isAuthReady = !userLoading;
+    const isUserLoggedIn = !!user;
 
     const navigate = useNavigate();
 
@@ -115,6 +116,10 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
     };
 
     const handleAddToCartClick = async () => {
+        if (!isAuthReady) {
+            return;
+        }
+
         if (!isUserLoggedIn) {
             navigate('/login');
             return;

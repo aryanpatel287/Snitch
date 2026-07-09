@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import AuthFormGroup from '../components/AuthFormGroup';
 import ContinueWithGoogle from '../components/ContinueWIthGoogle';
@@ -14,9 +14,11 @@ const Register = () => {
 
     const navigate = useNavigate();
 
-    if (!loading && user) {
-        navigate('/');
-    }
+    useEffect(() => {
+        if (!loading && user) {
+            navigate('/', { replace: true });
+        }
+    }, [loading, user, navigate]);
 
     const [formData, setFormData] = useState({
         fullname: '',
