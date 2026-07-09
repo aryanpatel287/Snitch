@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import '../../styles/_products-breadcrumbs.scss';
+import '../../styles/product-page/_products-breadcrumbs.scss';
 
 const ProductsBreadcrumbs = () => {
     return (

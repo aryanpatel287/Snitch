@@ -1,6 +1,6 @@
 import React from 'react';
 import { useProductFilter } from '../../hooks/useProductFilter';
-import '../../styles/_products-pagination.scss';
+import '../../styles/product-page/_products-pagination.scss';
 
 const ProductPagination = () => {
     const { currentPage, setCurrentPage, totalPages } = useProductFilter();

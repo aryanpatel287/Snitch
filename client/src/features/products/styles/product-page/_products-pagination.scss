@@ -1,0 +1,67 @@
+.products-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-border);
+
+    &__btn {
+        background: none;
+        border: 1px solid var(--color-border);
+        border-radius: var(--border-radius-btn);
+        padding: 10px 20px;
+        font-family: var(--font-body);
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: background-color var(--transition-fast) ease;
+
+        &:hover:not(:disabled) {
+            background-color: var(--color-muted);
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+
+    &__numbers {
+        display: flex;
+        gap: 6px;
+
+        @media (max-width: 640px) {
+            display: none;
+        }
+    }
+
+    &__num-btn {
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 8px;
+        background: transparent;
+        font-family: var(--font-body);
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color var(--transition-fast) ease, color var(--transition-fast) ease;
+
+        &:hover {
+            background-color: var(--color-muted);
+        }
+
+        &.active {
+            background-color: var(--color-foreground);
+            color: #ffffff;
+            font-weight: 700;
+        }
+    }
+}
