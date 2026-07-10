@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import FullScreenPreview from './FullScreenPreview';
-import '../styles/_product-gallery.scss';
+import '../../styles/product-details/_product-gallery.scss';
 
 const PLACEHOLDER_IMAGE = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800"><rect width="600" height="800" fill="%23f5f5f5"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-size="14" fill="%23000">NO PRODUCT IMAGES AVAILABLE</text></svg>';
 

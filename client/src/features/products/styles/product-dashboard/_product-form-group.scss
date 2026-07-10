@@ -1,4 +1,4 @@
-@use '../../shared/styles/mixins' as *;
+@use '../../../shared/styles/mixins' as *;
 
 .product-form-fields {
     @include displayFlex(stretch, flex-start, column, 24px);

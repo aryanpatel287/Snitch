@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router';
-import { useProduct } from '../hooks/useProduct';
-import ProductFormFields from '../components/ProductFormFields';
-import '../styles/_edit-product.scss';
+import { useProduct } from '../../hooks/useProduct';
+import ProductFormFields from '../../components/product-dashboard/ProductFormFields';
+import '../../styles/product-dashboard/_edit-product.scss';
 
 function validate(formData) {
     const errors = {};

@@ -4,10 +4,10 @@ import { useSearchParams } from 'react-router';
 import Navbar from '../../shared/components/Navbar';
 import DashboardHome from '../components/DashboardHome';
 import DashboardAccount from '../components/DashboardAccount';
-import DashboardMyProducts from '../../products/components/DashboardMyProducts';
-import CreateProduct from '../../products/pages/CreateProduct';
-import EditProduct from '../../products/pages/EditProduct';
-import CreateVariant from '../../products/components/CreateVariant';
+import DashboardMyProducts from '../../products/components/product-dashboard/DashboardMyProducts';
+import CreateProduct from '../../products/pages/product-dashboard/CreateProduct';
+import EditProduct from '../../products/pages/product-dashboard/EditProduct';
+import CreateVariant from '../../products/components/product-dashboard/CreateVariant';
 import '../styles/_user.scss';
 
 const mockProducts = [

@@ -1,7 +1,7 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { Upload, ImagePlus } from 'lucide-react';
 import ImagePreviewCard from './ImagePreviewCard';
-import '../styles/_image-upload.scss';
+import '../../styles/product-dashboard/_image-upload.scss';
 
 const MAX_IMAGES = 7;
 

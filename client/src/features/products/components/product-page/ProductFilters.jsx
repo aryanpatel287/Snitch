@@ -1,6 +1,6 @@
 import React from 'react';
-import { useProductFilter } from '../hooks/useProductFilter';
-import '../styles/_product-filters.scss';
+import { useProductFilter } from '../../hooks/useProductFilter';
+import '../../styles/product-page/_product-filters.scss';
 
 const ProductFilters = () => {
     const {
@@ -14,9 +14,19 @@ const ProductFilters = () => {
         setSelectedSize,
         clearAllFilters,
         isMobileFiltersOpen: isOpen,
-        setIsMobileFiltersOpen: setIsOpen
+        setIsMobileFiltersOpen: setIsOpen,
     } = useProductFilter();
-    const categories = ['T-Shirts', 'Shirts', 'Hoodies', 'Jeans', 'Blazers', 'Casual', 'Formal', 'Gym', 'Party'];
+    const categories = [
+        'T-Shirts',
+        'Shirts',
+        'Hoodies',
+        'Jeans',
+        'Blazers',
+        'Casual',
+        'Formal',
+        'Gym',
+        'Party',
+    ];
     const colors = [
         { name: 'Black', hex: '#000000' },
         { name: 'White', hex: '#ffffff' },
@@ -25,19 +35,25 @@ const ProductFilters = () => {
         { name: 'Green', hex: '#33ff57' },
         { name: 'Yellow', hex: '#f3ff33' },
         { name: 'Orange', hex: '#ff9933' },
-        { name: 'Pink', hex: '#ff3399' }
+        { name: 'Pink', hex: '#ff3399' },
     ];
     const sizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'];
 
     return (
-        <aside className={`product-filters ${isOpen ? 'product-filters--open' : ''}`}>
+        <aside
+            className={`product-filters ${isOpen ? 'product-filters--open' : ''}`}
+        >
             <div className="product-filters__header-row">
                 <h3 className="product-filters__title">Filters</h3>
-                <button className="product-filters__close-btn" onClick={() => setIsOpen(false)} aria-label="Close filters">
+                <button
+                    className="product-filters__close-btn"
+                    onClick={() => setIsOpen(false)}
+                    aria-label="Close filters"
+                >
                     <i className="ri-close-line"></i>
                 </button>
             </div>
-            
+
             <hr className="product-filters__divider" />
 
             {/* Categories Accordion */}
@@ -48,7 +64,11 @@ const ProductFilters = () => {
                         <button
                             key={cat}
                             className={`product-filters__category-btn ${selectedCategory === cat ? 'active' : ''}`}
-                            onClick={() => setSelectedCategory(selectedCategory === cat ? '' : cat)}
+                            onClick={() =>
+                                setSelectedCategory(
+                                    selectedCategory === cat ? '' : cat,
+                                )
+                            }
                         >
                             <span>{cat}</span>
                             <i className="ri-arrow-right-s-line"></i>
@@ -89,11 +109,24 @@ const ProductFilters = () => {
                             className={`product-filters__color-swatch ${selectedColor === c.name ? 'active' : ''}`}
                             style={{ backgroundColor: c.hex }}
                             title={c.name}
-                            onClick={() => setSelectedColor(selectedColor === c.name ? '' : c.name)}
+                            onClick={() =>
+                                setSelectedColor(
+                                    selectedColor === c.name ? '' : c.name,
+                                )
+                            }
                             aria-label={`Filter by color ${c.name}`}
                         >
                             {selectedColor === c.name && (
-                                <i className="ri-check-line" style={{ color: c.name === 'White' || c.name === 'Yellow' ? '#000000' : '#ffffff' }}></i>
+                                <i
+                                    className="ri-check-line"
+                                    style={{
+                                        color:
+                                            c.name === 'White' ||
+                                            c.name === 'Yellow'
+                                                ? '#000000'
+                                                : '#ffffff',
+                                    }}
+                                ></i>
                             )}
                         </button>
                     ))}
@@ -110,7 +143,9 @@ const ProductFilters = () => {
                         <button
                             key={sz}
                             className={`product-filters__size-pill ${selectedSize === sz ? 'active' : ''}`}
-                            onClick={() => setSelectedSize(selectedSize === sz ? '' : sz)}
+                            onClick={() =>
+                                setSelectedSize(selectedSize === sz ? '' : sz)
+                            }
                         >
                             {sz}
                         </button>
@@ -121,7 +156,10 @@ const ProductFilters = () => {
             <hr className="product-filters__divider" />
 
             {/* Clear All Button */}
-            <button className="button primary-button product-filters__clear-btn" onClick={clearAllFilters}>
+            <button
+                className="button primary-button product-filters__clear-btn"
+                onClick={clearAllFilters}
+            >
                 Clear All Filters
             </button>
         </aside>

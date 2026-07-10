@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Minus } from 'lucide-react';
-import { getMockProductMetaData } from './EditorialProductCard';
-import '../styles/_product-info.scss';
+import { getMockProductMetaData } from '../EditorialProductCard';
+import '../../styles/product-details/_product-info.scss';
 import { useSelector } from 'react-redux';
-import { useCart } from '../../cart/hooks/useCart';
+import { useCart } from '../../../cart/hooks/useCart';
 import { useNavigate } from 'react-router';
 
 const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
@@ -24,13 +24,19 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
     const getAttributeValue = (attributes, key) => {
         if (!attributes) return null;
         if (attributes instanceof Map) {
-            return attributes.get(key) || attributes.get(key.charAt(0).toUpperCase() + key.slice(1));
+            return (
+                attributes.get(key) ||
+                attributes.get(key.charAt(0).toUpperCase() + key.slice(1))
+            );
         }
         if (typeof attributes.get === 'function') {
-            return attributes.get(key) || attributes.get(key.charAt(0).toUpperCase() + key.slice(1));
+            return (
+                attributes.get(key) ||
+                attributes.get(key.charAt(0).toUpperCase() + key.slice(1))
+            );
         }
         const foundKey = Object.keys(attributes).find(
-            (k) => k.toLowerCase() === key.toLowerCase()
+            (k) => k.toLowerCase() === key.toLowerCase(),
         );
         return foundKey ? attributes[foundKey] : null;
     };
@@ -55,7 +61,7 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
             if (!groupedAttributes[groupKey]) {
                 groupedAttributes[groupKey] = {
                     name: key, // original key capitalization
-                    values: new Set()
+                    values: new Set(),
                 };
             }
             groupedAttributes[groupKey].values.add(val);
@@ -65,7 +71,7 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
     const attributesList = Object.keys(groupedAttributes).map((groupKey) => ({
         key: groupKey,
         name: groupedAttributes[groupKey].name,
-        values: Array.from(groupedAttributes[groupKey].values)
+        values: Array.from(groupedAttributes[groupKey].values),
     }));
 
     // Active selections
@@ -84,7 +90,9 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
             return;
         }
 
-        const allSelected = attributesList.every((attr) => !!selectedAttributes[attr.key]);
+        const allSelected = attributesList.every(
+            (attr) => !!selectedAttributes[attr.key],
+        );
 
         if (allSelected) {
             const match = variants.find((v) => {
@@ -111,14 +119,18 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
         }
 
         if (variants.length > 0) {
-            const unselected = attributesList.filter((attr) => !selectedAttributes[attr.key]);
+            const unselected = attributesList.filter(
+                (attr) => !selectedAttributes[attr.key],
+            );
             if (unselected.length > 0) {
                 const names = unselected.map((attr) => attr.name.toLowerCase());
                 if (names.length === 1) {
                     setValidationError(`Please select a ${names[0]}.`);
                 } else {
                     const last = names.pop();
-                    setValidationError(`Please select a ${names.join(', ')} and ${last}.`);
+                    setValidationError(
+                        `Please select a ${names.join(', ')} and ${last}.`,
+                    );
                 }
                 return;
             }
@@ -210,7 +222,11 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
                 return (
                     <div key={attr.key} className="product-info__option-group">
                         <span className="product-info__option-label">
-                            {isColor ? 'Select Color' : isSize ? 'Choose Size' : `Select ${attr.name}`}
+                            {isColor
+                                ? 'Select Color'
+                                : isSize
+                                  ? 'Choose Size'
+                                  : `Select ${attr.name}`}
                         </span>
 
                         {isColor ? (
@@ -235,8 +251,10 @@ const ProductInfo = ({ product, selectedVariant, onVariantSelect }) => {
                                                 className="ri-check-line"
                                                 style={{
                                                     color:
-                                                        c.toLowerCase() === 'white' ||
-                                                        c.toLowerCase() === 'yellow'
+                                                        c.toLowerCase() ===
+                                                            'white' ||
+                                                        c.toLowerCase() ===
+                                                            'yellow'
                                                             ? '#000000'
                                                             : '#ffffff',
                                                 }}

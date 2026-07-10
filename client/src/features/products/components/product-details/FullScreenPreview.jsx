@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
-import '../styles/_fullscreen-preview.scss';
+import '../../styles/product-details/_fullscreen-preview.scss';
 
 const FullScreenPreview = ({ images = [], activeIndex, onClose, onChangeActiveIndex }) => {
     if (!images || images.length === 0) return null;

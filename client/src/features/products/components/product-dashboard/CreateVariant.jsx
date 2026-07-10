@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Loader2, Plus, Trash2 } from 'lucide-react';
-import { useProduct } from '../hooks/useProduct';
+import { useProduct } from '../../hooks/useProduct';
 import ProductFormGroup from './ProductFormGroup';
 import ImageUploadZone from './ImageUploadZone';
-import '../styles/_create-variant.scss';
+import '../../styles/product-dashboard/_create-variant.scss';
 
 const CURRENCIES = ['INR', 'USD', 'EUR', 'GBP', 'AED', 'SGD'];
 

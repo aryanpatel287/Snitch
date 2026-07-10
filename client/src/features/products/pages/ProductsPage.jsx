@@ -1,11 +1,11 @@
 import React from 'react';
 import Navbar from '../../shared/components/Navbar';
 import Footer from '../../landing/components/Footer';
-import ProductFilters from '../components/ProductFilters';
+import ProductFilters from '../components/product-page/ProductFilters';
 import { ProductFilterProvider } from '../hooks/useProductFilter';
 import ProductsBreadcrumbs from '../components/product-page/ProductsBreadcrumbs';
 import ProductCatalogSection from '../components/product-page/ProductCatalogSection';
-import '../styles/_products-page.scss';
+import '../styles/product-page/_products-page.scss';
 
 const ProductsPage = () => {
     return (

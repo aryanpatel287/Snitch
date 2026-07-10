@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useProduct } from '../hooks/useProduct';
-import { EditorialProductCard } from './EditorialProductCard';
+import { useProduct } from '../../hooks/useProduct';
+import { EditorialProductCard } from '../EditorialProductCard';
 
-
-const DashboardMyProducts = ({ mockProducts, onAddNewProduct, onEditProduct, onAddVariant }) => {
-
+const DashboardMyProducts = ({
+    mockProducts,
+    onAddNewProduct,
+    onEditProduct,
+    onAddVariant,
+}) => {
     const { sellerProducts, loading } = useSelector((state) => state.product);
 
     const { handleGetProducts } = useProduct();
@@ -20,7 +23,8 @@ const DashboardMyProducts = ({ mockProducts, onAddNewProduct, onEditProduct, onA
         return <div className="dashboard-error">Something went wrong.</div>;
     }
 
-    if (sellerProducts.length === 0) return <div className="dashboard-empty">No products found.</div>;
+    if (sellerProducts.length === 0)
+        return <div className="dashboard-empty">No products found.</div>;
 
     return (
         <div className="dashboard-my-products">
@@ -39,8 +43,8 @@ const DashboardMyProducts = ({ mockProducts, onAddNewProduct, onEditProduct, onA
 
             <div className="products-grid">
                 {sellerProducts.map((product) => (
-                    <div 
-                        key={product._id} 
+                    <div
+                        key={product._id}
                         className="dashboard-product-card-wrapper"
                         onClick={() => onEditProduct(product._id)}
                         style={{ cursor: 'pointer' }}

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router';
-import { useProduct } from '../hooks/useProduct';
-import ProductFormFields from '../components/ProductFormFields';
-import ImageUploadZone from '../components/ImageUploadZone';
-import '../styles/_create-product.scss';
+import { useProduct } from '../../hooks/useProduct';
+import ProductFormFields from '../../components/product-dashboard/ProductFormFields';
+import ImageUploadZone from '../../components/product-dashboard/ImageUploadZone';
+import '../../styles/product-dashboard/_create-product.scss';
 
 const INITIAL_FORM = {
     title: '',

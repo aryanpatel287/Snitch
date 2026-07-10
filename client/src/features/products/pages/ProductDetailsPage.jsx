@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router';
 import Navbar from '../../shared/components/Navbar';
 import Footer from '../../landing/components/Footer';
-import ProductGallery from '../components/ProductGallery';
-import ProductInfo from '../components/ProductInfo';
+import ProductGallery from '../components/product-details/ProductGallery';
+import ProductInfo from '../components/product-details/ProductInfo';
 import { useProduct } from '../hooks/useProduct';
-import '../styles/_product-details-page.scss';
+import '../styles/product-details/_product-details-page.scss';
 
 const ProductDetailsPage = () => {
     const { productId } = useParams();
