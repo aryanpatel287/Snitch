@@ -1,16 +1,19 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router';
 import { useProduct } from './useProduct';
+import { clearProductCache } from '../state/product.slice';
 
 const ProductFilterContext = createContext(null);
 
 export const ProductFilterProvider = ({ children }) => {
-    const {
-        handleGetAllProducts,
-        allProducts = [],
-        loading,
-        error,
-    } = useProduct();
+    const dispatch = useDispatch();
+    const { handleGetAllProducts } = useProduct();
+    const productsByPage = useSelector((state) => state.product.productsByPage) || {};
+    const totalPages = useSelector((state) => state.product.totalPages) || 1;
+    const totalProducts = useSelector((state) => state.product.totalProducts) || 0;
+    const loading = useSelector((state) => state.product.loading);
+    const error = useSelector((state) => state.product.error);
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -24,10 +27,6 @@ export const ProductFilterProvider = ({ children }) => {
 
     const searchUrlVal = searchParams.get('search') || '';
     const styleUrlVal = searchParams.get('style') || '';
-
-    useEffect(() => {
-        handleGetAllProducts();
-    }, []);
 
     useEffect(() => {
         if (styleUrlVal) {
@@ -45,97 +44,9 @@ export const ProductFilterProvider = ({ children }) => {
         setSearchParams({});
     };
 
-    const processedProducts = useMemo(() => {
-        let result = [...allProducts];
-
-        if (searchUrlVal.trim()) {
-            const query = searchUrlVal.toLowerCase();
-            result = result.filter(
-                (p) =>
-                    p.title?.toLowerCase().includes(query) ||
-                    p.description?.toLowerCase().includes(query),
-            );
-        }
-
-        if (selectedCategory) {
-            const categoryQuery = selectedCategory.toLowerCase();
-            result = result.filter((p) => {
-                const titleMatch = p.title
-                    ?.toLowerCase()
-                    .includes(categoryQuery);
-                const descMatch = p.description
-                    ?.toLowerCase()
-                    .includes(categoryQuery);
-                return titleMatch || descMatch;
-            });
-        }
-
-        result = result.filter((p) => {
-            const amt = p.price?.amount || 0;
-            return amt <= priceRange;
-        });
-
-        if (selectedColor) {
-            const colorQuery = selectedColor.toLowerCase();
-            result = result.filter((p) => {
-                return (
-                    p.variants?.some((v) => {
-                        const cVal = v.attributes?.get
-                            ? v.attributes.get('color')
-                            : v.attributes?.color;
-                        return cVal?.toLowerCase() === colorQuery;
-                    }) || p.title?.toLowerCase().includes(colorQuery)
-                );
-            });
-        }
-
-        if (selectedSize) {
-            const sizeQuery = selectedSize.toLowerCase();
-            result = result.filter((p) => {
-                return (
-                    p.variants?.some((v) => {
-                        const sVal = v.attributes?.get
-                            ? v.attributes.get('size')
-                            : v.attributes?.size;
-                        return sVal?.toLowerCase() === sizeQuery;
-                    }) || p.description?.toLowerCase().includes(sizeQuery)
-                );
-            });
-        }
-
-        if (sortBy === 'price_asc') {
-            result.sort(
-                (a, b) => (a.price?.amount || 0) - (b.price?.amount || 0),
-            );
-        } else if (sortBy === 'price_desc') {
-            result.sort(
-                (a, b) => (b.price?.amount || 0) - (a.price?.amount || 0),
-            );
-        } else {
-            result.sort(
-                (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-            );
-        }
-
-        return result;
-    }, [
-        allProducts,
-        searchUrlVal,
-        selectedCategory,
-        priceRange,
-        selectedColor,
-        selectedSize,
-        sortBy,
-    ]);
-
-    const paginatedProducts = useMemo(() => {
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        return processedProducts.slice(startIndex, startIndex + itemsPerPage);
-    }, [processedProducts, currentPage]);
-
-    const totalPages = Math.ceil(processedProducts.length / itemsPerPage) || 1;
-
+    // Whenever filters change, clear cache and reset page
     useEffect(() => {
+        dispatch(clearProductCache());
         setCurrentPage(1);
     }, [
         searchUrlVal,
@@ -144,7 +55,51 @@ export const ProductFilterProvider = ({ children }) => {
         selectedColor,
         selectedSize,
         sortBy,
+        dispatch,
     ]);
+
+    // Whenever current page or filters change, trigger query if not cached
+    useEffect(() => {
+        if (!productsByPage[currentPage]) {
+            handleGetAllProducts({
+                page: currentPage,
+                limit: itemsPerPage,
+                search: searchUrlVal,
+                category: selectedCategory,
+                priceRange,
+                color: selectedColor,
+                size: selectedSize,
+                sortBy,
+            });
+        }
+    }, [
+        currentPage,
+        searchUrlVal,
+        selectedCategory,
+        priceRange,
+        selectedColor,
+        selectedSize,
+        sortBy,
+        productsByPage,
+    ]);
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [currentPage]);
+
+    const paginatedProducts = useMemo(() => {
+        return productsByPage[currentPage] || [];
+    }, [productsByPage, currentPage]);
+
+    const processedProducts = useMemo(() => {
+        return {
+            length: totalProducts
+        };
+    }, [totalProducts]);
+
+    const allProducts = useMemo(() => {
+        return Object.values(productsByPage).flat();
+    }, [productsByPage]);
 
     const value = {
         allProducts,

@@ -1,4 +1,6 @@
+import mongoose from 'mongoose';
 import productModel from '../models/product.model.js';
+import categoryModel from '../models/category.model.js';
 import { sendResponse } from '../utils/response.utlis.js';
 import { uploadFileToImageKit } from '../services/storage.service.js';
 
@@ -259,7 +261,78 @@ async function getSellerProductsController(req, res) {
 
 async function getProductsController(req, res) {
     try {
-        const products = await productModel.find().populate('seller');
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 9;
+        const skip = (page - 1) * limit;
+
+        const { search, category, priceRange, color, size, sortBy } = req.query;
+
+        const filter = { isActive: { $ne: false } };
+
+        if (search) {
+            filter.$or = [
+                { title: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        if (category) {
+            if (mongoose.Types.ObjectId.isValid(category)) {
+                filter.category = category;
+            } else {
+                const catDoc = await categoryModel.findOne({
+                    $or: [
+                        { slug: category.toLowerCase() },
+                        { name: { $regex: `^${category}$`, $options: 'i' } }
+                    ]
+                });
+                if (catDoc) {
+                    filter.category = catDoc._id;
+                } else {
+                    filter.category = new mongoose.Types.ObjectId();
+                }
+            }
+        }
+
+        if (priceRange) {
+            filter['price.amount'] = { $lte: Number(priceRange) };
+        }
+
+        if (color) {
+            const colorRegex = new RegExp(`^${color}$`, 'i');
+            filter.$and = filter.$and || [];
+            filter.$and.push({
+                $or: [
+                    { 'variants.attributes.color': colorRegex },
+                    { title: { $regex: color, $options: 'i' } }
+                ]
+            });
+        }
+
+        if (size) {
+            const sizeRegex = new RegExp(`^${size}$`, 'i');
+            filter.$and = filter.$and || [];
+            filter.$and.push({
+                $or: [
+                    { 'variants.attributes.size': sizeRegex },
+                    { description: { $regex: size, $options: 'i' } }
+                ]
+            });
+        }
+
+        let sort = { createdAt: -1 };
+        if (sortBy === 'price_asc') {
+            sort = { 'price.amount': 1 };
+        } else if (sortBy === 'price_desc') {
+            sort = { 'price.amount': -1 };
+        }
+
+        const products = await productModel.find(filter)
+            .sort(sort)
+            .skip(skip)
+            .limit(limit);
+
+        const totalProducts = await productModel.countDocuments(filter);
 
         return sendResponse({
             res,
@@ -267,6 +340,9 @@ async function getProductsController(req, res) {
             message: 'Products fetched successfully',
             success: true,
             products,
+            totalPages: Math.ceil(totalProducts / limit) || 1,
+            totalProducts,
+            currentPage: page
         });
     } catch (error) {
         console.error('Error fetching products', error);
@@ -276,7 +352,7 @@ async function getProductsController(req, res) {
             statusCode: 500,
             message: 'Failed to fetch products',
             success: false,
-            error: 'Failed to fetch products',
+            error: error.message,
         });
     }
 }
@@ -295,9 +371,7 @@ async function getAProductController(req, res) {
     }
 
     try {
-        const product = await productModel
-            .findById(productId)
-            .populate('seller');
+        const product = await productModel.findById(productId);
 
         if (!product) {
             return sendResponse({
@@ -379,6 +453,57 @@ async function createVariantController(req, res) {
     }
 }
 
+async function getProductsByCategoryController(req, res) {
+    try {
+        const categoryId = req.params.categoryId;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 4;
+        const skip = (page - 1) * limit;
+        const exclude = req.query.exclude;
+
+        if (!categoryId) {
+            return sendResponse({
+                res,
+                statusCode: 400,
+                message: 'Category ID is required',
+                success: false,
+                error: 'Category ID is required',
+            });
+        }
+
+        const filter = { category: categoryId, isActive: { $ne: false } };
+        if (exclude && mongoose.Types.ObjectId.isValid(exclude)) {
+            filter._id = { $ne: exclude };
+        }
+
+        const productsByCategory = await productModel.find(filter)
+            .skip(skip)
+            .limit(limit);
+
+        const totalProducts = await productModel.countDocuments(filter);
+
+        return sendResponse({
+            res,
+            success: true,
+            statusCode: 200,
+            message: 'Products by category fetched successfully',
+            productsByCategory,
+            totalPages: Math.ceil(totalProducts / limit) || 1,
+            totalProducts,
+            currentPage: page
+        });
+    } catch (error) {
+        console.error('Error fetching products by category:', error);
+        sendResponse({
+            res,
+            success: false,
+            statusCode: 500,
+            message: 'Internal Server Error',
+            error: error.message,
+        });
+    }
+}
+
 export {
     createProductController,
     getProductsController,
@@ -386,4 +511,5 @@ export {
     getAProductController,
     createVariantController,
     updateProductController,
+    getProductsByCategoryController,
 };

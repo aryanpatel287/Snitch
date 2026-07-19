@@ -8,6 +8,13 @@ const productSlice = createSlice({
         error: null,
         allProducts: [],
         activeProduct: {},
+        similarProducts: [],
+        productsByPage: {},
+        totalPages: 1,
+        similarTotalPages: 1,
+        totalProducts: 0,
+        similarProductsLoading: false,
+        similarProductsError: null,
     },
     reducers: {
         setSellerProducts: (state, action) => {
@@ -22,8 +29,33 @@ const productSlice = createSlice({
         setAllProducts: (state, action) => {
             state.allProducts = action.payload;
         },
+        setSimilarProducts: (state, action) => {
+            state.similarProducts = action.payload;
+        },
         setActiveProduct: (state, action) => {
             state.activeProduct = action.payload;
+        },
+        setProductsForPage: (state, action) => {
+            const { page, products } = action.payload;
+            state.productsByPage[page] = products;
+        },
+        clearProductCache: (state) => {
+            state.productsByPage = {};
+        },
+        setTotalPages: (state, action) => {
+            state.totalPages = action.payload;
+        },
+        setSimilarTotalPages: (state, action) => {
+            state.similarTotalPages = action.payload;
+        },
+        setTotalProducts: (state, action) => {
+            state.totalProducts = action.payload;
+        },
+        setSimilarProductsLoading: (state, action) => {
+            state.similarProductsLoading = action.payload;
+        },
+        setSimilarProductsError: (state, action) => {
+            state.similarProductsError = action.payload;
         },
     },
 });
@@ -33,7 +65,15 @@ export const {
     setLoading,
     setError,
     setAllProducts,
+    setSimilarProducts,
     setActiveProduct,
+    setProductsForPage,
+    clearProductCache,
+    setTotalPages,
+    setSimilarTotalPages,
+    setTotalProducts,
+    setSimilarProductsLoading,
+    setSimilarProductsError,
 } = productSlice.actions;
 
 export default productSlice.reducer;

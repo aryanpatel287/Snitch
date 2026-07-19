@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Loader2, Plus, Trash2 } from 'lucide-react';
 import { useProduct } from '../../hooks/useProduct';
 import ProductFormGroup from './ProductFormGroup';
@@ -45,7 +46,9 @@ function validate(priceAmount, priceCurrency, stock, attributes) {
 }
 
 const CreateVariant = ({ productId, onCancel, onSuccess }) => {
-    const { handleCreateVariant, loading, error } = useProduct();
+    const { handleCreateVariant } = useProduct();
+    const loading = useSelector((state) => state.product.loading);
+    const error = useSelector((state) => state.product.error);
 
     const [priceAmount, setPriceAmount] = useState('');
     const [priceCurrency, setPriceCurrency] = useState('INR');

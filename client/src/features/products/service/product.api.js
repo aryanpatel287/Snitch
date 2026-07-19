@@ -28,9 +28,9 @@ export async function getSellerProducts() {
     }
 }
 
-export async function getAllProducts() {
+export async function getAllProducts(params) {
     try {
-        const response = await productApiInstance.get('/');
+        const response = await productApiInstance.get('/', { params });
         return response.data;
     } catch (error) {
         console.error('Error fetching products', error);
@@ -70,6 +70,19 @@ export async function createVariant(productId, variantData) {
         return response.data;
     } catch (error) {
         console.error('Error creating variant', error);
+        throw error;
+    }
+}
+
+export async function getProductsByCategory({ categoryId, params }) {
+    try {
+        const response = await productApiInstance.get(
+            `/category/${categoryId}`,
+            { params }
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching products by category', error);
         throw error;
     }
 }

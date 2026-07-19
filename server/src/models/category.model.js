@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import imageSchema from './image.schema';
+import imageSchema from './image.schema.js';
 
 const categorySchema = new mongoose.Schema({
     name: {
