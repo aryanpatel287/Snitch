@@ -6,6 +6,7 @@ import {
     getAllProducts,
     createVariant,
     updateProduct,
+    getProductsByCategory,
 } from '../service/product.api';
 import {
     setSellerProducts,
@@ -13,12 +14,18 @@ import {
     setAllProducts,
     setLoading,
     setError,
+    setSimilarProducts,
+    setProductsForPage,
+    setTotalPages,
+    setSimilarTotalPages,
+    setTotalProducts,
+    setSimilarProductsLoading,
+    setSimilarProductsError,
 } from '../state/product.slice';
 
 export const useProduct = () => {
     const dispatch = useDispatch();
-    const { sellerProducts, activeProduct, allProducts, loading, error } =
-        useSelector((state) => state.product);
+    const productsByPage = useSelector((state) => state.product.productsByPage);
 
     async function handleCreateProducts(formData) {
         dispatch(setLoading(true));
@@ -48,13 +55,18 @@ export const useProduct = () => {
         }
     }
 
-    async function handleGetAllProducts() {
+    async function handleGetAllProducts(params = {}) {
+        const page = params.page || 1;
+
         dispatch(setLoading(true));
         dispatch(setError(null));
 
         try {
-            const data = await getAllProducts();
+            const data = await getAllProducts(params);
             dispatch(setAllProducts(data.products));
+            dispatch(setProductsForPage({ page, products: data.products }));
+            dispatch(setTotalPages(data.totalPages));
+            dispatch(setTotalProducts(data.totalProducts));
         } catch (error) {
             dispatch(setError(error.response?.data?.message ?? error.message));
         } finally {
@@ -105,6 +117,24 @@ export const useProduct = () => {
         }
     }
 
+    async function handleSimilarProducts({ categoryId, page = 1, limit = 4, exclude }) {
+        dispatch(setSimilarProductsLoading(true));
+        dispatch(setSimilarProductsError(null));
+
+        try {
+            const data = await getProductsByCategory({
+                categoryId,
+                params: { page, limit, exclude }
+            });
+            dispatch(setSimilarProducts(data.productsByCategory));
+            dispatch(setSimilarTotalPages(data.totalPages));
+        } catch (error) {
+            dispatch(setSimilarProductsError(error.response?.data?.message ?? error.message));
+        } finally {
+            dispatch(setSimilarProductsLoading(false));
+        }
+    }
+
     return {
         handleCreateProducts,
         handleGetSellerProducts,
@@ -113,10 +143,6 @@ export const useProduct = () => {
         handleCreateVariant,
         handleUpdateProduct,
         handleGetProducts: handleGetSellerProducts,
-        sellerProducts,
-        allProducts,
-        activeProduct,
-        loading,
-        error,
+        handleSimilarProducts,
     };
 };

@@ -1,13 +1,16 @@
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useProduct } from '../../products/hooks/useProduct';
 import EditorialProductCard from '../../products/components/EditorialProductCard';
 import { Link } from 'react-router';
 
 const Collection = () => {
-    const { handleGetAllProducts, allProducts = [], loading } = useProduct();
+    const { handleGetAllProducts } = useProduct();
+    const allProducts = useSelector((state) => state.product.allProducts) || [];
+    const loading = useSelector((state) => state.product.loading);
 
     useEffect(() => {
-        handleGetAllProducts();
+        handleGetAllProducts({ limit: 12 });
     }, []);
 
     // Filter and slice items

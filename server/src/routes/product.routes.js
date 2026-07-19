@@ -8,6 +8,7 @@ import {
     getSellerProductsController,
     updateProductController,
     createVariantController,
+    getProductsByCategoryController,
 } from '../controllers/product.controller.js';
 import {
     createProductValidator,
@@ -88,5 +89,12 @@ productRouter.post(
     authSeller,
     createVariantController,
 );
+
+/**
+ * @router GET /api/products/category/:categoryId
+ * @desc Get products by category
+ * @access Public
+ */
+productRouter.get('/category/:categoryId', getProductsByCategoryController);
 
 export default productRouter;

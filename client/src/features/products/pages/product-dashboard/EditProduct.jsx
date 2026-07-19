@@ -22,10 +22,11 @@ const EditProduct = ({ productId, onCancel, onSuccess, onAddVariant }) => {
     const {
         handleGetActiveProduct,
         handleUpdateProduct,
-        activeProduct,
-        loading,
-        error,
     } = useProduct();
+
+    const activeProduct = useSelector((state) => state.product.activeProduct);
+    const loading = useSelector((state) => state.product.loading);
+    const error = useSelector((state) => state.product.error);
 
     const [formData, setFormData] = useState({
         title: '',

@@ -4,6 +4,7 @@ import { config } from '../config/config.js';
 import connectToDb from '../config/database.js';
 import userModel from '../models/user.model.js';
 import productModel from '../models/product.model.js';
+import categoryModel from '../models/category.model.js';
 import { uploadFileToImageKit } from '../services/storage.service.js';
 
 // Scraped Snitch Products Data
@@ -323,7 +324,9 @@ async function downloadImage(url) {
   }
 }
 
-async function seedCategory(productsList, sellerId, categoryName, attributeName) {
+async function seedCategory(productsList, sellerId, categoryDoc, attributeName) {
+  const categoryId = categoryDoc._id;
+  const categoryName = categoryDoc.name;
   console.log(`\n--- Seeding category [${categoryName}] for Seller: ${sellerId} ---`);
   
   for (let i = 0; i < productsList.length; i++) {
@@ -380,7 +383,9 @@ async function seedCategory(productsList, sellerId, categoryName, attributeName)
           currency: 'INR'
         },
         images: uploadedImages,
-        variants: variants
+        variants: variants,
+        category: categoryId,
+        gender: 'men'
       });
 
       console.log(`   Successfully seeded product with ID: ${product._id}`);
@@ -395,7 +400,8 @@ async function seedDatabase() {
     console.log('Connecting to database...');
     await connectToDb();
 
-    console.log('Clearing existing products from the database...');
+    console.log('Clearing existing categories and products from the database...');
+    await categoryModel.deleteMany({});
     await productModel.deleteMany({});
     
     // Clear only target seeded emails to avoid breaking unrelated accounts
@@ -438,15 +444,27 @@ async function seedDatabase() {
     });
 
     console.log('Sellers created successfully!');
+
+    // Create categories
+    const categoriesToSeed = [
+      { name: 'Shirts', slug: 'shirts' },
+      { name: 'T-shirts', slug: 't-shirts' },
+      { name: 'Jeans', slug: 'jeans' }
+    ];
+    const categoryDocs = {};
+    for (const cat of categoriesToSeed) {
+      categoryDocs[cat.slug] = await categoryModel.create(cat);
+      console.log(`Created category: "${cat.name}"`);
+    }
     
     // Seed Shirts to Snitch Trend & Casuals (skyh53624@gmail.com)
-    await seedCategory(productsData.shirts, sellers['skyh53624@gmail.com']._id, 'shirts', 'size');
+    await seedCategory(productsData.shirts, sellers['skyh53624@gmail.com']._id, categoryDocs['shirts'], 'size');
 
     // Seed T-shirts to Snitch Streetwear Co. (dummymail.me.287@gmail.com)
-    await seedCategory(productsData.tshirts, sellers['dummymail.me.287@gmail.com']._id, 'tshirts', 'size');
+    await seedCategory(productsData.tshirts, sellers['dummymail.me.287@gmail.com']._id, categoryDocs['t-shirts'], 'size');
 
     // Seed Jeans to Snitch Denim House (leopatel967@gmail.com)
-    await seedCategory(productsData.jeans, sellers['leopatel967@gmail.com']._id, 'jeans', 'waist');
+    await seedCategory(productsData.jeans, sellers['leopatel967@gmail.com']._id, categoryDocs['jeans'], 'waist');
 
     console.log('\n==================================================');
     console.log('Database seeding process completed successfully!');
