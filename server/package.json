@@ -14,7 +14,7 @@
         "mongoose": "^9.6.1",
         "morgan": "^1.10.1",
         "multer": "^2.1.1",
-        "nodemailer": "^8.0.7",
+        "nodemailer": "^9.0.3",
         "passport": "^0.7.0",
         "passport-google-oauth20": "^2.0.0",
         "resend": "^6.16.0"
@@ -32,7 +32,7 @@
     },
     "devDependencies": {
         "supertest": "^7.0.0",
-        "vitest": "^1.6.0"
+        "vitest": "^4.1.10"
     },
     "keywords": [],
     "author": "",
