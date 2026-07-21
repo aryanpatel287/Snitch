@@ -117,7 +117,7 @@ const Navbar = () => {
                                 className="navbar__logo-link"
                                 onClick={closeAllMenus}
                             >
-                                #SNITCH
+                                Sciolto
                             </Link>
 
                             {/* Right Actions */}

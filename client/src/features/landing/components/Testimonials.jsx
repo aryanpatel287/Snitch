@@ -7,7 +7,7 @@ const Testimonials = () => {
             name: 'Sarah M.',
             verified: true,
             stars: 5,
-            review: `"I'm blown away by the quality and style of these clothes. The attention to detail is outstanding, and the fit is absolutely perfect. Snitch is my new favorite fashion brand!"`
+            review: `"I'm blown away by the quality and style of these clothes. The attention to detail is outstanding, and the fit is absolutely perfect. Sciolto is my new favorite fashion brand!"`
         },
         {
             id: 2,

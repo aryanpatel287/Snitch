@@ -46,8 +46,8 @@ describe('Product & Variant Endpoints', () => {
 
   describe('POST /api/products/seller/create-product', () => {
     const validProductPayload = {
-      title: 'Minimalist Monochrome Mug',
-      description: 'Luxury editorial style monochrome mug.',
+      title: 'Minimalist Streetwear Mug',
+      description: 'Luxury editorial style streetwear mug.',
       priceAmount: 899,
       priceCurrency: 'INR',
       stock: 50,
@@ -156,7 +156,7 @@ describe('Product & Variant Endpoints', () => {
 
   describe('POST /api/products/seller/:productId/variants', () => {
     const validVariantPayload = {
-      attributes: { size: 'L', color: 'Monochrome Black' },
+      attributes: { size: 'L', color: 'Stealth Black' },
       stock: 15,
       price: { amount: 999, currency: 'INR' },
     };
