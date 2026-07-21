@@ -1,9 +1,9 @@
 <!-- prettier-ignore -->
 <div align="center">
 
-<h1>Snitch</h1>
+<h1>Sciolto</h1>
 
-_A premium, high-contrast, zero-radius monochrome luxury streetwear e-commerce platform featuring modular dart-sass styling, server-side paginated queries, client-side pagination caching, and ImageKit image serialization._
+_A premium, high-contrast luxury streetwear e-commerce platform featuring modular dart-sass styling, server-side paginated queries, client-side pagination caching, and ImageKit image serialization._
 
 [![Node version](https://img.shields.io/badge/Node.js->=18-3c873a?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org)
 [![React version](https://img.shields.io/badge/React-19.0-61dafb?style=flat-square&logo=react&logoColor=white)](https://react.dev)
@@ -19,7 +19,7 @@ _A premium, high-contrast, zero-radius monochrome luxury streetwear e-commerce p
 
 ## Overview
 
-Snitch is a modern streetwear e-commerce platform built with a strict monochrome editorial brand aesthetic. It features a responsive React 19 single-page client and a robust Express.js backend API backed by MongoDB and Redis. 
+Sciolto is a modern streetwear e-commerce platform built with a high-contrast editorial brand aesthetic. It features a responsive React 19 single-page client and a robust Express.js backend API backed by MongoDB and Redis. 
 
 The application utilizes server-side pagination, dynamic category and price filtering, a comprehensive seller inventory dashboard, custom variant management (sizes and colors), base64 image serialization, and ImageKit integration.
 
@@ -34,7 +34,7 @@ For developer guides and specific setup details:
 
 ## Key Features
 
-- **Monochrome Editorial Canvas**: High-contrast typographic brand styling utilizing Google Poppins display and Satoshi body typefaces, zero border radii, constant 2px solid border focus transitions, and pure white/black palettes.
+- **High-Contrast Editorial Canvas**: High-contrast typographic brand styling utilizing Google Poppins display and Satoshi body typefaces alongside a clean pure white/black palette.
 - **Client-Side Page Caching**: Integrates a Redux-based pagination cache (`productsByPage`) to cache loaded catalog pages, making backward/forward browsing transitions instant (0ms) and invalidating the cache cleanly on filter resets.
 - **Dynamic Product Variants**: Allows sellers to define custom attributes (such as size and color), manage individual variant stock/pricing, and toggle variant-specific galleries that resolve dynamically when attributes match.
 - **Server-Side Pagination & Filters**: Offloads search, category matching, price filters, and sorting parameters directly to optimized MongoDB queries rather than relying on in-memory client operations.
@@ -62,10 +62,10 @@ For developer guides and specific setup details:
 
 ## Architecture
 
-Snitch uses a clean, decoupled architecture:
+Sciolto uses a clean, decoupled architecture:
 
 ```text
-Snitch/
+Sciolto/
 ├── client/                 # React frontend application (Vite 7)
 │   ├── src/
 │   │   ├── app/            # App setup, store, and routes

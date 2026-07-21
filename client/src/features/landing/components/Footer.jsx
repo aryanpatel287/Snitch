@@ -8,7 +8,7 @@ const Footer = () => {
                 <div className="footer__grid">
                     <div className="footer__brand">
                         <Link to="/" className="footer__wordmark">
-                            SNITCH
+                            SCIOLTO
                         </Link>
                         <p className="footer__tagline">
                             We have clothes that suits your style and which you're proud to wear. From women to men.
@@ -64,7 +64,7 @@ const Footer = () => {
                 
                 <div className="footer__bottom">
                     <span className="footer__copyright">
-                        Snitch &copy; 2000-{new Date().getFullYear()}, All Rights Reserved.
+                        Sciolto &copy; 2000-{new Date().getFullYear()}, All Rights Reserved.
                     </span>
                     <div className="footer__payment-gateways">
                         <span className="payment-badge"><i className="ri-visa-line"></i></span>

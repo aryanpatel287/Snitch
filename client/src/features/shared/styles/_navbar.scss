@@ -54,7 +54,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        text-transform: uppercase;
     }
 
     &__right-actions {
@@ -72,10 +71,14 @@
         height: 38px;
         width: 260px;
         border: 2px solid transparent;
-        transition: border-color var(--transition-fast) ease, width var(--transition-fast) ease;
+        transition:
+            border-color var(--transition-fast) ease,
+            width var(--transition-fast) ease;
 
         &:focus-within {
-            border-color: var(--color-foreground); // constant 2px border, transition color only
+            border-color: var(
+                --color-foreground
+            ); // constant 2px border, transition color only
         }
 
         @media (max-width: 992px) {
@@ -347,7 +350,7 @@
         overflow-x: auto;
         margin-bottom: 24px;
         padding-bottom: 8px;
-        
+
         scrollbar-width: none;
         &::-webkit-scrollbar {
             display: none;
@@ -409,7 +412,7 @@
         &--category {
             font-weight: 500; // Categories not bolded out too much
             border-bottom: 1px solid var(--color-border-light); // Keep line only for categories
-            
+
             i {
                 font-size: 1.1rem;
                 color: var(--color-muted-foreground);
@@ -434,14 +437,18 @@
         background: none;
         border: 1px solid var(--color-sale-red) !important;
         color: var(--color-sale-red) !important;
-        border-radius: var(--border-radius-btn) !important; // Fully rounded pill
+        border-radius: var(
+            --border-radius-btn
+        ) !important; // Fully rounded pill
         padding: 12px !important;
         font-family: var(--font-body) !important;
         font-size: 0.9rem !important;
         font-weight: 700 !important;
         text-align: center !important;
         cursor: pointer;
-        transition: background-color var(--transition-fast) ease, color var(--transition-fast) ease;
+        transition:
+            background-color var(--transition-fast) ease,
+            color var(--transition-fast) ease;
 
         &:hover {
             background-color: var(--color-sale-red) !important;

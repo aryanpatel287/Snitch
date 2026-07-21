@@ -1,9 +1,9 @@
 <!-- prettier-ignore -->
 <div align="center">
 
-<h1>Snitch - Server</h1>
+<h1>Sciolto - Server</h1>
 
-_The Node.js & Express 5 backend API engine for the Snitch storefront, orchestrating MongoDB schemas, Redis token caches, ImageKit uploads, and Gmail OAuth2 reset mailings._
+_The Node.js & Express 5 backend API engine for the Sciolto storefront, orchestrating MongoDB schemas, Redis token caches, ImageKit uploads, and Gmail OAuth2 reset mailings._
 
 [![Node version](https://img.shields.io/badge/Node.js->=18-3c873a?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org)
 [![Express version](https://img.shields.io/badge/Express-5.0-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com)

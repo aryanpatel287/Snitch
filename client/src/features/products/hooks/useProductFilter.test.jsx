@@ -18,7 +18,7 @@ vi.mock('./useProduct', () => ({
 const mockProducts = [
     {
         _id: '1',
-        title: 'Snitch Black Shirt',
+        title: 'Sciolto Black Shirt',
         description: 'Cotton slim fit shirt',
         price: { amount: 1500 },
         createdAt: '2026-01-01T00:00:00.000Z',

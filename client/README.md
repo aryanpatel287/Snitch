@@ -1,9 +1,9 @@
 <!-- prettier-ignore -->
 <div align="center">
 
-<h1>Snitch - Client</h1>
+<h1>Sciolto - Client</h1>
 
-_The React 19 & Vite 7 frontend SPA client for the Snitch storefront, featuring feature-first Sass layouts, Redux pagination caching, and interactive details galleries._
+_The React 19 & Vite 7 frontend SPA client for the Sciolto storefront, featuring feature-first Sass layouts, Redux pagination caching, and interactive details galleries._
 
 [![Node version](https://img.shields.io/badge/Node.js->=18-3c873a?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org)
 [![React version](https://img.shields.io/badge/React-19.0-61dafb?style=flat-square&logo=react&logoColor=white)](https://react.dev)
@@ -19,7 +19,7 @@ _The React 19 & Vite 7 frontend SPA client for the Snitch storefront, featuring 
 
 ## Features
 
-- **Monochrome Editorial Layouts**: Zero-radius border outlines, high-contrast black/white panels, and elegant display typography grids.
+- **High-Contrast Editorial Layouts**: High-contrast black/white panels and elegant display typography grids.
 - **Client-Side Page Caching**: Caches catalog query results dynamically in Redux Toolkit (`productsByPage`). Swapping back and forth between catalog pages loads instantly (0ms) without triggering API requests. Invalidates cache cleanly upon filter changes.
 - **Dynamic Variant Swapping**: Prevent variant auto-selection on detail pages. Keeps options unselected until the user completes the choice, displaying base details and swap-loading specific images/pricing once resolved.
 - **Dynamic Catalog Filters**: Interfaces with server-side queries supporting search query inputs, category tabs, price range filters, color/size parameters, and sorting options.
@@ -66,16 +66,13 @@ client/
 
 ## Styling Guidelines
 
-Snitch enforces a strict visual standard to maintain its high-end brand feel:
+Sciolto enforces a strict visual standard to maintain its high-end brand feel:
 
 - **Typography Stack**:
   - **Headlines**: `'Poppins', 'Archivo Black', sans-serif` (heavy uppercase display weights).
   - **Body copy**: `'Satoshi', sans-serif`.
   - **Prices & numbers**: `'JetBrains Mono', monospace` or bold Satoshi.
-- **Borders & Radii**:
-  - **Cards & panels**: `20px` border-radius (`--border-radius-card`) globally for testimonial boxes, filters, form cards, and inventory boxes.
-  - **Inputs & buttons**: `9999px` pill border-radius (`--border-radius-btn`) for buttons, search inputs, and selectors. Textareas use `20px`.
-- **Contrast focus states**: To prevent layout jumps, focus borders must maintain a constant `2px` width, transitioning only color from gray to solid black.
+
 
 ---
 

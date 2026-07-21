@@ -36,11 +36,11 @@ export const emailVerificationTemplate = ({ name, verificationUrl }) => {
     <body>
       <div class="container">
         <div class="header">
-          <h1>SNITCH</h1>
+          <h1>SCIOLTO</h1>
         </div>
         <div class="content">
           <p>Hi ${name},</p>
-          <p>Welcome to Snitch! We're thrilled to have you on board. Please verify your email address to unlock full access to your account and complete your registration.</p>
+          <p>Welcome to Sciolto! We're thrilled to have you on board. Please verify your email address to unlock full access to your account and complete your registration.</p>
           <div class="btn-wrapper">
             <a href="${verificationUrl}" class="btn">Verify Email Address</a>
           </div>
@@ -48,10 +48,10 @@ export const emailVerificationTemplate = ({ name, verificationUrl }) => {
             If the button doesn't work, copy and paste this link into your browser:<br>
             <a href="${verificationUrl}" style="color: #000000;">${verificationUrl}</a>
           </p>
-          <p class="note">If you didn't create an account with Snitch, you can safely ignore this email.</p>
+          <p class="note">If you didn't create an account with Sciolto, you can safely ignore this email.</p>
         </div>
         <div class="footer">
-          <p>&copy; ${new Date().getFullYear()} Snitch. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} Sciolto. All rights reserved.</p>
         </div>
       </div>
     </body>
@@ -74,11 +74,11 @@ export const resetPasswordEmailTemplate = ({ name, resetUrl }) => {
     <body>
       <div class="container">
         <div class="header">
-          <h1>SNITCH</h1>
+          <h1>SCIOLTO</h1>
         </div>
         <div class="content">
           <p>Hi ${name},</p>
-          <p>We received a request to reset the password for your Snitch account. If you made this request, please click the button below to securely set a new password.</p>
+          <p>We received a request to reset the password for your Sciolto account. If you made this request, please click the button below to securely set a new password.</p>
           <div class="btn-wrapper">
             <a href="${resetUrl}" class="btn">Reset Password</a>
           </div>
@@ -89,7 +89,7 @@ export const resetPasswordEmailTemplate = ({ name, resetUrl }) => {
           <p class="note">If you didn't request a password reset, you can safely ignore this email. Your password will remain completely secure and unchanged.</p>
         </div>
         <div class="footer">
-          <p>&copy; ${new Date().getFullYear()} Snitch. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} Sciolto. All rights reserved.</p>
         </div>
       </div>
     </body>

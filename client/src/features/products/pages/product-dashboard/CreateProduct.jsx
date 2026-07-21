@@ -90,7 +90,7 @@ const CreateProduct = ({ isEmbedded = false, onCancel, onSuccess }) => {
                             </h1>
                             <p className="create-product-subtitle">
                                 Fill in the details to list your product on
-                                Snitch.
+                                Sciolto.
                             </p>
                         </div>
                     </header>
