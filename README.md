@@ -24,8 +24,8 @@ Sciolto is a modern streetwear e-commerce platform built with a high-contrast ed
 The application utilizes server-side pagination, dynamic category and price filtering, a comprehensive seller inventory dashboard, custom variant management (sizes and colors), base64 image serialization, and ImageKit integration.
 
 For developer guides and specific setup details:
-* To configure and launch the API server, see the [Server README](file:///home/aryan-patel/workspace/Snitch/server/README.md).
-* To configure and launch the Vite client, see the [Client README](file:///home/aryan-patel/workspace/Snitch/client/README.md).
+* To configure and launch the API server, see the [Server README](./server/README.md).
+* To configure and launch the Vite client, see the [Client README](./client/README.md).
 
 > [!NOTE]
 > Make sure to have both MongoDB and Redis servers running locally or remotely before launching the application.

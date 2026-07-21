@@ -48,7 +48,7 @@ export const sendEmailUsingResend = async ({ to, subject, html, text }) => {
         const recipients = Array.isArray(to) ? to : [to];
 
         const payload = {
-            from: `Snitch <${config.RESEND_USER}>`,
+            from: `Sciolto <${config.RESEND_USER}>`,
             to: recipients,
             subject,
         };

@@ -24,7 +24,7 @@ describe('Navbar Component', () => {
     vi.clearAllMocks();
   });
 
-  it('should render the logo brand name "#SCIOLTO"', () => {
+  it('should render the logo brand name "Sciolto"', () => {
     useSelector.mockReturnValue({ user: null });
 
     render(
@@ -33,7 +33,7 @@ describe('Navbar Component', () => {
       </MemoryRouter>
     );
 
-    const logoElements = screen.getAllByText('#SCIOLTO');
+    const logoElements = screen.getAllByText('Sciolto');
     expect(logoElements.length).toBeGreaterThan(0);
     expect(logoElements[0].closest('a')).toHaveAttribute('href', '/');
   });

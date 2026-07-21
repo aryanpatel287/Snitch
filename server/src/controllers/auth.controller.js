@@ -211,7 +211,7 @@ async function googleAuthController(req, res) {
 
 // cache helper
 async function getCachedUser(userId) {
-    const cacheKey = `snitch:user:${userId}`;
+    const cacheKey = `sciolto:user:${userId}`;
     const cached = await redis.get(cacheKey);
 
     if (cached) {
@@ -277,7 +277,7 @@ async function getMeController(req, res) {
 
 // call this after any profile update
 async function invalidateUserCache(userId) {
-    await redis.del(`snitch:user:${userId}`);
+    await redis.del(`sciolto:user:${userId}`);
 }
 
 /**
@@ -431,7 +431,7 @@ async function logoutController(req, res) {
         res.clearCookie('token');
 
         await redis.set(
-            `snitch:blacklist:${token}`,
+            `sciolto:blacklist:${token}`,
             Date.now().toString(),
             'EX',
             3600 * 24,
