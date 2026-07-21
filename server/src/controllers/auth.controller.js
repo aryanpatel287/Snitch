@@ -64,13 +64,13 @@ async function checkTokenExists(req, res) {
  * @body { email, password, contact, fullname }
  */
 async function RegsiterUserController(req, res) {
-    const tokenExists = await checkTokenExists(req, res);
-    if (tokenExists) {
-        return;
-    }
-
-    const { email, password, contact, fullname, isSeller } = req.body;
     try {
+        const tokenExists = await checkTokenExists(req, res);
+        if (tokenExists) {
+            return;
+        }
+
+        const { email, password, contact, fullname, isSeller } = req.body;
         const isUserExists = await userModel.findOne({
             $or: [{ email }, { contact }],
         });
@@ -99,7 +99,7 @@ async function RegsiterUserController(req, res) {
     } catch (error) {
         console.log(error);
 
-        await sendResponse({
+        return await sendResponse({
             res,
             statusCode: 500,
             message: 'Server error',
@@ -115,39 +115,49 @@ async function RegsiterUserController(req, res) {
  * @body { email, password }
  */
 async function loginUserController(req, res) {
-    const tokenExists = await checkTokenExists(req, res);
-    if (tokenExists) {
-        return;
-    }
+    try {
+        const tokenExists = await checkTokenExists(req, res);
+        if (tokenExists) {
+            return;
+        }
 
-    const { email, password } = req.body;
+        const { email, password } = req.body;
 
-    const user = await userModel.findOne({ email }).select('+password');
+        const user = await userModel.findOne({ email }).select('+password');
 
-    if (!user || !user.password) {
+        if (!user || !user.password) {
+            return await sendResponse({
+                res,
+                statusCode: 401,
+                message: 'Invalid credentials',
+                success: false,
+            });
+        }
+
+        const isPasswordMatch = await user.comparePassword(password);
+
+        if (!isPasswordMatch) {
+            return await sendResponse({
+                res,
+                statusCode: 401,
+                message: 'Invalid credentials',
+                success: false,
+            });
+        }
+
+        return await sendTokenResponse(
+            { user, message: 'User logged in successfully', isRegister: false },
+            res,
+        );
+    } catch (error) {
+        console.log(error);
         return await sendResponse({
             res,
-            statusCode: 401,
-            message: 'Invalid credentials',
+            statusCode: 500,
+            message: 'Server error',
             success: false,
         });
     }
-
-    const isPasswordMatch = await user.comparePassword(password);
-
-    if (!isPasswordMatch) {
-        return await sendResponse({
-            res,
-            statusCode: 401,
-            message: 'Invalid credentials',
-            success: false,
-        });
-    }
-
-    return await sendTokenResponse(
-        { user, message: 'User logged in successfully', isRegister: false },
-        res,
-    );
 }
 
 /**
@@ -157,36 +167,46 @@ async function loginUserController(req, res) {
  * @body No body required
  */
 async function googleAuthController(req, res) {
-    console.log(req.user);
+    try {
+        console.log(req.user);
 
-    const { emails, displayName, id } = req.user;
+        const { emails, displayName, id } = req.user;
 
-    const email = emails[0].value;
+        const email = emails[0].value;
 
-    let user = await userModel.findOne({ email });
+        let user = await userModel.findOne({ email });
 
-    if (!user) {
-        user = await userModel.create({
-            email,
-            fullname: displayName,
-            googleId: id,
+        if (!user) {
+            user = await userModel.create({
+                email,
+                fullname: displayName,
+                googleId: id,
+            });
+        }
+
+        const token = jwt.sign(
+            {
+                _id: user._id,
+                role: user.role,
+            },
+            config.JWT_SECRET,
+            {
+                expiresIn: '7d',
+            },
+        );
+
+        res.cookie('token', token);
+
+        return res.redirect(config.CLIENT_ORIGIN);
+    } catch (error) {
+        console.log(error);
+        return await sendResponse({
+            res,
+            statusCode: 500,
+            message: 'Server error',
+            success: false,
         });
     }
-
-    const token = jwt.sign(
-        {
-            _id: user._id,
-            role: user.role,
-        },
-        config.JWT_SECRET,
-        {
-            expiresIn: '7d',
-        },
-    );
-
-    res.cookie('token', token);
-
-    res.redirect(config.CLIENT_ORIGIN);
 }
 
 // cache helper
@@ -212,31 +232,47 @@ async function getCachedUser(userId) {
  * @body No body required
  */
 async function getMeController(req, res) {
-    const userId = req.user?._id;
+    try {
+        const userId = req.user?._id;
 
-    if (!userId) {
-        return res.status(401).json({
-            message: 'unauthorized access',
+        if (!userId) {
+            return await sendResponse({
+                res,
+                statusCode: 401,
+                message: 'unauthorized access',
+                success: false,
+                error: 'user details not attached in the req',
+            });
+        }
+
+        const user = await getCachedUser(userId);
+
+        if (!user) {
+            return await sendResponse({
+                res,
+                statusCode: 404,
+                message: 'user not found',
+                success: false,
+                error: 'user not found',
+            });
+        }
+
+        return await sendResponse({
+            res,
+            statusCode: 200,
+            message: 'user found successfully',
+            success: true,
+            user,
+        });
+    } catch (error) {
+        console.log(error);
+        return await sendResponse({
+            res,
+            statusCode: 500,
+            message: 'Server error',
             success: false,
-            error: 'user details not attached in the req',
         });
     }
-
-    const user = await getCachedUser(userId);
-
-    if (!user) {
-        return res.status(404).json({
-            message: 'user not found',
-            success: false,
-            error: 'user not found',
-        });
-    }
-
-    return res.status(200).json({
-        message: 'user found successfully',
-        success: true,
-        user,
-    });
 }
 
 // call this after any profile update
@@ -251,52 +287,63 @@ async function invalidateUserCache(userId) {
  * @body { email }
  */
 async function forgotPasswordController(req, res) {
-    const { email } = req.body;
+    try {
+        const { email } = req.body;
 
-    if (!email) {
+        if (!email) {
+            return await sendResponse({
+                res,
+                statusCode: 400,
+                message: 'Email is required',
+                success: false,
+            });
+        }
+
+        const user = await userModel.findOne({ email });
+
+        if (!user) {
+            return await sendResponse({
+                res,
+                statusCode: 404,
+                message: 'User not found',
+                success: false,
+            });
+        }
+
+        const token = jwt.sign(
+            {
+                _id: user._id,
+            },
+            config.JWT_SECRET,
+            {
+                expiresIn: '1h',
+            },
+        );
+
+        const resetUrl = `${config.CLIENT_ORIGIN}/reset-password?token=${token}`;
+
+        await sendEmail({
+            to: email,
+            subject: 'Password Reset Request',
+            html: resetPasswordEmailTemplate({ name: user.fullname, resetUrl }),
+        });
+
         return await sendResponse({
             res,
-            statusCode: 400,
-            message: 'Email is required',
+            statusCode: 200,
+            message: 'Password reset email sent successfully',
+            success: true,
+        });
+    } catch (error) {
+        console.log(error);
+
+        return await sendResponse({
+            res,
+            statusCode: 500,
+            message: 'Internal server error',
             success: false,
         });
     }
-
-    const user = await userModel.findOne({ email });
-
-    if (!user) {
-        return await sendResponse({
-            res,
-            statusCode: 404,
-            message: 'User not found',
-            success: false,
-        });
-    }
-
-    const token = jwt.sign(
-        {
-            _id: user._id,
-        },
-        config.JWT_SECRET,
-        {
-            expiresIn: '1h',
-        },
-    );
-
-    const resetUrl = `${config.CLIENT_ORIGIN}/reset-password?token=${token}`;
-
-    await sendEmail({
-        to: email,
-        subject: 'Password Reset Request',
-        html: resetPasswordEmailTemplate({ name: user.fullname, resetUrl }),
-    });
-
-    await sendResponse({
-        res,
-        statusCode: 200,
-        message: 'Password reset email sent successfully',
-        success: true,
-    });
 }
 
 /**
@@ -307,47 +354,58 @@ async function forgotPasswordController(req, res) {
  * @query { token }
  */
 async function updatePasswordController(req, res) {
-    const { password } = req.body;
-    const { token } = req.query;
+    try {
+        const { password } = req.body;
+        const { token } = req.query;
 
-    if (!token) {
+        if (!token) {
+            return await sendResponse({
+                res,
+                statusCode: 400,
+                message: 'Token is required',
+                success: false,
+            });
+        }
+
+        const decodedToken = jwt.verify(token, config.JWT_SECRET);
+
+        const userId = decodedToken._id;
+
+        const hasedPassword = await bcrypt.hash(password, 10);
+
+        const user = await userModel
+            .findByIdAndUpdate(
+                { _id: userId },
+                { password: hasedPassword },
+                { new: true },
+            )
+            .select('+password');
+
+        if (!user) {
+            return await sendResponse({
+                res,
+                statusCode: 404,
+                message: 'User not found',
+                success: false,
+            });
+        }
+
         return await sendResponse({
             res,
-            statusCode: 400,
-            message: 'Token is required',
-            success: false,
+            statusCode: 200,
+            message: 'Password updated successfully',
+            success: true,
         });
-    }
+    } catch (error) {
+        console.log(error);
 
-    const decodedToken = jwt.verify(token, config.JWT_SECRET);
-
-    const userId = decodedToken._id;
-
-    const hasedPassword = await bcrypt.hash(password, 10);
-
-    const user = await userModel
-        .findByIdAndUpdate(
-            { _id: userId },
-            { password: hasedPassword },
-            { new: true },
-        )
-        .select('+password');
-
-    if (!user) {
         return await sendResponse({
             res,
-            statusCode: 404,
-            message: 'User not found',
             success: false,
+            statusCode: 500,
+            message: 'Internal server error',
         });
     }
-
-    return await sendResponse({
-        res,
-        statusCode: 200,
-        message: 'Password updated successfully',
-        success: true,
-    });
 }
 
 /**
@@ -357,33 +415,43 @@ async function updatePasswordController(req, res) {
  * @body No body required
  */
 async function logoutController(req, res) {
-    const token = req.cookies.token;
+    try {
+        const token = req.cookies.token;
 
-    if (!token) {
+        if (!token) {
+            return await sendResponse({
+                res,
+                statusCode: 400,
+                message: 'Invalid token',
+                success: false,
+                error: 'token not found',
+            });
+        }
+
+        res.clearCookie('token');
+
+        await redis.set(
+            `snitch:blacklist:${token}`,
+            Date.now().toString(),
+            'EX',
+            3600 * 24,
+        );
+
         return await sendResponse({
             res,
-            statusCode: 400,
-            message: 'Invalid token',
+            statusCode: 200,
+            message: 'User logged out successfully',
+            success: true,
+        });
+    } catch (error) {
+        console.log(error);
+        return await sendResponse({
+            res,
+            statusCode: 500,
+            message: 'Server error',
             success: false,
-            error: 'token not found',
         });
     }
-
-    res.clearCookie('token');
-
-    await redis.set(
-        `snitch:blacklist:${token}`,
-        Date.now().toString(),
-        'EX',
-        3600 * 24,
-    );
-
-    return await sendResponse({
-        res,
-        statusCode: 200,
-        message: 'User logged out successfully',
-        success: true,
-    });
 }
 
 export {
