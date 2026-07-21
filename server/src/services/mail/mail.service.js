@@ -12,8 +12,6 @@ export async function sendEmail({ to, subject, html, text }) {
                 text,
             });
 
-            console.log('Email Response: ' + emailResponse);
-
             return emailResponse.message;
         }
 
@@ -24,9 +22,9 @@ export async function sendEmail({ to, subject, html, text }) {
             text,
         });
 
-        console.log('Email Response: ' + emailResponse);
         return emailResponse.message;
     } catch (error) {
         console.error('Error sending email : ', error);
+        throw error;
     }
 }
