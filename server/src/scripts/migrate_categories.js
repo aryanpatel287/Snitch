@@ -8,111 +8,111 @@ import categoryModel from '../models/category.model.js';
 const productsList = [
     {
         "_id": "6a4d21b28e8dc7cee2e37a7e",
-        "title": "Snitch Men Smart Slim Fit Textured Casual Shirt"
+        "title": "Sciolto Men Smart Slim Fit Textured Casual Shirt"
     },
     {
         "_id": "6a4d21ba8e8dc7cee2e37a96",
-        "title": "Snitch Men Smart Spread Collar Solid Casual Shirt"
+        "title": "Sciolto Men Smart Spread Collar Solid Casual Shirt"
     },
     {
         "_id": "6a4d21c28e8dc7cee2e37aae",
-        "title": "Snitch Mauve & White Striped Classic Slim Fit Opaque Casual Shirt"
+        "title": "Sciolto Mauve & White Striped Classic Slim Fit Opaque Casual Shirt"
     },
     {
         "_id": "6a4d21cb8e8dc7cee2e37ac6",
-        "title": "Snitch Blue Classic Slim Fit Vertical Stripes Button-Down Collar Casual Shirt"
+        "title": "Sciolto Blue Classic Slim Fit Vertical Stripes Button-Down Collar Casual Shirt"
     },
     {
         "_id": "6a4d21d28e8dc7cee2e37ade",
-        "title": "Snitch White Classic Slim Fit Vertical Striped Cotton Casual Shirt"
+        "title": "Sciolto White Classic Slim Fit Vertical Striped Cotton Casual Shirt"
     },
     {
         "_id": "6a4d21d78e8dc7cee2e37af6",
-        "title": "Snitch Slim Fit Spread Collar Short Sleeves Casual Shirt"
+        "title": "Sciolto Slim Fit Spread Collar Short Sleeves Casual Shirt"
     },
     {
         "_id": "6a4d21de8e8dc7cee2e37b0e",
-        "title": "Snitch Men Casual Shirt"
+        "title": "Sciolto Men Casual Shirt"
     },
     {
         "_id": "6a4d21e48e8dc7cee2e37b2a",
-        "title": "Snitch Men Striped Casual Shirt"
+        "title": "Sciolto Men Striped Casual Shirt"
     },
     {
         "_id": "6a4d21eb8e8dc7cee2e37b46",
-        "title": "Snitch Men Classic Button-Down Collar Solid Cotton Casual Shirt"
+        "title": "Sciolto Men Classic Button-Down Collar Solid Cotton Casual Shirt"
     },
     {
         "_id": "6a4d21f28e8dc7cee2e37b62",
-        "title": "Snitch Embroidery Polo Neck Cotton Oversized T-shirt"
+        "title": "Sciolto Embroidery Polo Neck Cotton Oversized T-shirt"
     },
     {
         "_id": "6a4d21f98e8dc7cee2e37b7a",
-        "title": "Snitch Men Typography Printed Polo Collar Applique T-shirt"
+        "title": "Sciolto Men Typography Printed Polo Collar Applique T-shirt"
     },
     {
         "_id": "6a4d22018e8dc7cee2e37b8e",
-        "title": "Snitch Olive Self Design Polo Collar Casual T-shirt"
+        "title": "Sciolto Olive Self Design Polo Collar Casual T-shirt"
     },
     {
         "_id": "6a4d22078e8dc7cee2e37ba6",
-        "title": "Snitch Oversized Polo Collar Drop-Shoulder Sleeves Pure Cotton T-Shirt"
+        "title": "Sciolto Oversized Polo Collar Drop-Shoulder Sleeves Pure Cotton T-Shirt"
     },
     {
         "_id": "6a4d220e8e8dc7cee2e37bc2",
-        "title": "Snitch Black Textured Polo Collar Slim Fit Cotton T-shirt"
+        "title": "Sciolto Black Textured Polo Collar Slim Fit Cotton T-shirt"
     },
     {
         "_id": "6a4d22168e8dc7cee2e37bde",
-        "title": "Snitch Men Solid Polo Collar Slim Fit T-shirt"
+        "title": "Sciolto Men Solid Polo Collar Slim Fit T-shirt"
     },
     {
         "_id": "6a4d221e8e8dc7cee2e37bf6",
-        "title": "Snitch Men Solid Round Neck Pure Cotton Relaxed Fit T-shirt"
+        "title": "Sciolto Men Solid Round Neck Pure Cotton Relaxed Fit T-shirt"
     },
     {
         "_id": "6a4d22248e8dc7cee2e37c12",
-        "title": "Snitch Textured Polo Collar Drop-Shoulder Sleeves Pure Cotton T-Shirt"
+        "title": "Sciolto Textured Polo Collar Drop-Shoulder Sleeves Pure Cotton T-Shirt"
     },
     {
         "_id": "6a4d222c8e8dc7cee2e37c2e",
-        "title": "Snitch Men Printed Drop-Shoulder Sleeves T-shirt"
+        "title": "Sciolto Men Printed Drop-Shoulder Sleeves T-shirt"
     },
     {
         "_id": "6a4d22328e8dc7cee2e37c42",
-        "title": "Snitch Men Flared Mid-Rise Low Distress Light Fade Jeans"
+        "title": "Sciolto Men Flared Mid-Rise Low Distress Light Fade Jeans"
     },
     {
         "_id": "6a4d22388e8dc7cee2e37c5e",
-        "title": "Snitch Men Straight Fit Mid-Rise Light Fade Jeans"
+        "title": "Sciolto Men Straight Fit Mid-Rise Light Fade Jeans"
     },
     {
         "_id": "6a4d223f8e8dc7cee2e37c7a",
-        "title": "Snitch Men Straight Fit Mid-Rise Stretchable Jeans"
+        "title": "Sciolto Men Straight Fit Mid-Rise Stretchable Jeans"
     },
     {
         "_id": "6a4d22458e8dc7cee2e37c96",
-        "title": "Snitch Men Grey Mid-Rise Clean Look Pure Cotton Jeans"
+        "title": "Sciolto Men Grey Mid-Rise Clean Look Pure Cotton Jeans"
     },
     {
         "_id": "6a4d224c8e8dc7cee2e37cae",
-        "title": "Snitch Men Straight Fit Mid-Rise Light Fade Jeans"
+        "title": "Sciolto Men Straight Fit Mid-Rise Light Fade Jeans"
     },
     {
         "_id": "6a4d22528e8dc7cee2e37cca",
-        "title": "Snitch Men Mid-Rise Low Distress Light Fade Jeans"
+        "title": "Sciolto Men Mid-Rise Low Distress Light Fade Jeans"
     },
     {
         "_id": "6a4d22598e8dc7cee2e37ce6",
-        "title": "Snitch Men Straight Fit Mid-Rise Light Fade Jeans"
+        "title": "Sciolto Men Straight Fit Mid-Rise Light Fade Jeans"
     },
     {
         "_id": "6a4d225f8e8dc7cee2e37d02",
-        "title": "Snitch Men Mid-rise Pure Cotton Baggy Jeans"
+        "title": "Sciolto Men Mid-rise Pure Cotton Baggy Jeans"
     },
     {
         "_id": "6a4d22658e8dc7cee2e37d1e",
-        "title": "Snitch Men Blue Baggy Fit Pure Cotton Jeans"
+        "title": "Sciolto Men Blue Baggy Fit Pure Cotton Jeans"
     }
 ];
 

@@ -111,7 +111,7 @@ const Navbar = () => {
                                 <i className="ri-menu-line"></i>
                             </button>
 
-                            {/* Center: Logo #SNITCH */}
+                            {/* Center: Logo Sciolto */}
                             <Link
                                 to="/"
                                 className="navbar__logo-link"
