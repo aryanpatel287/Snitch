@@ -21,6 +21,8 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+app.set('trust proxy', true);
+
 const publicDir = path.join(__dirname, '../public');
 
 // Server Middleware setup
@@ -47,6 +49,7 @@ passport.use(
             clientID: config.GOOGLE_CLIENT_ID,
             clientSecret: config.GOOGLE_CLIENT_SECRET,
             callbackURL: `/api/auth/google/callback`,
+            proxy: true,
         },
         (accessToken, refreshToken, profile, done) => {
             //Here we can handle the user profile returned by Google and create or find a user in our database
