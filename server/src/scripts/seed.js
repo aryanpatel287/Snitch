@@ -468,27 +468,27 @@ async function seedDatabase() {
         // Create Streetwear seller
         sellers['dummymail.me.287@gmail.com'] = await userModel.create({
             email: 'dummymail.me.287@gmail.com',
-            fullname: 'Snitch Streetwear Co.',
+            fullname: 'Sciolto Streetwear Co.',
             contact: '9876500001',
-            password: 'SellerStreetwear123!',
+            password: 'Seller' + '@' + 'Streetwear123!',
             role: 'seller',
         });
 
         // Create Trend/Casuals seller
         sellers['skyh53624@gmail.com'] = await userModel.create({
             email: 'skyh53624@gmail.com',
-            fullname: 'Snitch Trend & Casuals',
+            fullname: 'Sciolto Trend & Casuals',
             contact: '9876500002',
-            password: 'SellerTrend123!',
+            password: 'Seller' + '@' + 'Trend123!',
             role: 'seller',
         });
 
         // Create Denim seller
         sellers['leopatel967@gmail.com'] = await userModel.create({
             email: 'leopatel967@gmail.com',
-            fullname: 'Snitch Denim House',
+            fullname: 'Sciolto Denim House',
             contact: '9876500003',
-            password: '@Aryan287',
+            password: 'Seller' + '@' + 'Denim123!',
             role: 'seller',
         });
 
@@ -506,7 +506,7 @@ async function seedDatabase() {
             console.log(`Created category: "${cat.name}"`);
         }
 
-        // Seed Shirts to Snitch Trend & Casuals (skyh53624@gmail.com)
+        // Seed Shirts to Sciolto Trend & Casuals (skyh53624@gmail.com)
         await seedCategory(
             productsData.shirts,
             sellers['skyh53624@gmail.com']._id,
@@ -514,7 +514,7 @@ async function seedDatabase() {
             'size',
         );
 
-        // Seed T-shirts to Snitch Streetwear Co. (dummymail.me.287@gmail.com)
+        // Seed T-shirts to Sciolto Streetwear Co. (dummymail.me.287@gmail.com)
         await seedCategory(
             productsData.tshirts,
             sellers['dummymail.me.287@gmail.com']._id,
@@ -522,7 +522,7 @@ async function seedDatabase() {
             'size',
         );
 
-        // Seed Jeans to Snitch Denim House (leopatel967@gmail.com)
+        // Seed Jeans to Sciolto Denim House (leopatel967@gmail.com)
         await seedCategory(
             productsData.jeans,
             sellers['leopatel967@gmail.com']._id,
