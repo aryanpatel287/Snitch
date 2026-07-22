@@ -22,7 +22,10 @@ const addToCartController = async (req, res) => {
     }
 
     try {
-        const product = await productModel.findById(productId);
+        const [product, cartResult] = await Promise.all([
+            productModel.findById(productId).lean(),
+            cartModel.findOne({ user: userId }),
+        ]);
 
         if (!product) {
             return await sendResponse({
@@ -36,7 +39,7 @@ const addToCartController = async (req, res) => {
 
         let productPrice = product.price;
         if (variantId) {
-            const variant = product.variants.id(variantId);
+            const variant = product.variants && product.variants.find((v) => v._id.toString() === variantId);
             if (!variant) {
                 return await sendResponse({
                     res,
@@ -51,9 +54,7 @@ const addToCartController = async (req, res) => {
 
         const stock = await stockOfProduct(productId, variantId);
 
-        let cart =
-            (await cartModel.findOne({ user: userId })) ||
-            new cartModel({ user: userId, items: [] });
+        let cart = cartResult || new cartModel({ user: userId, items: [] });
 
         const isProductInCart = cart.items.find(
             (item) =>
