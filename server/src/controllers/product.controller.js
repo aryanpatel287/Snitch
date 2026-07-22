@@ -272,7 +272,7 @@ async function getProductsController(req, res) {
         if (search) {
             filter.$or = [
                 { title: { $regex: search, $options: 'i' } },
-                { description: { $regex: search, $options: 'i' } }
+                { description: { $regex: search, $options: 'i' } },
             ];
         }
 
@@ -283,8 +283,8 @@ async function getProductsController(req, res) {
                 const catDoc = await categoryModel.findOne({
                     $or: [
                         { slug: category.toLowerCase() },
-                        { name: { $regex: `^${category}$`, $options: 'i' } }
-                    ]
+                        { name: { $regex: `^${category}$`, $options: 'i' } },
+                    ],
                 });
                 if (catDoc) {
                     filter.category = catDoc._id;
@@ -304,8 +304,8 @@ async function getProductsController(req, res) {
             filter.$and.push({
                 $or: [
                     { 'variants.attributes.color': colorRegex },
-                    { title: { $regex: color, $options: 'i' } }
-                ]
+                    { title: { $regex: color, $options: 'i' } },
+                ],
             });
         }
 
@@ -315,8 +315,8 @@ async function getProductsController(req, res) {
             filter.$and.push({
                 $or: [
                     { 'variants.attributes.size': sizeRegex },
-                    { description: { $regex: size, $options: 'i' } }
-                ]
+                    { description: { $regex: size, $options: 'i' } },
+                ],
             });
         }
 
@@ -327,7 +327,9 @@ async function getProductsController(req, res) {
             sort = { 'price.amount': -1 };
         }
 
-        const products = await productModel.find(filter)
+        const products = await productModel
+            .find(filter)
+            .lean()
             .sort(sort)
             .skip(skip)
             .limit(limit);
@@ -342,7 +344,7 @@ async function getProductsController(req, res) {
             products,
             totalPages: Math.ceil(totalProducts / limit) || 1,
             totalProducts,
-            currentPage: page
+            currentPage: page,
         });
     } catch (error) {
         console.error('Error fetching products', error);
@@ -371,7 +373,7 @@ async function getAProductController(req, res) {
     }
 
     try {
-        const product = await productModel.findById(productId);
+        const product = await productModel.findById(productId).lean();
 
         if (!product) {
             return sendResponse({
@@ -476,7 +478,9 @@ async function getProductsByCategoryController(req, res) {
             filter._id = { $ne: exclude };
         }
 
-        const productsByCategory = await productModel.find(filter)
+        const productsByCategory = await productModel
+            .find(filter)
+            .lean()
             .skip(skip)
             .limit(limit);
 
@@ -490,7 +494,7 @@ async function getProductsByCategoryController(req, res) {
             productsByCategory,
             totalPages: Math.ceil(totalProducts / limit) || 1,
             totalProducts,
-            currentPage: page
+            currentPage: page,
         });
     } catch (error) {
         console.error('Error fetching products by category:', error);
