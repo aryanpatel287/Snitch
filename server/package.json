@@ -30,7 +30,7 @@
         "seed": "node src/scripts/seed.js",
         "build": "node scripts/sync-client-build.js",
         "test:load:prepare": "node scripts/generate-load-tokens.js",
-        "test:load": "npm run test:load:prepare && artillery run --output tests/load-report.json tests/load-test-ecommerce.yml"
+        "test:load": "npm run test:load:prepare && mkdir -p tests/reports && artillery run --output tests/reports/load-report-$(date +%Y-%m-%d_%H-%M-%S).json tests/load-test-ecommerce.yml"
     },
     "devDependencies": {
         "supertest": "^7.0.0",
