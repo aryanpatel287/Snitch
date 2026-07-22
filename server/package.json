@@ -28,7 +28,9 @@
         "test:watch": "vitest",
         "dev": "npx nodemon server.js",
         "seed": "node src/scripts/seed.js",
-        "build": "node scripts/sync-client-build.js"
+        "build": "node scripts/sync-client-build.js",
+        "test:load:prepare": "node scripts/generate-load-tokens.js",
+        "test:load": "npm run test:load:prepare && artillery run --output tests/load-report.json tests/load-test-ecommerce.yml"
     },
     "devDependencies": {
         "supertest": "^7.0.0",

@@ -1,0 +1,67 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 30
+      arrivalRate: 2
+      rampTo: 10
+      name: "Ramping Load Phase"
+  payload:
+    path: "./load-tokens.csv"
+    fields:
+      - "token"
+    order: "random"
+  headers:
+    Content-Type: "application/json"
+
+scenarios:
+  - name: "Scenario 1: HTTP Public Browsing"
+    weight: 55
+    flow:
+      - get:
+          url: "/api/products"
+          capture:
+            - json: "$.products[0]._id"
+              as: "productId"
+          expect:
+            - statusCode: 200
+      - think: 2
+      - get:
+          url: "/api/products/{{ productId }}"
+          expect:
+            - statusCode: 200
+
+  - name: "Scenario 2: HTTP Authenticated Cart Operations"
+    weight: 45
+    flow:
+      - get:
+          url: "/api/auth/get-me"
+          headers:
+            Cookie: "token={{ token }}"
+          expect:
+            - statusCode: 200
+      - think: 1
+      - get:
+          url: "/api/cart"
+          headers:
+            Cookie: "token={{ token }}"
+          expect:
+            - statusCode: 200
+      - think: 2
+      - get:
+          url: "/api/products"
+          capture:
+            - json: "$.products[0]._id"
+              as: "productId"
+          expect:
+            - statusCode: 200
+      - think: 1
+      - post:
+          url: "/api/cart/add/{{ productId }}"
+          headers:
+            Cookie: "token={{ token }}"
+          json:
+            quantity: 1
+          expect:
+            - statusCode:
+                - 200
+                - 201
