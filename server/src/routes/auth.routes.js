@@ -18,6 +18,7 @@ import {
 } from '../controllers/auth.controller.js';
 
 import { authUser } from '../middlewares/auth.middleware.js';
+import { authRateLimiter } from '../middlewares/rateLimit.middleware.js';
 
 import passport from 'passport';
 import { config } from '../config/config.js';
@@ -30,7 +31,7 @@ const authRouter = Router();
  * @access Public
  * @body { email, password, contact, fullname }
  */
-authRouter.post('/register', validateRegister, RegsiterUserController);
+authRouter.post('/register', authRateLimiter, validateRegister, RegsiterUserController);
 
 /**
  * @route POST /api/auth/login
@@ -38,7 +39,7 @@ authRouter.post('/register', validateRegister, RegsiterUserController);
  * @access Public
  * @body { email, password }
  */
-authRouter.post('/login', validateLogin, loginUserController);
+authRouter.post('/login', authRateLimiter, validateLogin, loginUserController);
 
 /**
  * @route GET /api/auth/google
