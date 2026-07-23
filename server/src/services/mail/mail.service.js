@@ -4,6 +4,14 @@ import { sendEmailUsingResend } from './resend.mail.service.js';
 
 export async function sendEmail({ to, subject, html, text }) {
     try {
+        if (
+            (config.NODE_ENV == 'testing' || config.NODE_ENV == 'test') ||
+            (to && (to.includes('loadtest') || to.endsWith('@example.com')))
+        ) {
+            console.log(`[TESTING] Skipping email to ${to} (Subject: ${subject})`);
+            return true;
+        }
+
         if (config.NODE_ENV == 'DEVELOPMENT') {
             const emailResponse = await sendEmailUsingGmailAPI({
                 to,

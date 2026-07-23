@@ -63,6 +63,14 @@ async function generateTokens() {
         fs.writeFileSync(csvPath, csvContent, 'utf-8');
         console.log(`Successfully wrote 200 tokens to ${csvPath}`);
 
+        // Write credentials CSV
+        const credsCsvPath = path.join(testsDir, 'load-credentials.csv');
+        const credsCsvHeader = 'email,password';
+        const credsRows = testingUsers.map(user => `${user.email},loadtest_pass_123`);
+        const credsCsvContent = [credsCsvHeader, ...credsRows].join('\n');
+        fs.writeFileSync(credsCsvPath, credsCsvContent, 'utf-8');
+        console.log(`Successfully wrote ${testingUsers.length} credentials to ${credsCsvPath}`);
+
     } catch (error) {
         console.error('Error during token generation:', error);
         process.exit(1);
