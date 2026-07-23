@@ -1,0 +1,51 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 30
+      arrivalRate: 1
+      rampTo: 5
+      name: "Sciolto Ramping Auth Load Phase"
+  payload:
+    path: "./load-credentials.csv"
+    fields:
+      - "email"
+      - "password"
+    order: "random"
+    skipHeader: true
+  headers:
+    Content-Type: "application/json"
+
+scenarios:
+  - name: "Sciolto Scenario 1: Dynamic User Registration"
+    weight: 40
+    flow:
+      - post:
+          url: "/api/auth/register"
+          json:
+            fullname: "LoadTest User {{ $randomString(6) }}"
+            email: "loadtest_{{ $randomString(8) }}@example.com"
+            contact: "9876{{ $randomNumber(100000, 999999) }}"
+            password: "SecurePassword123!"
+          expect:
+            - statusCode: 201
+
+  - name: "Sciolto Scenario 2: Customer Login"
+    weight: 50
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ email }}"
+            password: "{{ password }}"
+          expect:
+            - statusCode: 200
+
+  - name: "Sciolto Scenario 3: Forgot Password Request"
+    weight: 10
+    flow:
+      - post:
+          url: "/api/auth/forgot-password"
+          json:
+            email: "{{ email }}"
+          expect:
+            - statusCode: 200

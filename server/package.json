@@ -7,6 +7,7 @@
         "cors": "^2.8.6",
         "dotenv": "^17.4.2",
         "express": "^5.2.1",
+        "express-rate-limit": "^8.6.0",
         "express-validator": "^7.3.2",
         "googleapis": "^173.0.0",
         "ioredis": "^5.10.1",
@@ -17,6 +18,7 @@
         "nodemailer": "^9.0.3",
         "passport": "^0.7.0",
         "passport-google-oauth20": "^2.0.0",
+        "rate-limit-redis": "^6.0.0",
         "resend": "^6.16.0"
     },
     "name": "server",
@@ -30,7 +32,8 @@
         "seed": "node src/scripts/seed.js",
         "build": "node scripts/sync-client-build.js",
         "test:load:prepare": "node scripts/generate-load-tokens.js",
-        "test:load": "npm run test:load:prepare && mkdir -p tests/reports && artillery run --output tests/reports/load-report-$(date +%Y-%m-%d_%H-%M-%S).json tests/load-test-ecommerce.yml"
+        "test:load": "npm run test:load:prepare && mkdir -p tests/reports && npx -y artillery run --output tests/reports/load-report-$(date +%Y-%m-%d_%H-%M-%S).json tests/load-test-ecommerce.yml",
+        "test:load:sciolto-auth": "npm run test:load:prepare && mkdir -p tests/reports && npx -y artillery run --output tests/reports/sciolto-load-report-auth-$(date +%Y-%m-%d_%H-%M-%S).json tests/sciolto-load-test-auth.yml"
     },
     "devDependencies": {
         "supertest": "^7.0.0",
